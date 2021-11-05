@@ -15,13 +15,12 @@ public class OrOperatorShould
     [InlineData(false, false, false)]
     public void ImplementLogicalOr(bool left, bool right, bool expected)
     {
-        var l = new ExpressionPattern<object>(_ => left);
-        var r = new ExpressionPattern<object>(_ => right);
+        var l = left ? Constants<object>.Truth : Constants<object>.Falsity;
+        var r = right ? Constants<object>.Truth : Constants<object>.Falsity;
 
         var pattern = l.Or(r);
-        pattern.Should().BeOfType(typeof(OrPattern<object>));
 
-        var actual = pattern.Match(new object());
+        var actual = pattern.Compile()(new object());
         actual.Should().Be(expected);
     }
 }

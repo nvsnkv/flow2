@@ -1,4 +1,7 @@
-﻿using Flow.Domain.Patterns.Logical;
+﻿using System;
+using System.Linq.Expressions;
+using System.Runtime.InteropServices.ComTypes;
+using Flow.Domain.Patterns.Logical;
 using FluentAssertions;
 using Xunit;
 using Xunit.Categories;
@@ -7,21 +10,29 @@ namespace Flow.Domain.Patterns.UnitTests;
 
 public class AndOperatorShould
 {
-    [Theory]
-    [UnitTest]
+    [Theory] [UnitTest]
     [InlineData(true, true, true)]
     [InlineData(true, false, false)]
     [InlineData(false, true, false)]
     [InlineData(false, false, false)]
     public void ImplementLogicalAnd(bool left, bool right, bool expected)
     {
-        var l = new ExpressionPattern<object>(_ => left);
-        var r = new ExpressionPattern<object>(_ => right);
+        Expression <Func<object, bool>> l = _ => left;
+        Expression<Func<object, bool>> r = _ => right;
 
         var pattern = l.And(r);
-        pattern.Should().BeOfType(typeof(AndPattern<object>));
-
-        var actual = pattern.Match(new object());
+        
+        var actual = pattern.Compile()(new object());
         actual.Should().Be(expected);
+    }
+
+    [Fact] [UnitTest]
+    public void ChainSeveralExpressions()
+    {
+        Expression<Func<object, bool>> a = a => true;
+        Expression<Func<object, bool>> b = a => true;
+        Expression<Func<object, bool>> c = a => true;
+
+        a.And(b).And(c).Compile()(new object()).Should().BeTrue();
     }
 }
