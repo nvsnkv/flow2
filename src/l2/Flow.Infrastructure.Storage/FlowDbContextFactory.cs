@@ -1,4 +1,5 @@
 ﻿using Flow.Infrastructure.Configuration;
+using Flow.Infrastructure.Configuration.Contract;
 using Microsoft.EntityFrameworkCore;
 
 namespace Flow.Infrastructure.Storage;
