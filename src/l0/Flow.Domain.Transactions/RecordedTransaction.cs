@@ -4,7 +4,7 @@ namespace Flow.Domain.Transactions
 {
     public sealed class RecordedTransaction: Transaction
     {
-        public RecordedTransaction(long key, decimal amount, string currency, string? category, string title, AccountInfo account) : base(amount, currency, category, title, account)
+        public RecordedTransaction(long key, DateTime timestamp, decimal amount, string currency, string? category, string title, AccountInfo account) : base(timestamp, amount, currency, category, title, account)
         {
             Key = key;
         }

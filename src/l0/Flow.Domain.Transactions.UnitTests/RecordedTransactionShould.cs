@@ -1,3 +1,4 @@
+using System;
 using FluentAssertions;
 using Xunit;
 using Xunit.Categories;
@@ -6,8 +7,8 @@ namespace Flow.Domain.Transactions.UnitTests
 {
     public class RecordedTransactionShould 
     {
-        private readonly Transaction transaction = new Transaction(-100, "RUB", null, "Transfer", new AccountInfo("name", "bank"));
-        private readonly Transaction other = new Transaction(-10, "RUB", null, "Transfer", new AccountInfo("name", "bank"));
+        private readonly Transaction transaction = new Transaction(DateTime.UtcNow, -100, "RUB", null, "Transfer", new AccountInfo("name", "bank"));
+        private readonly Transaction other = new Transaction(DateTime.UtcNow, - 10, "RUB", null, "Transfer", new AccountInfo("name", "bank"));
 
         [Fact] [UnitTest]
         public void IgnoreTransactionDetailsInComparison()

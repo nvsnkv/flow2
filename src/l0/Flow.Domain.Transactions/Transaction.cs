@@ -4,23 +4,27 @@ namespace Flow.Domain.Transactions
 {
     public class Transaction
     {
-        public Transaction(decimal amount, string currency, string? category, string title, AccountInfo account)
+        public Transaction(DateTime timestamp, decimal amount, string currency, string? category, string title, AccountInfo account)
         {
             Amount = amount;
             Currency = currency;
             Category = category ?? string.Empty;
             Title = title;
             Account = account;
+            Timestamp = timestamp;
         }
 
         public Transaction(Transaction other)
         {
+            Timestamp = other.Timestamp;
             Amount = other.Amount;
             Currency = other.Currency;
             Category = other.Category;
             Title = other.Title;
             Account = other.Account;
         }
+        
+        public DateTime Timestamp { get; }
 
         public decimal Amount { get; }
 
@@ -34,7 +38,7 @@ namespace Flow.Domain.Transactions
 
         protected bool Equals(Transaction other)
         {
-            return Amount == other.Amount && Currency == other.Currency && Category == other.Category && Title == other.Title && Account.Equals(other.Account);
+            return Timestamp == other.Timestamp && Amount == other.Amount && Currency == other.Currency && Category == other.Category && Title == other.Title && Account.Equals(other.Account);
         }
 
         public override bool Equals(object? obj)
@@ -47,7 +51,7 @@ namespace Flow.Domain.Transactions
 
         public override int GetHashCode()
         {
-            return HashCode.Combine(Amount, Currency, Category, Title, Account);
+            return HashCode.Combine(Timestamp, Amount, Currency, Category, Title, Account);
         }
 
         public static bool operator ==(Transaction? left, Transaction? right)
