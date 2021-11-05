@@ -9,7 +9,7 @@ namespace Flow.Domain.Patterns
     {
         private Expression<Func<T, bool>> result = Constants<T>.Truth;
         private ParameterExpression? param;
-        private int conditions = 0;
+        
         public PatternBuilder<T> With(Expression<Func<T, bool>> predicate)
         {
             param ??= predicate.Parameters.Single();
