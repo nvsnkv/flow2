@@ -39,6 +39,27 @@ internal class TransactionCriteriaParser : ITransactionCriteriaParser
         return new CriteriaParserResult<Transaction>(builder.Build(), errors);
     }
 
+    public CriteriaParserResult<RecordedTransaction> ParseRecordedTransactionCriteria(IEnumerable<string> parts)
+    {
+        var builder = new PatternBuilder<RecordedTransaction>();
+        var errors = new List<string>();
+
+        foreach (var part in parts)
+        {
+            var (expr, err) = ParsePart<RecordedTransaction>(part);
+            if (expr == null)
+            {
+                errors.Add(err);
+            }
+            else
+            {
+                builder.With(expr);
+            }
+        }
+
+        return new CriteriaParserResult<RecordedTransaction>(builder.Build(), errors);
+    }
+
     private (Expression<Func<T,bool>>?, string?) ParsePart<T>(string part) where T : Transaction
     {
         var match = criterionPattern.Match(part);
@@ -334,10 +355,5 @@ internal class TransactionCriteriaParser : ITransactionCriteriaParser
         {
             return false;
         }
-    }
-
-    public CriteriaParserResult<RecordedTransaction> ParseRecordedTransactionCriteria(IEnumerable<string> parts)
-    {
-        throw new NotImplementedException();
     }
 }
