@@ -8,6 +8,29 @@ using Flow.Infrastructure.IO.Contract;
 
 namespace Flow.Infrastructure.IO;
 
+/*
+example: find ts[2021-02-02:2021-09-01] a<-1000 !c=RUB ocom%noway cat(,rose,blue) 
+              timestamp between a:b
+              amount <-1000
+              currency != RUB
+              comment LIKE noway
+              category IN ('',rose, blue)
+
+   ts    =val
+!  a     %val
+   c     <val
+   cat   >val
+   t     >=val
+   acc   <=val
+   bnk   [from:till]
+   ocom  (from:till]
+   ocat  [from:till)
+   ot    (from:till)
+   k     (val,val,val)
+
+
+^(!?)(ts|a|c|cat|ttl|acc|bnk|ocom|ocat|ottl)(\=|\%|\<|\>|\<=|\>=|\[|\()(.*+)(\]|\))$
+ */
 internal class TransactionCriteriaParser : ITransactionCriteriaParser
 {
     private readonly Regex criterionPattern = new(@"^(?<neg>!?)(?<prop>ts|a|c|cat|ttl|acc|bnk|ocom|ocat|ottl)(?<opStart>\=|\%|\<|\>|\<=|\>=|\[|\()(?<arg>.*)(?<opEnd>\]?|\)?)$");
