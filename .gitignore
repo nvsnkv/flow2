@@ -2,3 +2,4 @@ bin
 obj
 .suo
 /src/Flow.sln.DotSettings.user
+/src/.vs
