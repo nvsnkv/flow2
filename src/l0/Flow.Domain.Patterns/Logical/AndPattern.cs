@@ -14,7 +14,13 @@ namespace Flow.Domain.Patterns.Logical
             var l = Left.GetExpression();
             var r = Right.GetExpression();
 
-            return Expression.Lambda<Func<T, bool>>(Expression.And(l.Body, r.Body), l.Parameters);
+            Expression expression = Expression.And(l.Body, r.Body);
+            while (expression.CanReduce)
+            {
+                expression = expression.Reduce();
+            }
+
+            return Expression.Lambda<Func<T, bool>>(expression, l.Parameters);
         }
     }
 }
