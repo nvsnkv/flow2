@@ -4,13 +4,13 @@ services:
     image: postgres
     restart: always
     volumes:
-       - flow-storage-data:/var/lib/postgresql/data
+       - flow-dev-data:/var/lib/postgresql/data
     environment:
-      - POSTGRES_DB=flow-dev
+      - POSTGRES_DB=flow
       - "POSTGRES_USER=${DEV_DB_USER}"
       - "POSTGRES_PASSWORD=${DEV_DB_PWD}"
     ports:
       - "${DEV_DB_PORT}:5432"
        
 volumes:
-  flow-storage-data:
+  flow-dev-data:
