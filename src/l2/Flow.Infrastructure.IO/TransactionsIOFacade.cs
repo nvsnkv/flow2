@@ -43,7 +43,7 @@ internal class TransactionsIOFacade : ITransactionsReader, ITransactionsWriter, 
                  return;
                 
             case SupportedFormats.JSON:
-                await json.WriteTransactions(writer, transactions);
+                await json.WriteTransactions(writer, transactions, ct);
                 return;
 
             default:
@@ -60,7 +60,7 @@ internal class TransactionsIOFacade : ITransactionsReader, ITransactionsWriter, 
                 return;
 
             case SupportedFormats.JSON:
-                await json.WriteRecordedTransactions(writer, transactions);
+                await json.WriteRecordedTransactions(writer, transactions, ct);
                 return;
 
             default:
@@ -77,7 +77,7 @@ internal class TransactionsIOFacade : ITransactionsReader, ITransactionsWriter, 
                 return;
 
             case SupportedFormats.JSON:
-                await json.WriteRejections(writer, rejections);
+                await json.WriteRejections(writer, rejections, ct);
                 return;
 
             default:

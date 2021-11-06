@@ -1,6 +1,8 @@
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Newtonsoft.Json;
@@ -22,8 +24,10 @@ public class JsonSerializerShould : TestDataCarrier
         await using var writeStream = new MemoryStream();
         await using var writer = new StreamWriter(writeStream);
 
-        await serializer.WriteTransactions(writer, Transactions);
+        await serializer.WriteTransactions(writer, Transactions, CancellationToken.None);
         await using var readStream = new MemoryStream(writeStream.ToArray());
+
+        var text = Encoding.UTF8.GetString(writeStream.ToArray());
 
         using var reader = new StreamReader(readStream);
 
@@ -38,12 +42,12 @@ public class JsonSerializerShould : TestDataCarrier
     public async Task SerializeAndDeserializeRecordedTransactionsProperly(string cultureCode)
     {
         var culture = CultureInfo.GetCultureInfo(cultureCode);
-        var serializer = new JsonTransactionsSerializer(new JsonSerializerSettings() { Culture = culture,  });
+        var serializer = new JsonTransactionsSerializer(new JsonSerializerSettings { Culture = culture,  });
 
         await using var writeStream = new MemoryStream();
         await using var writer = new StreamWriter(writeStream);
 
-        await serializer.WriteRecordedTransactions(writer, RecordedTransactions);
+        await serializer.WriteRecordedTransactions(writer, RecordedTransactions, CancellationToken.None);
         await using var readStream = new MemoryStream(writeStream.ToArray());
 
         using var reader = new StreamReader(readStream);
