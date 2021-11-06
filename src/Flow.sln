@@ -7,25 +7,36 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "l0", "l0", "{6DE04AF2-D489-
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Flow.Domain.Transactions", "l0\Flow.Domain.Transactions\Flow.Domain.Transactions.csproj", "{DF66A06E-1388-4CD9-AE6A-F3CCE2D46450}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Flow.Domain.Transactions.UnitTests", "l0\Flow.Domain.Transactions.UnitTests\Flow.Domain.Transactions.UnitTests.csproj", "{691B0D85-A0A0-4E62-A810-38D2B9CACBAF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Flow.Domain.Transactions.UnitTests", "l0\Flow.Domain.Transactions.UnitTests\Flow.Domain.Transactions.UnitTests.csproj", "{691B0D85-A0A0-4E62-A810-38D2B9CACBAF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Flow.Domain.Patterns", "l0\Flow.Domain.Patterns\Flow.Domain.Patterns.csproj", "{D84E4D21-35FA-4340-AC2D-48E9D5F4AD83}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Flow.Domain.Patterns", "l0\Flow.Domain.Patterns\Flow.Domain.Patterns.csproj", "{D84E4D21-35FA-4340-AC2D-48E9D5F4AD83}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Flow.Domain.Patterns.UnitTests", "l0\Flow.Domain.Patterns.UnitTests\Flow.Domain.Patterns.UnitTests.csproj", "{DE25839E-8C5C-4ADE-9E2B-2E8DC51CD3D4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Flow.Domain.Patterns.UnitTests", "l0\Flow.Domain.Patterns.UnitTests\Flow.Domain.Patterns.UnitTests.csproj", "{DE25839E-8C5C-4ADE-9E2B-2E8DC51CD3D4}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "l1", "l1", "{BF31D4DF-B59D-44E8-9EA4-D1EAC24CC3ED}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Flow.Application.Transactions", "l1\Flow.Application.Transactions\Flow.Application.Transactions.csproj", "{E0A46C01-FCF4-4454-AF94-2A5A5DB12F39}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Flow.Application.Transactions", "l1\Flow.Application.Transactions\Flow.Application.Transactions.csproj", "{E0A46C01-FCF4-4454-AF94-2A5A5DB12F39}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "l2", "l2", "{C2DD4A7B-704F-4C12-B89E-E6A7657A418D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Flow.Infrastructure.Storage", "l2\Flow.Infrastructure.Storage\Flow.Infrastructure.Storage.csproj", "{8CA85E21-2B98-49E4-A234-E71618B3E0E8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Flow.Infrastructure.Storage", "l2\Flow.Infrastructure.Storage\Flow.Infrastructure.Storage.csproj", "{8CA85E21-2B98-49E4-A234-E71618B3E0E8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Flow.Infrastructure.Configuration", "l2\Flow.Infrastructure.Configuration\Flow.Infrastructure.Configuration.csproj", "{25C4F714-68D3-42E6-A6CB-5E063DBCDE63}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Flow.Infrastructure.Configuration", "l2\Flow.Infrastructure.Configuration\Flow.Infrastructure.Configuration.csproj", "{25C4F714-68D3-42E6-A6CB-5E063DBCDE63}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Flow.Infrastructure.IO", "l2\Flow.Infrastructure.IO\Flow.Infrastructure.IO.csproj", "{C99CF6F9-CFE3-4F67-B450-89B45AD7893F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Flow.Infrastructure.IO", "l2\Flow.Infrastructure.IO\Flow.Infrastructure.IO.csproj", "{C99CF6F9-CFE3-4F67-B450-89B45AD7893F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Flow.Infrastructure.IO.UnitTests", "l2\Flow.Infrastructure.IO.UnitTests\Flow.Infrastructure.IO.UnitTests.csproj", "{AAB611F2-902B-4196-97B8-E48EEE41E010}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Flow.Infrastructure.IO.UnitTests", "l2\Flow.Infrastructure.IO.UnitTests\Flow.Infrastructure.IO.UnitTests.csproj", "{AAB611F2-902B-4196-97B8-E48EEE41E010}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "l3", "l3", "{249EE53E-3FC4-4710-90E8-135335BB3FD8}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CommandLine", "CommandLine", "{128C34A4-0A1B-44B2-AD90-F3B76381F851}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Flow.Hosts.Accountant.Cli", "l3\CommandLine\Flow.Hosts.Accountant.Cli\Flow.Hosts.Accountant.Cli.csproj", "{FF7F0C82-916F-4ECA-9510-B74864B626F4}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{65511899-B4E1-4208-A29A-114C3E778822}"
+	ProjectSection(SolutionItems) = preProject
+		docker-compose.devenv.yaml = docker-compose.devenv.yaml
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Flow.Infrastructure.Storage.Migrations", "l2\Flow.Infrastructure.Storage.Migrations\Flow.Infrastructure.Storage.Migrations.csproj", "{D4126756-6928-4D1F-B203-DC1A4E38AD2A}"
 EndProject
@@ -71,6 +82,10 @@ Global
 		{AAB611F2-902B-4196-97B8-E48EEE41E010}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AAB611F2-902B-4196-97B8-E48EEE41E010}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AAB611F2-902B-4196-97B8-E48EEE41E010}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FF7F0C82-916F-4ECA-9510-B74864B626F4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FF7F0C82-916F-4ECA-9510-B74864B626F4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FF7F0C82-916F-4ECA-9510-B74864B626F4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FF7F0C82-916F-4ECA-9510-B74864B626F4}.Release|Any CPU.Build.0 = Release|Any CPU
 		{D4126756-6928-4D1F-B203-DC1A4E38AD2A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{D4126756-6928-4D1F-B203-DC1A4E38AD2A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D4126756-6928-4D1F-B203-DC1A4E38AD2A}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -89,6 +104,8 @@ Global
 		{25C4F714-68D3-42E6-A6CB-5E063DBCDE63} = {C2DD4A7B-704F-4C12-B89E-E6A7657A418D}
 		{C99CF6F9-CFE3-4F67-B450-89B45AD7893F} = {C2DD4A7B-704F-4C12-B89E-E6A7657A418D}
 		{AAB611F2-902B-4196-97B8-E48EEE41E010} = {C2DD4A7B-704F-4C12-B89E-E6A7657A418D}
+		{128C34A4-0A1B-44B2-AD90-F3B76381F851} = {249EE53E-3FC4-4710-90E8-135335BB3FD8}
+		{FF7F0C82-916F-4ECA-9510-B74864B626F4} = {128C34A4-0A1B-44B2-AD90-F3B76381F851}
 		{D4126756-6928-4D1F-B203-DC1A4E38AD2A} = {C2DD4A7B-704F-4C12-B89E-E6A7657A418D}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
