@@ -1,5 +1,4 @@
-﻿using System.Reflection.Metadata.Ecma335;
-using Autofac;
+﻿using Autofac;
 using Flow.Infrastructure.Configuration.Contract;
 using Microsoft.EntityFrameworkCore;
 
@@ -16,7 +15,7 @@ public class FlowDatabase : Module
         }).InstancePerLifetimeScope().AsImplementedInterfaces();
 
         builder.Register(c => new TransactionStorage(c.Resolve<IDbContextFactory<FlowDbContext>>())).InstancePerLifetimeScope().AsImplementedInterfaces();
-
+         
         base.Load(builder);
     }
 }

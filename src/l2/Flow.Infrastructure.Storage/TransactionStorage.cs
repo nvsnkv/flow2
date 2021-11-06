@@ -2,7 +2,6 @@
 using Flow.Application.Transactions.Infrastructure;
 using Flow.Domain.Transactions;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Internal;
 
 namespace Flow.Infrastructure.Storage;
 internal class TransactionStorage : ITransactionsStorage

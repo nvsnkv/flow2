@@ -1,7 +1,6 @@
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using FluentAssertions;
@@ -26,9 +25,7 @@ public class JsonSerializerShould : TestDataCarrier
 
         await serializer.WriteTransactions(writer, Transactions, CancellationToken.None);
         await using var readStream = new MemoryStream(writeStream.ToArray());
-
-        var text = Encoding.UTF8.GetString(writeStream.ToArray());
-
+        
         using var reader = new StreamReader(readStream);
 
         var result = await serializer.ReadTransactions(reader);

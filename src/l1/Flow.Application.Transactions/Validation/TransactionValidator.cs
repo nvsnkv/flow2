@@ -11,11 +11,8 @@ internal class TransactionValidator : AbstractValidator<Transaction>
     private readonly Func<Transaction, bool> currencyNotEmpty = TransactionValidationRules.CurrencyIsNotEmpty.Compile();
     private readonly Func<Transaction, bool> titleNotEmpty = TransactionValidationRules.TitleIsNotEmpty.Compile();
     
-    private readonly IValidator<AccountInfo> accountValidator;
-
     public TransactionValidator(IValidator<AccountInfo> accountValidator)
     {
-        this.accountValidator = accountValidator;
         RuleFor(t => t).Custom((t, c) =>
         {
             var result = accountValidator.Validate(t.Account);

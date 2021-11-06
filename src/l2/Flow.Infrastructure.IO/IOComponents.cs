@@ -17,12 +17,13 @@ public class IOComponents : Module
         {
             var config = c.Resolve<IFlowConfiguration>();
 
-            var culture = CultureInfo.GetCultures(CultureTypes.AllCultures)
-                              .FirstOrDefault(c => c.Name == config.CultureCode)
+            var culture = CultureInfo
+                              .GetCultures(CultureTypes.AllCultures)
+                              .FirstOrDefault(ci => ci.Name == config.CultureCode)
                           ?? CultureInfo.CurrentCulture;
 
             var csv = new CsvTransactionsSerializer(new CsvConfiguration(culture));
-            var json = new JsonTransactionsSerializer(new JsonSerializerSettings() { Culture = culture });
+            var json = new JsonTransactionsSerializer(new JsonSerializerSettings { Culture = culture });
             return new TransactionsIOFacade(csv, json);
         }).InstancePerLifetimeScope().AsImplementedInterfaces();
 

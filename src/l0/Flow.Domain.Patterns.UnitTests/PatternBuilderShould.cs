@@ -49,8 +49,8 @@ public class PatternBuilderShould
     {
         var pattern = new PatternBuilder<object>()
             .With(t => t != new object())
-            .With(t => t.ToString(), ta => ta.Length > 0)
-            .With(t => t.ToString(), ta => ta.Length < 1000)
+            .With(t => t.ToString(), ta => ta!.Length > 0)
+            .With(t => t.ToString(), ta => ta!.Length < 1000)
             .Build();
 
         pattern.Compile()(new TestData(5, "Best string ever")).Should().BeTrue();

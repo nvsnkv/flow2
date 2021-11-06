@@ -11,7 +11,7 @@ internal class JsonTransactionsSerializer
 
     public JsonTransactionsSerializer(JsonSerializerSettings? settings)
     {
-        this.serializer = settings is null 
+        serializer = settings is null 
             ? JsonSerializer.CreateDefault() 
             : JsonSerializer.Create(settings);
     }
@@ -58,8 +58,7 @@ internal class JsonTransactionsSerializer
         await jsonWriter.FlushAsync(ct);
     }
 
-    [SuppressMessage("ReSharper", "MemberCanBePrivate.Local")]
-    [SuppressMessage("ReSharper", "UnusedAutoPropertyAccessor.Local")]
+    [SuppressMessage("ReSharper", "MemberCanBePrivate.Local"), SuppressMessage("ReSharper", "UnusedAutoPropertyAccessor.Local")]
     private class JsonTransaction
     {
         public DateTime? Timestamp { get; set; }
@@ -89,9 +88,7 @@ internal class JsonTransactionsSerializer
         }
     }
 
-    [SuppressMessage("ReSharper", "MemberCanBePrivate.Local")]
-    [SuppressMessage("ReSharper", "UnusedAutoPropertyAccessor.Local")]
-    [UsedImplicitly]
+    [SuppressMessage("ReSharper", "MemberCanBePrivate.Local"), SuppressMessage("ReSharper", "UnusedAutoPropertyAccessor.Local"), UsedImplicitly]
     private class JsonRecordedTransaction: JsonTransaction
     {
         public long? Key { get; set; }

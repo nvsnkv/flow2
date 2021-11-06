@@ -28,7 +28,7 @@ namespace Flow.Domain.Transactions
             if (ReferenceEquals(this, obj)) { return true; }
 
             if (obj is RecordedTransaction other) { return Equals(other); }
-            if (obj is Transaction otherTransaction) { return Equals(otherTransaction); };
+            if (obj is Transaction otherTransaction) { return Equals(otherTransaction); }
 
             return false;
         }

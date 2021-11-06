@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq.Expressions;
-using System.Runtime.InteropServices.ComTypes;
 using Flow.Domain.Patterns.Logical;
 using FluentAssertions;
 using Xunit;
@@ -29,9 +28,9 @@ public class AndOperatorShould
     [Fact] [UnitTest]
     public void ChainSeveralExpressions()
     {
-        Expression<Func<object, bool>> a = a => true;
-        Expression<Func<object, bool>> b = a => true;
-        Expression<Func<object, bool>> c = a => true;
+        Expression<Func<object, bool>> a = s => true;
+        Expression<Func<object, bool>> b = s => true;
+        Expression<Func<object, bool>> c = s => true;
 
         a.And(b).And(c).Compile()(new object()).Should().BeTrue();
     }

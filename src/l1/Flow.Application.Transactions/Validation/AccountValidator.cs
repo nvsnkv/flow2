@@ -1,7 +1,6 @@
 ﻿using Flow.Domain.Transactions;
 using Flow.Domain.Transactions.Validation;
 using FluentValidation;
-using FluentValidation.Results;
 
 namespace Flow.Application.Transactions.Validation;
 

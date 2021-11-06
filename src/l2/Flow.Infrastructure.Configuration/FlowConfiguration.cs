@@ -22,7 +22,7 @@ public sealed class FlowConfiguration : Module
 
     protected override void Load(ContainerBuilder builder)
     {
-        builder.Register(c => config.GetSection("flow").Get<FlowConfigurationDto>()).AsImplementedInterfaces();
+        builder.Register(_ => config.GetSection("flow").Get<FlowConfigurationDto>()).AsImplementedInterfaces();
         base.Load(builder);
     }
 }

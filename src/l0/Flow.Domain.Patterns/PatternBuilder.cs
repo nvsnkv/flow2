@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using System.Linq.Expressions;
-using Flow.Domain.Patterns.Logical;
 
 namespace Flow.Domain.Patterns
 {

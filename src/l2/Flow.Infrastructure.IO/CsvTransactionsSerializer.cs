@@ -71,7 +71,7 @@ internal class CsvTransactionsSerializer
         }
     }
 
-    [SuppressMessage("ReSharper", "InconsistentNaming")]
+    [SuppressMessage("ReSharper", "InconsistentNaming"), SuppressMessage("ReSharper", "MemberCanBeProtected.Local"), SuppressMessage("ReSharper", "PropertyCanBeMadeInitOnly.Local")]
     private class TransactionRow
     {
         public DateTime? TIMESTAMP { get; set; }
@@ -108,7 +108,9 @@ internal class CsvTransactionsSerializer
         }
     }
 
-    [SuppressMessage("ReSharper", "InconsistentNaming")]
+    [SuppressMessage("ReSharper", "InconsistentNaming"), SuppressMessage("ReSharper", "MemberCanBeProtected.Local"), 
+     SuppressMessage("ReSharper", "PropertyCanBeMadeInitOnly.Local"), SuppressMessage("ReSharper", "UnusedAutoPropertyAccessor.Local"),
+     SuppressMessage("ReSharper", "MemberCanBePrivate.Local")]
     private class RecordedTransactionRow : TransactionRow
     {   
         public long? KEY { get; set; }

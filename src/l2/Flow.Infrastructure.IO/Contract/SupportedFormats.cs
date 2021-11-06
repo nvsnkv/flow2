@@ -1,4 +1,5 @@
-﻿namespace Flow.Infrastructure.IO.Contract;
+﻿// ReSharper disable InconsistentNaming
+namespace Flow.Infrastructure.IO.Contract;
 
 public enum SupportedFormats
 {

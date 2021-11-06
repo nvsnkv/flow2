@@ -1,5 +1,4 @@
-﻿using System.Runtime.InteropServices;
-using Flow.Domain.Transactions.Validation;
+﻿using Flow.Domain.Transactions.Validation;
 using FluentAssertions;
 using Xunit;
 using Xunit.Categories;

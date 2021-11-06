@@ -51,7 +51,7 @@ internal class TransactionCriteriaParser : ITransactionCriteriaParser
             var (expr, err) = ParsePart<Transaction>(part);
             if (expr == null)
             {
-                errors.Add(err);
+                errors.Add(err!);
             }
             else
             {
@@ -72,7 +72,7 @@ internal class TransactionCriteriaParser : ITransactionCriteriaParser
             var (expr, err) = ParsePart<RecordedTransaction>(part);
             if (expr == null)
             {
-                errors.Add(err);
+                errors.Add(err!);
             }
             else
             {
@@ -286,7 +286,7 @@ internal class TransactionCriteriaParser : ITransactionCriteriaParser
 
             "(" => arg.Value.Contains(',')
                 ? opEnd.Value == ")" && TryParseCollection<T>(value, out var collection)
-                    ? (BuildContainsExpression<T>(param, collection), null)
+                    ? (BuildContainsExpression(param, collection), null)
                     : (null, $"Unable to parse collection from {opStart.Value}{value}{opEnd.Value}")
                 : TryParseMinMax<T>(value, out var min, out var max)
                 ? opEnd.Value switch
@@ -306,9 +306,9 @@ internal class TransactionCriteriaParser : ITransactionCriteriaParser
             _ => (null, $"Unknown operation {opStart}..{opEnd} given!")
         };
 
-        if (neg.Value == "!")
+        var (expr, err) = pair;
+        if (neg.Value == "!" && expr != null)
         {
-            var (expr, err) = pair;
             return (Expression.Lambda<Func<T, bool>>(Expression.Not(Expression.Invoke(expr, param)), param), err);
         }
 
@@ -363,10 +363,10 @@ internal class TransactionCriteriaParser : ITransactionCriteriaParser
             var converter = TypeDescriptor.GetConverter(typeof(T));
             if (converter.CanConvertTo(typeof(T)))
             {
-                var res = (T?)converter.ConvertFromString(arg);
+                var res = (T?)converter.ConvertFromString(null, culture, arg);
                 if (res != null)
                 {
-                    o = res!;
+                    o = res;
                 }
 
                 return res != null;
