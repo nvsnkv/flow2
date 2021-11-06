@@ -5,19 +5,19 @@ namespace Flow.Infrastructure.IO.UnitTests;
 
 public abstract class TestDataCarrier
 {
-    public static readonly AccountInfo Account = new AccountInfo("Account", "The Bank");
-    public static readonly AccountInfo CyryllicAccount = new AccountInfo("—чЄт", "Ѕанк");
+    private static readonly AccountInfo Account = new AccountInfo("Account", "The Bank");
+    private static readonly AccountInfo CyryllicAccount = new AccountInfo("—чЄт", "Ѕанк");
 
-    public static readonly Transaction[] Transactions = new[]
+    protected static readonly Transaction[] Transactions = new[]
     {
         new Transaction(DateTime.UtcNow.Date, -150, "RUB", null, "local store", Account),
         new Transaction(DateTime.UtcNow.Date, -150.5M, "RUB", "famous", "local store", Account),
         new Transaction(DateTime.UtcNow.Date, -150.5M, "RUB", "“ест", " ириллицы", CyryllicAccount), 
         new Transaction(new DateTime(2021, 11, 06, 11, 30, 00), 2, "EUR", null, "'\"Quotes\" test", Account),
-        new Transaction(new DateTime(2021, 11, 06), 0.333M, "RUR", "Special symbols", "\',.;\" test", Account)
+        new Transaction(new DateTime(2021, 11, 05), 0.333M, "RUR", "Special symbols", "\',.;\" test", Account)
     };
 
-    public static readonly RecordedTransaction[] RecordedTransactions = new[]
+    protected static readonly RecordedTransaction[] RecordedTransactions = new[]
     {
         new RecordedTransaction(1, Transactions[0]),
         new RecordedTransaction(2, Transactions[1]),
