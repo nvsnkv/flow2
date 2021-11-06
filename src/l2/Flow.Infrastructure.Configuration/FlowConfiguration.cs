@@ -14,6 +14,7 @@ public sealed class FlowConfiguration : Module
 
     public FlowConfiguration()
     {
+        var path = File.Exists(ConfigurationFile) ? ConfigurationFile : "app.config";
         config = new ConfigurationBuilder()
             .AddEnvironmentVariables().AddJsonFile(ConfigurationFile, true)
             .AddEnvironmentVariables()
