@@ -27,6 +27,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Flow.Infrastructure.IO", "l
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Flow.Infrastructure.IO.UnitTests", "l2\Flow.Infrastructure.IO.UnitTests\Flow.Infrastructure.IO.UnitTests.csproj", "{AAB611F2-902B-4196-97B8-E48EEE41E010}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Flow.Infrastructure.Storage.Migrations", "l2\Flow.Infrastructure.Storage.Migrations\Flow.Infrastructure.Storage.Migrations.csproj", "{D4126756-6928-4D1F-B203-DC1A4E38AD2A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -69,6 +71,10 @@ Global
 		{AAB611F2-902B-4196-97B8-E48EEE41E010}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AAB611F2-902B-4196-97B8-E48EEE41E010}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AAB611F2-902B-4196-97B8-E48EEE41E010}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D4126756-6928-4D1F-B203-DC1A4E38AD2A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D4126756-6928-4D1F-B203-DC1A4E38AD2A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D4126756-6928-4D1F-B203-DC1A4E38AD2A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D4126756-6928-4D1F-B203-DC1A4E38AD2A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -83,6 +89,7 @@ Global
 		{25C4F714-68D3-42E6-A6CB-5E063DBCDE63} = {C2DD4A7B-704F-4C12-B89E-E6A7657A418D}
 		{C99CF6F9-CFE3-4F67-B450-89B45AD7893F} = {C2DD4A7B-704F-4C12-B89E-E6A7657A418D}
 		{AAB611F2-902B-4196-97B8-E48EEE41E010} = {C2DD4A7B-704F-4C12-B89E-E6A7657A418D}
+		{D4126756-6928-4D1F-B203-DC1A4E38AD2A} = {C2DD4A7B-704F-4C12-B89E-E6A7657A418D}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BD863072-1B8D-417A-BFF4-C60D20CE1D31}

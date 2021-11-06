@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Flow.Infrastructure.Storage;
 
-internal class FlowDbContext : DbContext
+internal partial class FlowDbContext : DbContext
 {
     public FlowDbContext(DbContextOptions options) : base(options)
     {
@@ -18,6 +18,9 @@ internal class FlowDbContext : DbContext
             ab.Property(a => a.Name).IsRequired();
             ab.Property(a => a.Bank).IsRequired();
             ab.HasKey(a => new { a.Name, a.Bank });
+            ab.HasMany(typeof(RecordedTransaction))
+                .WithOne()
+                .HasForeignKey("account_name", "bank_name");
         });
 
         modelBuilder.Entity<RecordedTransaction>(tb =>
@@ -30,7 +33,9 @@ internal class FlowDbContext : DbContext
             tb.Property(t => t.Title).IsRequired();
             tb.HasKey(t => t.Key);
 
-            tb.HasOne(t => t.Account);
+            tb.Property(typeof(string), "account_name").IsRequired();
+            tb.Property(typeof(string), "bank_name").IsRequired();
+
             tb.OwnsOne(t => t.Overrides, ob =>
             {
                 ob.Property(o => o!.Title);

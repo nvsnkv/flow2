@@ -1,6 +1,9 @@
-﻿using Autofac;
+﻿using System.Runtime.CompilerServices;
+using Autofac;
 using Flow.Infrastructure.Configuration.Contract;
 using Microsoft.EntityFrameworkCore;
+
+[assembly:InternalsVisibleTo("Flow.Infrastructure.Storage.Migrations")]
 
 namespace Flow.Infrastructure.Storage;
 
