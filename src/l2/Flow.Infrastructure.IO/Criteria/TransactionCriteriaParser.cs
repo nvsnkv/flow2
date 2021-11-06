@@ -34,7 +34,7 @@ example: find ts[2021-02-02:2021-09-01] a<-1000 !c=RUB ocom%noway cat(,rose,blue
 internal class TransactionCriteriaParser : ITransactionCriteriaParser
 {
     private readonly GenericParser parser;
-    private readonly Regex criterionPattern = new(@"^(?<neg>!?)(?<prop>ts|a|c|cat|ttl|acc|bnk|ocom|ocat|ottl)(?<opStart>\=|\%|\<=?|\>=?|\[|\()(?<arg>.*)(?<opEnd>\]?|\)?)$");
+    private readonly Regex criterionPattern = new(@"^(?<neg>!?)(?<prop>ts?|a|cat|acc|c|bnk|ocom|ocat|ot)(?<opStart>\=|\%|\<=?|\>=?|\[|\()(?<arg>.*?)(?<opEnd>\]?|\)?)$");
     
     public TransactionCriteriaParser(GenericParser parser)
     {
@@ -226,8 +226,8 @@ internal class TransactionCriteriaParser : ITransactionCriteriaParser
     {
         return opEnd switch
         {
-            "]" => Expression.LessThanOrEqual(Expression.Constant(max), param),
-            ")" => Expression.LessThan(Expression.Constant(max), param),
+            "]" => Expression.GreaterThanOrEqual(Expression.Constant(max), param),
+            ")" => Expression.GreaterThan(Expression.Constant(max), param),
             _ => throw new NotSupportedException($"Not supported boundary {opEnd}!")
         };
     }
@@ -236,22 +236,22 @@ internal class TransactionCriteriaParser : ITransactionCriteriaParser
     {
         return opStart switch
         {
-            "[" => Expression.GreaterThanOrEqual(Expression.Constant(min), param),
-            "(" => Expression.GreaterThan(Expression.Constant(min), param),
+            "[" => Expression.LessThanOrEqual(Expression.Constant(min), param),
+            "(" => Expression.LessThan(Expression.Constant(min), param),
             _ => throw new NotSupportedException($"Not supported boundary {opStart}!")
         };
     }
 
     private Expression<Func<T, bool>> BuildContainsExpression<T>(ParameterExpression param, string part)
     {
-        Expression<Func<string?, bool>> contains = s => s!= null && s.Contains(part);
-        return Expression.Lambda<Func<T, bool>>(contains.Body, param);
+        var partAccess = Expression.Constant(part);
+        return Expression.Lambda<Func<T, bool>>(Expression.Call(param, "Contains", null, partAccess), param);
     }
 
     private Expression<Func<T, bool>> BuildContainsExpression<T>(ParameterExpression param, List<T> collection)
     {
-        Expression<Func<T, bool>> contains = c => collection.Contains((T)c);
-        return Expression.Lambda<Func<T, bool>>(contains.Body, param);
+        var collectionAccess = Expression.Constant(collection);
+        return Expression.Lambda<Func<T, bool>>(Expression.Call(collectionAccess, "Contains", null, param), param);
     }
 
     
