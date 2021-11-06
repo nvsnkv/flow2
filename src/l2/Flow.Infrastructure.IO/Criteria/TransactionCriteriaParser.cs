@@ -34,7 +34,7 @@ example: find ts[2021-02-02:2021-09-01] a<-1000 !c=RUB ocom%noway cat(,rose,blue
 internal class TransactionCriteriaParser : ITransactionCriteriaParser
 {
     private readonly GenericParser parser;
-    private readonly Regex criterionPattern = new(@"^(?<neg>!?)(?<prop>ts?|a|cat|acc|c|bnk|ocom|ocat|ot)(?<opStart>\=|\%|\<=?|\>=?|\[|\()(?<arg>.*?)(?<opEnd>\]?|\)?)$");
+    private readonly Regex criterionPattern = new(@"^(?<neg>!?)(?<prop>ts?|a|cat|acc|c|bnk|ocom|ocat|ot|k)(?<opStart>\=|\%|\<=?|\>=?|\[|\()(?<arg>.*?)(?<opEnd>\]?|\)?)$");
     
     public TransactionCriteriaParser(GenericParser parser)
     {
