@@ -25,6 +25,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Flow.Infrastructure.Configu
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Flow.Infrastructure.IO", "l2\Flow.Infrastructure.IO\Flow.Infrastructure.IO.csproj", "{C99CF6F9-CFE3-4F67-B450-89B45AD7893F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Flow.Infrastructure.IO.UnitTests", "l2\Flow.Infrastructure.IO.UnitTests\Flow.Infrastructure.IO.UnitTests.csproj", "{AAB611F2-902B-4196-97B8-E48EEE41E010}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -63,6 +65,10 @@ Global
 		{C99CF6F9-CFE3-4F67-B450-89B45AD7893F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C99CF6F9-CFE3-4F67-B450-89B45AD7893F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C99CF6F9-CFE3-4F67-B450-89B45AD7893F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AAB611F2-902B-4196-97B8-E48EEE41E010}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AAB611F2-902B-4196-97B8-E48EEE41E010}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AAB611F2-902B-4196-97B8-E48EEE41E010}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AAB611F2-902B-4196-97B8-E48EEE41E010}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -76,6 +82,7 @@ Global
 		{8CA85E21-2B98-49E4-A234-E71618B3E0E8} = {C2DD4A7B-704F-4C12-B89E-E6A7657A418D}
 		{25C4F714-68D3-42E6-A6CB-5E063DBCDE63} = {C2DD4A7B-704F-4C12-B89E-E6A7657A418D}
 		{C99CF6F9-CFE3-4F67-B450-89B45AD7893F} = {C2DD4A7B-704F-4C12-B89E-E6A7657A418D}
+		{AAB611F2-902B-4196-97B8-E48EEE41E010} = {C2DD4A7B-704F-4C12-B89E-E6A7657A418D}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BD863072-1B8D-417A-BFF4-C60D20CE1D31}

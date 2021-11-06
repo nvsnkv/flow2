@@ -33,7 +33,7 @@ internal class CsvTransactionsSerializer
 
         await foreach (var row in csvReader.GetRecordsAsync(typeof(TransactionRow), ct))
         {
-            result.Add((Transaction)row);
+            result.Add((Transaction)(TransactionRow)row);
         }
 
         return result;
@@ -46,7 +46,7 @@ internal class CsvTransactionsSerializer
 
         await foreach (var row in csvReader.GetRecordsAsync(typeof(RecordedTransactionRow), ct))
         {
-            result.Add((RecordedTransaction)row);
+            result.Add((RecordedTransaction)(RecordedTransactionRow)row);
         }
 
         return result;

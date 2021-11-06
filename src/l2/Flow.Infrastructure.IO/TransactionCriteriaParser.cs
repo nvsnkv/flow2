@@ -351,7 +351,7 @@ internal class TransactionCriteriaParser : ITransactionCriteriaParser
         var split = value.Split(":");
         if (split.Length != 2) { return false; }
 
-        return TryParseVal<T>(split[0], out min) && TryParseVal<T>(split[1], out max);
+        return TryParseVal(split[0], out min!) && TryParseVal(split[1], out max!);
     }
 
     private bool TryParseVal<T>(string arg, out T? o)

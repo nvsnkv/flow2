@@ -1,8 +1,11 @@
 ﻿using System.Globalization;
+using System.Runtime.CompilerServices;
 using Autofac;
 using CsvHelper.Configuration;
 using Flow.Infrastructure.Configuration.Contract;
 using Newtonsoft.Json;
+
+[assembly:InternalsVisibleTo("Flow.Infrastructure.IO.UnitTests")]
 
 namespace Flow.Infrastructure.IO;
 
