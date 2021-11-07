@@ -5,7 +5,7 @@ namespace Flow.Application.Transactions;
 
 public interface IAccountant
 {
-    Task<IEnumerable<RecordedTransaction>> Get(Expression<Func<Transaction, bool>>? conditions,
+    Task<IEnumerable<RecordedTransaction>> Get(Expression<Func<RecordedTransaction, bool>>? conditions,
         CancellationToken ct);
 
     Task<IEnumerable<RejectedTransaction>> Create(IEnumerable<Transaction> transactions, CancellationToken ct);

@@ -8,7 +8,7 @@ internal class AccountValidator : AbstractValidator<AccountInfo>
 {
     private readonly Func<AccountInfo, bool> nameIsNotEmpty = AccountInfoValidationRules.NameIsNotEmpty.Compile();
     private readonly Func<AccountInfo, bool> bankIsNotEmpty = AccountInfoValidationRules.BankIsNotEmpty.Compile();
-    AccountValidator()
+    public AccountValidator()
     {
         
         RuleFor(a => a).Custom((a, c) =>

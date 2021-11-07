@@ -17,10 +17,10 @@ internal class Accountant : IAccountant
         this.transactionValidator = transactionValidator;
     }
 
-    public async Task<IEnumerable<RecordedTransaction>> Get(Expression<Func<Transaction, bool>>? conditions,
+    public async Task<IEnumerable<RecordedTransaction>> Get(Expression<Func<RecordedTransaction, bool>>? conditions,
         CancellationToken ct)
     {
-        conditions ??= Constants<Transaction>.Truth;
+        conditions ??= Constants<RecordedTransaction>.Truth;
 
         return await storage.Read(conditions, ct);
     }

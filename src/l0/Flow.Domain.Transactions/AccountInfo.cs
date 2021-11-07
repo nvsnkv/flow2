@@ -2,7 +2,7 @@
 
 namespace Flow.Domain.Transactions
 {
-    public sealed class AccountInfo
+    public class AccountInfo
     {
         public static readonly AccountInfo Empty = new AccountInfo(string.Empty, string.Empty);
 

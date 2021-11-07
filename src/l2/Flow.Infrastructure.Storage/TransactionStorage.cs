@@ -26,7 +26,7 @@ internal class TransactionStorage : ITransactionsStorage
         return Enumerable.Empty<RejectedTransaction>();
     }
 
-    public async Task<IEnumerable<RecordedTransaction>> Read(Expression<Func<Transaction, bool>> conditions, CancellationToken ct)
+    public async Task<IEnumerable<RecordedTransaction>> Read(Expression<Func<RecordedTransaction, bool>> conditions, CancellationToken ct)
     {
         await using var context = factory.CreateDbContext();
         return await context.Transactions

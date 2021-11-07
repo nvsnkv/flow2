@@ -1,6 +1,6 @@
 ﻿namespace Flow.Domain.Transactions
 {
-    public sealed class Overrides
+    public class Overrides
     {
         public Overrides(string? category, string? title, string? comment)
         {

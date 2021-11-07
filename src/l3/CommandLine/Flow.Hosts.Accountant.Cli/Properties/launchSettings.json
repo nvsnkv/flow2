@@ -1,0 +1,17 @@
+{
+  "profiles": {
+    "WSL": {
+      "commandName": "WSL2",
+      "environmentVariables": {},
+      "distributionName": ""
+    },
+    "accountant list": {
+      "commandName": "Project",
+      "commandLineArgs": "list"
+    },
+    "help list": {
+      "commandName": "Project",
+      "commandLineArgs": "help list"
+    }
+  }
+}
