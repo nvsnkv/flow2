@@ -11,4 +11,5 @@ internal class FlowConfigurationDto : IFlowConfiguration
     public string? NumberStyle { get; set; }
 
     public string? DateStyle { get; set; }
+    public IDictionary<SupportedFormat, string>? Editor { get; set; }
 }

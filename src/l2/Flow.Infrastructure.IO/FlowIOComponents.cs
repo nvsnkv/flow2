@@ -10,7 +10,7 @@ using Newtonsoft.Json;
 
 namespace Flow.Infrastructure.IO;
 
-public class IOComponents : Module
+public class FlowIOComponents : Module
 {
     protected override void Load(ContainerBuilder builder)
     {

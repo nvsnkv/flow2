@@ -16,4 +16,14 @@
     <RepositoryUrl>https://github.com/nvsnkv/flow2</RepositoryUrl>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="CommandLineParser" Version="2.8.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\l2\Flow.Infrastructure.Configuration\Flow.Infrastructure.Configuration.csproj" />
+    <ProjectReference Include="..\..\..\l2\Flow.Infrastructure.IO\Flow.Infrastructure.IO.csproj" />
+    <ProjectReference Include="..\..\..\l2\Flow.Infrastructure.Storage\Flow.Infrastructure.Storage.csproj" />
+  </ItemGroup>
+
 </Project>

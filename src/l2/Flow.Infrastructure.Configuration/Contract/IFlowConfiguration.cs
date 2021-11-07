@@ -8,4 +8,6 @@ public interface IFlowConfiguration
     string? NumberStyle { get; }
 
     string? DateStyle { get; }
+
+    IDictionary<SupportedFormat, string>? Editor { get; }
 }
