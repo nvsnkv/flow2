@@ -12,8 +12,7 @@ internal class AddTransactionsArgs : ArgsBase
     [Option('f', "input-format", Required = false, Default = SupportedFormat.CSV, HelpText = "Input format. If specified, app will use it to parse incoming data. If not specified, app will use file extension to define input format. This parameter is required if input-file is not set.")]
     public SupportedFormat Format { get; set; }
 
-    [Option('i', "input-file", Required = false,
-        HelpText = "Input file path. If specified, app will use the file instead of standard input.")]
+    [Option('i', "input-file", Required = false, HelpText = "Input file path. If specified, app will use the file instead of standard input.")]
     public string? Input
     {
         get => input;
