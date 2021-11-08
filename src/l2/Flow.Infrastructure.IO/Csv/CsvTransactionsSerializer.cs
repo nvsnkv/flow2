@@ -16,12 +16,16 @@ internal class CsvTransactionsSerializer
     public async Task WriteTransactions(StreamWriter writer, IEnumerable<Transaction> transactions, CancellationToken ct)
     {
         await using var csvWriter = new CsvWriter(writer, config);
+        csvWriter.Context.RegisterClassMap<TransactionRowMap>();
+
         await csvWriter.WriteRecordsAsync(transactions.Select(t => (TransactionRow)t), ct);
     }
 
     public async Task WriteRecordedTransactions(StreamWriter writer, IEnumerable<RecordedTransaction> transactions,  CancellationToken ct)
     {
         await using var csvWriter = new CsvWriter(writer, config);
+        csvWriter.Context.RegisterClassMap<RecordedTransactionRowMap>();
+
         await csvWriter.WriteRecordsAsync(transactions.Select(t => (RecordedTransactionRow)t), ct);
     }
 
