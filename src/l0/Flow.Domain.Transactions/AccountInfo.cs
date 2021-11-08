@@ -1,44 +1,43 @@
 ﻿using System;
 
-namespace Flow.Domain.Transactions
+namespace Flow.Domain.Transactions;
+
+public class AccountInfo
 {
-    public class AccountInfo
+    public static readonly AccountInfo Empty = new(string.Empty, string.Empty);
+
+    public AccountInfo(string name, string bank)
     {
-        public static readonly AccountInfo Empty = new AccountInfo(string.Empty, string.Empty);
+        Name = name;
+        Bank = bank;
+    }
 
-        public AccountInfo(string name, string bank)
-        {
-            Name = name;
-            Bank = bank;
-        }
+    public string Name { get; }
 
-        public string Name { get; }
+    public string Bank { get; }
 
-        public string Bank { get; }
+    private bool Equals(AccountInfo other)
+    {
+        return Name == other.Name && Bank == other.Bank;
+    }
 
-        private bool Equals(AccountInfo other)
-        {
-            return Name == other.Name && Bank == other.Bank;
-        }
+    public override bool Equals(object? obj)
+    {
+        return ReferenceEquals(this, obj) || obj is AccountInfo other && Equals(other);
+    }
 
-        public override bool Equals(object? obj)
-        {
-            return ReferenceEquals(this, obj) || obj is AccountInfo other && Equals(other);
-        }
+    public override int GetHashCode()
+    {
+        return HashCode.Combine(Name, Bank);
+    }
 
-        public override int GetHashCode()
-        {
-            return HashCode.Combine(Name, Bank);
-        }
+    public static bool operator ==(AccountInfo? left, AccountInfo? right)
+    {
+        return Equals(left, right);
+    }
 
-        public static bool operator ==(AccountInfo? left, AccountInfo? right)
-        {
-            return Equals(left, right);
-        }
-
-        public static bool operator !=(AccountInfo? left, AccountInfo? right)
-        {
-            return !Equals(left, right);
-        }
+    public static bool operator !=(AccountInfo? left, AccountInfo? right)
+    {
+        return !Equals(left, right);
     }
 }
