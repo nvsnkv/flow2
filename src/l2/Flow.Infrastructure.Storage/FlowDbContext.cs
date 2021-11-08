@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Flow.Infrastructure.Storage;
 
-internal partial class FlowDbContext : DbContext
+internal class FlowDbContext : DbContext
 {
     public FlowDbContext(DbContextOptions options) : base(options)
     {

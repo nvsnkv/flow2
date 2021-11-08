@@ -20,7 +20,7 @@ internal class ListTransactionsCommand : CommandBase
 
     public async Task<int> Execute(ListTransactionsArgs args, CancellationToken ct)
     {
-        var criteria = parser.ParseRecordedTransactionCriteria(args.Criteria);
+        var criteria = parser.ParseRecordedTransactionCriteria(args.Criteria ?? Enumerable.Empty<string>());
         if (!criteria.Successful)
         {
             foreach (var error in criteria.Errors)

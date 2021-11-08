@@ -1,5 +1,4 @@
 ﻿using CommandLine;
-using CsvHelper;
 using Flow.Infrastructure.Configuration.Contract;
 using JetBrains.Annotations;
 
