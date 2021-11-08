@@ -18,6 +18,7 @@ builder.RegisterModule(new FlowConfiguration())
 
 builder.RegisterType<AddTransactionsCommand>();
 builder.RegisterType<ListTransactionsCommand>();
+builder.RegisterType<EditTransactionsCommand>();
 
 var container = builder.Build();
 var config = container.Resolve<IFlowConfiguration>();
@@ -35,10 +36,12 @@ var parser = new Parser(settings => {
     settings.EnableDashDash = true;
 });
 
-var arguments = parser.ParseArguments<AddTransactionsArgs, ListTransactionsArgs>(args);
+var arguments = parser.ParseArguments<AddTransactionsArgs, ListTransactionsArgs, UpdateTransactionsArgs>(args);
 return await arguments.MapResult(
     async (AddTransactionsArgs arg) => await container.Resolve<AddTransactionsCommand>().Execute(arg, CancellationToken.None),
     async (ListTransactionsArgs arg) => await container.Resolve<ListTransactionsCommand>().Execute(arg, CancellationToken.None),
+    async (UpdateTransactionsArgs arg) => await container.Resolve<EditTransactionsCommand>().Execute(arg, CancellationToken.None),
+    async (EditTransactionsArgs arg) => await container.Resolve<EditTransactionsCommand>().Execute(arg, CancellationToken.None),
     async errs =>
     {
         var errors = errs as Error[] ?? errs.ToArray();
