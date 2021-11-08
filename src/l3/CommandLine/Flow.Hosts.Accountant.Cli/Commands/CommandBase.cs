@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using Flow.Infrastructure.Configuration.Contract;
+using JetBrains.Annotations;
 
 namespace Flow.Hosts.Accountant.Cli.Commands;
 
@@ -11,26 +12,21 @@ internal abstract class CommandBase
     {
         this.config = config;
     }
-
+    
     protected async Task<int> TryStartEditor(string? outputPath, SupportedFormat format, bool waitForExit)
     {
-        if (outputPath != null && (config.Editor?.ContainsKey(format) ?? false))
+        if (outputPath == null || !(config.Editor?.ContainsKey(format) ?? false)) return waitForExit ? -1 : 0;
+
+        var process = Process.Start(new ProcessStartInfo(config.Editor[format], outputPath)
         {
-            var process = Process.Start(new ProcessStartInfo(config.Editor[format], outputPath)
-            {
-                UseShellExecute = true
-            });
+            UseShellExecute = true
+        });
 
-            if (waitForExit && process != null)
-            {
-                await process.WaitForExitAsync();
-                return process.ExitCode;
-            }
+        if (!waitForExit) return 0;
+        if (process == null) return -1;
 
-            return 0;
-        }
-
-        return 0;
+        await process.WaitForExitAsync();
+        return process.ExitCode;
     }
 
     protected StreamWriter CreateWriter(string? output)
@@ -53,8 +49,17 @@ internal abstract class CommandBase
         return null;
     }
 
+    protected StreamReader CreateReader(string? input)
+    {
+        var stream = string.IsNullOrEmpty(input)
+            ? Console.OpenStandardInput()
+            : File.OpenRead(input);
+
+        return new StreamReader(stream);
+    }
+
     private string GeneratePath(SupportedFormat format, string command, string slug)
     {
-        return $"{command}.{DateTime.Now:s}.{slug}.{format.ToString().ToLower()}".Replace(":","_");
+        return $"{command}.{DateTime.Now:s}.{slug}.{format.ToString().ToLower()}".Replace(":", "_");
     }
 }

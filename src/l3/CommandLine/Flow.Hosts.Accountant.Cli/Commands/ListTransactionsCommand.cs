@@ -26,7 +26,7 @@ internal class ListTransactionsCommand : CommandBase
             foreach (var error in criteria.Errors)
             {
                 await Console.Error.WriteLineAsync(error);
-                return -1;
+                return 1;
             }
         }
         var transactions = await accountant.Get(criteria.Conditions, ct);
