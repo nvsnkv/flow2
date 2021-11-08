@@ -21,8 +21,8 @@ internal class AddTransactionsCommand : CommandBase
     {
         using var streamReader = CreateReader(addTransactionsArgs.Input);
         
-        var transactions = await reader.ReadRecordedTransactions(streamReader, addTransactionsArgs.Format, ct);
-        var rejected = await accountant.Update(transactions, ct);
+        var transactions = await reader.ReadTransactions(streamReader, addTransactionsArgs.Format, ct);
+        var rejected = await accountant.Create(transactions, ct);
 
         var outputPath = addTransactionsArgs.Output ?? GetFallbackOutputPath(addTransactionsArgs.Format, "add", "rejected-transactions");
         await using var streamWriter = CreateWriter(outputPath);

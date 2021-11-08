@@ -9,8 +9,8 @@ internal class ArgsBase
         var ext = Path.GetExtension(input)?.ToLower();
         return ext switch
         {
-            "csv" => SupportedFormat.CSV,
-            "json" => SupportedFormat.JSON,
+            ".csv" => SupportedFormat.CSV,
+            ".json" => SupportedFormat.JSON,
             null => null,
             _ => throw new NotSupportedException("File type is not supported!")
         };
