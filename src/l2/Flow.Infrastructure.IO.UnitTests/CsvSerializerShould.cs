@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using CsvHelper.Configuration;
+using Flow.Infrastructure.IO.Csv;
 using FluentAssertions;
 using Xunit;
 using Xunit.Categories;

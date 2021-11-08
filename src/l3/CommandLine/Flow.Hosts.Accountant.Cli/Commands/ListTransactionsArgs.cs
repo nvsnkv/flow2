@@ -10,13 +10,13 @@ internal class ListTransactionsArgs : ArgsBase
     private string? output;
 
     [Option('f', "output-format", Default = SupportedFormat.CSV, HelpText = "Output format. If output-file is set, output format will be defined by extension of output-file and this option will be ignored.")]
-    public SupportedFormat Format { get; set; }
+    public SupportedFormat Format { get; [UsedImplicitly] set; }
 
     [Option('o', "output-file", HelpText = "Output file path. If specified, app will this path to write the list of transactions stored in the database, otherwise it will either generate a new file or use standard output depending on configuration.")]
     public string? Output
     {
         get => output;
-        set 
+        [UsedImplicitly] set
         {
             output= value;
             Format = GuessFormatFromPath(value) ?? Format;
@@ -24,5 +24,5 @@ internal class ListTransactionsArgs : ArgsBase
     }
 
     [Value(0, MetaName = "Criteria", Required = false, HelpText = "Criteria for items that should be returned.")]
-    public IEnumerable<string>? Criteria { get; set; }
+    public IEnumerable<string>? Criteria { get; [UsedImplicitly]  set; }
 }

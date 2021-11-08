@@ -4,6 +4,8 @@ using Autofac;
 using CsvHelper.Configuration;
 using Flow.Infrastructure.Configuration.Contract;
 using Flow.Infrastructure.IO.Criteria;
+using Flow.Infrastructure.IO.Csv;
+using Flow.Infrastructure.IO.Json;
 using Newtonsoft.Json;
 
 [assembly:InternalsVisibleTo("Flow.Infrastructure.IO.UnitTests")]

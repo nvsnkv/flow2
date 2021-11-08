@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Flow.Infrastructure.IO.Json;
 using FluentAssertions;
 using Newtonsoft.Json;
 using Xunit;

@@ -1,11 +1,9 @@
 ﻿using Flow.Application.Transactions;
 using Flow.Infrastructure.Configuration.Contract;
 using Flow.Infrastructure.IO.Contract;
-using JetBrains.Annotations;
 
 namespace Flow.Hosts.Accountant.Cli.Commands;
 
-[UsedImplicitly]
 internal class AddTransactionsCommand : CommandBase
 {
     private readonly IAccountant accountant;

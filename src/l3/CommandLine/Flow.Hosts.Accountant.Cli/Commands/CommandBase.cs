@@ -1,6 +1,5 @@
 ﻿using System.Diagnostics;
 using Flow.Infrastructure.Configuration.Contract;
-using JetBrains.Annotations;
 
 namespace Flow.Hosts.Accountant.Cli.Commands;
 
