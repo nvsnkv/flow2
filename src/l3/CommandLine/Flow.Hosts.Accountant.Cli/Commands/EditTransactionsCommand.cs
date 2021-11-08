@@ -23,18 +23,9 @@ internal class EditTransactionsCommand : CommandBase
 
     public async Task<int> Execute(UpdateTransactionsArgs args, CancellationToken ct)
     {
-        using var streamReader = CreateReader(args.Input);
-
-        var transactions = await reader.ReadTransactions(streamReader, args.Format, ct);
-        var rejected = await accountant.Create(transactions, ct);
-
-        var outputPath = args.Output ?? GetFallbackOutputPath(args.Format, "update", "rejected-transactions");
-        await using var streamWriter = CreateWriter(outputPath);
-        await rejectionsWriter.WriteRejections(streamWriter, rejected, args.Format, ct);
-
-        return await TryStartEditor(outputPath, args.Format, false);
+        return await UpdateFromFile(args.Input, args.Format, args.Output, ct);
     }
-    
+
     public async Task<int> Execute(EditTransactionsArgs args, CancellationToken ct)
     {
         var criteria = parser.ParseRecordedTransactionCriteria(args.Criteria ?? Enumerable.Empty<string>());
@@ -62,19 +53,20 @@ internal class EditTransactionsCommand : CommandBase
             return exitCode;
         }
 
-        using (var streamReader = CreateReader(interim))
-        {
-            transactions = await reader.ReadRecordedTransactions(streamReader, args.Format, ct);
-        }
+        return await UpdateFromFile(interim, args.Format, args.Output, ct);
+    }
 
-        var rejected = await accountant.Update(transactions, ct);
-        var outputPath = args.Output ?? GetFallbackOutputPath(args.Format, "update", "rejected-transactions");
-        
-        await using (var streamWriter = CreateWriter(outputPath))
-        {
-            await rejectionsWriter.WriteRejections(streamWriter, rejected, args.Format, ct);
-        }
+    private async Task<int> UpdateFromFile(string? input, SupportedFormat format, string? output, CancellationToken ct)
+    {
+        using var streamReader = CreateReader(input);
 
-        return await TryStartEditor(outputPath, args.Format, false);
+        var transactions = await reader.ReadTransactions(streamReader, format, ct);
+        var rejected = await accountant.Create(transactions, ct);
+
+        var outputPath = output ?? GetFallbackOutputPath(format, "update", "rejected-transactions");
+        await using var streamWriter = CreateWriter(outputPath);
+        await rejectionsWriter.WriteRejections(streamWriter, rejected, format, ct);
+
+        return await TryStartEditor(outputPath, format, false);
     }
 }
