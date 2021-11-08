@@ -1,7 +1,7 @@
 ﻿using Autofac;
 using Flow.Application.Transactions.Validation;
 
-namespace Flow.Application.Transactions;
+namespace Flow.Application.Transactions.Contract;
 
 public class TransactionsManagement : Module
 {

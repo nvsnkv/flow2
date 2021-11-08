@@ -2,7 +2,7 @@
 using Autofac;
 using CommandLine;
 using CommandLine.Text;
-using Flow.Application.Transactions;
+using Flow.Application.Transactions.Contract;
 using Flow.Hosts.Accountant.Cli.Commands;
 using Flow.Infrastructure.Configuration;
 using Flow.Infrastructure.Configuration.Contract;
