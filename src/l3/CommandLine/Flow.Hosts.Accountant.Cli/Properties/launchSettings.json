@@ -1,5 +1,12 @@
 {
   "profiles": {
-    
+    "flow add": {
+      "commandName": "Project",
+      "commandLineArgs": "add -e -i C:\\Users\\nvsnk\\Downloads\\account_statements_202111082140.csv"
+    },
+    "flow list all": {
+      "commandName": "Project",
+      "commandLineArgs": "k>0"
+    }
   }
 }

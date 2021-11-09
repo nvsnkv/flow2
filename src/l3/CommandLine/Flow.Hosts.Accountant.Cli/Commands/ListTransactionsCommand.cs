@@ -31,10 +31,15 @@ internal class ListTransactionsCommand : CommandBase
         }
         var transactions = await accountant.Get(criteria.Conditions, ct);
 
-        var output = args.Output ?? GetFallbackOutputPath(args.Format, "list", "transactions");
+        var output = args.Output ?? (args.OpenEditor ? GetFallbackOutputPath(args.Format, "list", "transactions") : null);
         await using var streamWriter = CreateWriter(output);
         await writer.WriteRecordedTransactions(streamWriter, transactions, args.Format, ct);
 
-        return await TryStartEditor(output, args.Format, false);
+        if (args.OpenEditor) 
+        { 
+            return await TryStartEditor(output, args.Format, false);
+        }
+
+        return 0;
     }
 }

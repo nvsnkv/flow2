@@ -36,7 +36,7 @@ internal class EditTransactionsCommand : CommandBase
         }
 
         var errsPath = args.Errors ?? GetFallbackOutputPath(args.Format, "add", "rejected-transactions");
-        if (!args.Interactive) { 
+        if (!args.EditInEdior) { 
         await using (var streamWriter = CreateWriter(errsPath))
         {
             await rejectionsWriter.WriteRejections(streamWriter, rejected, args.Format, ct);
@@ -48,7 +48,7 @@ internal class EditTransactionsCommand : CommandBase
             }
         }
 
-        if (args.Interactive)
+        if (args.EditInEdior)
         {
             var format = args.Format;
             Expression<Func<RecordedTransaction, bool>>? conditions = t => initial.Min <= t.Timestamp && t.Timestamp <= initial.Max;
@@ -107,7 +107,7 @@ internal class EditTransactionsCommand : CommandBase
         return await Update(interim, format, ct, errsPath, rejected);
     }
 
-    private async Task<int> Update(string interim, SupportedFormat format, CancellationToken ct, string? errsPath, EnumerableWithCount<RejectedTransaction>? rejected = null)
+    private async Task<int> Update(string? interim, SupportedFormat format, CancellationToken ct, string? errsPath, EnumerableWithCount<RejectedTransaction>? rejected = null)
     {
         rejected ??= new EnumerableWithCount<RejectedTransaction>(Enumerable.Empty<RejectedTransaction>());
 

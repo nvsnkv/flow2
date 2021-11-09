@@ -1,4 +1,6 @@
 ﻿using System.Diagnostics;
+using System.Globalization;
+using System.Linq;
 using System.Text;
 using Flow.Infrastructure.Configuration.Contract;
 
@@ -7,10 +9,13 @@ namespace Flow.Hosts.Accountant.Cli.Commands;
 internal abstract class CommandBase
 {
     private readonly IFlowConfiguration config;
+    private readonly CultureInfo culture;
 
     protected CommandBase(IFlowConfiguration config)
     {
         this.config = config;
+        Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+        culture = CultureInfo.GetCultures(CultureTypes.AllCultures).FirstOrDefault(c => c.Name == config.CultureCode) ?? CultureInfo.CurrentCulture;
     }
     
     protected async Task<int> TryStartEditor(string? outputPath, SupportedFormat format, bool waitForExit)
@@ -35,7 +40,7 @@ internal abstract class CommandBase
             ? Console.OpenStandardOutput()
             : File.OpenWrite(output);
 
-        return new StreamWriter(stream, Encoding.UTF8);
+        return new StreamWriter(stream, output != null ? Encoding.UTF8 : Encoding.GetEncoding(culture.TextInfo.OEMCodePage));
     }
 
     protected string? GetFallbackOutputPath(SupportedFormat format, string command, string slug)
@@ -55,7 +60,7 @@ internal abstract class CommandBase
             ? Console.OpenStandardInput()
             : File.OpenRead(input);
 
-        return new StreamReader(stream, Encoding.UTF8);
+        return new StreamReader(stream, input != null ? Encoding.UTF8 : Encoding.GetEncoding(culture.TextInfo.OEMCodePage));
     }
 
     private string GeneratePath(SupportedFormat format, string command, string slug)

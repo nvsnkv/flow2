@@ -47,13 +47,7 @@ return await arguments.MapResult(
     {
         var width = Console.WindowWidth;
         var errors = errs as Error[] ?? errs.ToArray();
-        var output = errors.IsHelp() || errors.IsVersion()
-            ? HelpText.AutoBuild(arguments, h => { h.MaximumDisplayWidth = width; return h; })
-            : HelpText.AutoBuild(arguments, h => {
-                h = HelpText.DefaultParsingErrorsHandler(arguments, h);
-                h.MaximumDisplayWidth = width;
-                return h;
-            });
+        var output = HelpText.AutoBuild(arguments, h => { h.MaximumDisplayWidth = width; return h; });
 
         await errors.Output().WriteLineAsync(output);
         return errors.IsHelp() || errors.IsVersion() ? 0 : 1;

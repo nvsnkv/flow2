@@ -23,6 +23,9 @@ internal class ListTransactionsArgs : ArgsBase
         }
     }
 
-    [Value(0, MetaName = "Criteria", Required = false, HelpText = "Criteria for items that should be returned.")]
+    [Option('e', "open-in-edior", Default = false, Required = false, HelpText = "Display transactions in external editor")]
+    public bool OpenEditor { get; [UsedImplicitly] set;}
+
+    [Value(0, MetaName = "Criteria", Required = true, HelpText = "Criteria for items that should be returned.")]
     public IEnumerable<string>? Criteria { get; [UsedImplicitly]  set; }
 }
