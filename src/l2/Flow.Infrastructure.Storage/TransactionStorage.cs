@@ -17,9 +17,9 @@ internal class TransactionStorage : ITransactionsStorage
     public async Task<IEnumerable<RejectedTransaction>> Create(IEnumerable<Transaction> transactions, CancellationToken ct)
     {
         await using var context = factory.CreateDbContext();
-        foreach (var transaction in transactions)
+        foreach (var t in transactions)
         {
-            await context.Transactions.AddAsync(new DbTransaction(0, transaction), ct);
+            await AddTransaction(t, context, ct);
         }
 
         await context.SaveChangesAsync(ct);
@@ -27,10 +27,26 @@ internal class TransactionStorage : ITransactionsStorage
         return Enumerable.Empty<RejectedTransaction>();
     }
 
+    private static async Task AddTransaction(Transaction t, FlowDbContext context, CancellationToken ct)
+    {
+        var account = await context.Accounts.Include(a => a.Transactions).SingleOrDefaultAsync(a => a.Name == t.Account.Name && a.Bank == t.Account.Bank, ct);
+        if (account == null)
+        {
+            account = new DbAccount(t.Account);
+            await context.Accounts.AddAsync(account, ct);
+            await context.SaveChangesAsync(ct);
+            account = await context.Accounts.Include(a => a.Transactions).SingleAsync(a => a.Name == t.Account.Name && a.Bank == t.Account.Bank, ct);
+        }
+
+        account.Transactions.Add(new DbTransaction(t.Timestamp, t.Amount, t.Currency, t.Category, t.Title, account));
+    }
+
     public async Task<IEnumerable<RecordedTransaction>> Read(Expression<Func<RecordedTransaction, bool>> conditions, CancellationToken ct)
     {
         await using var context = factory.CreateDbContext();
         return await context.Transactions
+            .Include(t => t.DbAccount)
+            .Include(t => t.Overrides)
             .Where(conditions)
             .Cast<RecordedTransaction>()
             .ToListAsync(ct);
@@ -40,18 +56,24 @@ internal class TransactionStorage : ITransactionsStorage
     {
         await using var context = factory.CreateDbContext();
         var rejections = new List<RejectedTransaction>();
-        foreach (var transaction in transactions)
+        foreach (var upd in transactions)
         {
-            var target = await context.Transactions.FirstOrDefaultAsync(t => t.Key == transaction.Key, ct);
+            var target = await context.Transactions.Include(t => t.DbAccount).Include(t => t.DbAccount.Transactions).FirstOrDefaultAsync(t => t.Key == upd.Key, ct);
             if (target is null)
             {
-                rejections.Add(new RejectedTransaction(transaction,
-                    $"Unable to identify transaction with key {transaction.Key}"));
+                rejections.Add(new RejectedTransaction(upd, $"Unable to identify transaction with key {upd.Key}"));
             }
             else
             {
-                context.Transactions.Remove(target);
-                context.Transactions.Add(new DbTransaction(transaction));
+                target.DbAccount.Transactions.Remove(target);
+                if (target.DbAccount != upd.Account)
+                {
+                    await AddTransaction(upd, context, ct);
+                }
+                else
+                {
+                    target.DbAccount.Transactions.Add(new DbTransaction(upd.Key, upd.Timestamp, upd.Amount, upd.Currency, upd.Category, upd.Title, target.DbAccount) { Overrides = upd.Overrides });
+                }
             }
         }
 
@@ -62,10 +84,11 @@ internal class TransactionStorage : ITransactionsStorage
     public async Task<int> Delete(Expression<Func<RecordedTransaction, bool>> conditions, CancellationToken ct)
     {
         await using var context = factory.CreateDbContext();
-        var targets = await context.Transactions.Where(conditions).Cast<DbTransaction>().ToListAsync(ct);
+        var targets = await context.Transactions.Include(t => t.DbAccount)
+            .Where(conditions).Cast<DbTransaction>().ToListAsync(ct);
         foreach (var target in targets)
         {
-            context.Transactions.Remove(target);
+            target.DbAccount.Transactions.Remove(target);
         }
 
         return await context.SaveChangesAsync(ct);

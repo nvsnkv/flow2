@@ -23,6 +23,9 @@ internal class AddTransactionsArgs : ArgsBase
         }
     }
 
-    [Option('o', "output-file", Required = false, HelpText = "Output file path. If specified, app will write list of rejected transactions to this file, otherwise it will either generate a new file or use standard output depending on configuration.")]
-    public string? Output { get; [UsedImplicitly] set; }
+    [Option('e', "interactive-edit", Required = false, Default = false, HelpText = "Use external editor to update successfully appended transactions.")]
+    public bool Interactive { get; [UsedImplicitly] set; }
+
+    [Option("output-errors", Required = false, HelpText = "Errors file path. If specified, app will write list of rejected transactions to this file, otherwise it will either generate a new file or use standard output depending on configuration.")]
+    public string? Errors { get; [UsedImplicitly] set; }
 }

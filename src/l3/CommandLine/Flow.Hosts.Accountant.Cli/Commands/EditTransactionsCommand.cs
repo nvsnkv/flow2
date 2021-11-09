@@ -23,7 +23,7 @@ internal class EditTransactionsCommand : CommandBase
 
     public async Task<int> Execute(UpdateTransactionsArgs args, CancellationToken ct)
     {
-        return await UpdateFromFile(args.Input, args.Format, args.Output, ct);
+        return await UpdateFromFile(args.Input, args.Format, args.Errors, ct);
     }
 
     public async Task<int> Execute(EditTransactionsArgs args, CancellationToken ct)

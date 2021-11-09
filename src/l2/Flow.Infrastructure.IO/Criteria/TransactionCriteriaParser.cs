@@ -39,23 +39,6 @@ internal class TransactionCriteriaParser : ITransactionCriteriaParser
         this.parser = parser;
     }
 
-    public CriteriaParserResult<Transaction> ParseTransactionCriteria(IEnumerable<string> parts)
-    {
-        var builder = new PatternBuilder<Transaction>();
-        var errors = new List<string>();
-
-        foreach (var part in parts)
-        {
-            var result = ParseCondition(part, builder);
-            if (!result.Successful)
-            {
-                errors.Add(result.Error);
-            }
-        }
-
-        return new CriteriaParserResult<Transaction>(builder.Build(), errors);
-    }
-
     public CriteriaParserResult<RecordedTransaction> ParseRecordedTransactionCriteria(IEnumerable<string> parts)
     {
         var builder = new PatternBuilder<RecordedTransaction>();
@@ -73,7 +56,7 @@ internal class TransactionCriteriaParser : ITransactionCriteriaParser
         return new CriteriaParserResult<RecordedTransaction>(builder.Build(), errors);
     }
 
-    private ParsingResult ParseCondition<T>(string part, PatternBuilder<T> builder) where T : Transaction
+    private ParsingResult ParseCondition(string part, PatternBuilder<RecordedTransaction> builder)
     {
         var match = criterionPattern.Match(part);
         if (!match.Success)
@@ -96,10 +79,10 @@ internal class TransactionCriteriaParser : ITransactionCriteriaParser
             "t" => HandleString(t => t.Title, builder, opStart, arg, opEnd, neg),
             "acc" => HandleString(t => t.Account.Name, builder, opStart, arg, opEnd, neg),
             "bnk" => HandleString(t => t.Account.Bank, builder, opStart, arg, opEnd, neg),
-            "k" => HandleLong(t => new RecorderTransactionFieldsAccessor(t).Key, builder, opStart, arg, opEnd, neg),
-            "ocom" => HandleString(t => new RecorderTransactionFieldsAccessor(t).Comment, builder, opStart, arg, opEnd, neg),
-            "ocat" => HandleString(t => new RecorderTransactionFieldsAccessor(t).CategoryOverride, builder, opStart, arg, opEnd, neg),
-            "ot" => HandleString(t => new RecorderTransactionFieldsAccessor(t).TitleOverride, builder, opStart, arg, opEnd, neg),
+            "k" => HandleLong(t => t.Key, builder, opStart, arg, opEnd, neg),
+            "ocom" => HandleString(t => t.Overrides!.Comment, builder, opStart, arg, opEnd, neg),
+            "ocat" => HandleString(t => t.Overrides!.Category, builder, opStart, arg, opEnd, neg),
+            "ot" => HandleString(t => t.Overrides!.Title, builder, opStart, arg, opEnd, neg),
             _ => new ParsingResult($"Unknown property {prop} given!")
         };
     }
@@ -137,9 +120,9 @@ internal class TransactionCriteriaParser : ITransactionCriteriaParser
         return result;
     }
 
-    private ParsingResult HandleString<T>(Expression<Func<T, string>> selector, PatternBuilder<T> builder, Group opStart, Group arg, Group opEnd, Group neg) where T : Transaction
+    private ParsingResult HandleString<T>(Expression<Func<T, string?>> selector, PatternBuilder<T> builder, Group opStart, Group arg, Group opEnd, Group neg) where T : Transaction
     {
-        var result = ParsePropertyCondition(selector, ParseAttributeConditions<string>(opStart, arg, opEnd, neg));
+        var result = ParsePropertyCondition(selector, ParseAttributeConditions<string?>(opStart, arg, opEnd, neg));
         if (result.Successful)
         {
             builder.With(result.Selector!, result.Condition!);
@@ -240,9 +223,9 @@ internal class TransactionCriteriaParser : ITransactionCriteriaParser
         };
     }
 
-    private Expression<Func<T, bool>> BuildContainsExpression<T>(ParameterExpression param, string part)
+    private Expression<Func<T, bool>> BuildContainsExpression<T>(ParameterExpression param, string? part)
     {
-        var partAccess = Expression.Constant(part);
+        var partAccess = Expression.Constant(part ?? string.Empty);
         return Expression.Lambda<Func<T, bool>>(Expression.Call(param, "Contains", null, partAccess), param);
     }
 

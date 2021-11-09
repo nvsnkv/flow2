@@ -17,8 +17,6 @@ internal class FlowDbContextFactory : IDbContextFactory<FlowDbContext>
     {
         var options = new DbContextOptionsBuilder()
             .UseNpgsql(config.ConnectionString ?? throw new InvalidOperationException("Connection string was not configured!"))
-            .UseLazyLoadingProxies()
-            .EnableSensitiveDataLogging()
             .Options;
 
         return new FlowDbContext(options);

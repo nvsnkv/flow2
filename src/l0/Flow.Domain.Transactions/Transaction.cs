@@ -34,7 +34,7 @@ public class Transaction
 
     public string Title { get; }
 
-    public AccountInfo Account { get; }
+    public virtual AccountInfo Account { get; }
 
     protected bool Equals(Transaction other)
     {

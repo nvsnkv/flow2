@@ -5,6 +5,7 @@ using Flow.Infrastructure.Storage.Model;
 using Microsoft.EntityFrameworkCore;
 
 [assembly:InternalsVisibleTo("Flow.Infrastructure.Storage.Migrations")]
+[assembly: InternalsVisibleTo("DynamicProxyGenAssembly2")]
 
 namespace Flow.Infrastructure.Storage;
 

@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Text;
 using Flow.Infrastructure.Configuration.Contract;
 
 namespace Flow.Hosts.Accountant.Cli.Commands;
@@ -34,7 +35,7 @@ internal abstract class CommandBase
             ? Console.OpenStandardOutput()
             : File.OpenWrite(output);
 
-        return new StreamWriter(stream);
+        return new StreamWriter(stream, Encoding.UTF8);
     }
 
     protected string? GetFallbackOutputPath(SupportedFormat format, string command, string slug)
@@ -54,7 +55,7 @@ internal abstract class CommandBase
             ? Console.OpenStandardInput()
             : File.OpenRead(input);
 
-        return new StreamReader(stream);
+        return new StreamReader(stream, Encoding.UTF8);
     }
 
     private string GeneratePath(SupportedFormat format, string command, string slug)

@@ -18,11 +18,11 @@ public class TransactionCriteriaParserShould : TestDataCarrier
     {
         var culture = CultureInfo.GetCultureInfo(cultureCode);
         var input = textInput.Split(' ');
-        var result = new TransactionCriteriaParser(new GenericParser(culture, DateTimeStyles.AssumeLocal, NumberStyles.Any)).ParseTransactionCriteria(input);
+        var result = new TransactionCriteriaParser(new GenericParser(culture, DateTimeStyles.AssumeLocal, NumberStyles.Any)).ParseRecordedTransactionCriteria(input);
         result.Successful.Should().BeTrue();
         result.Errors.Should().BeEmpty();
 
-        var items = Transactions.Where(result.Conditions!.Compile()).ToList();
+        var items = RecordedTransactions.Where(result.Conditions!.Compile()).ToList();
 
         items.Should().BeEquivalentTo(Transactions.Where(expectedSelector).ToList());
     }
@@ -34,7 +34,7 @@ public class TransactionCriteriaParserShould : TestDataCarrier
     {
         var culture = CultureInfo.GetCultureInfo(cultureCode);
         var input = textInput.Split(' ');
-        var result = new TransactionCriteriaParser(new GenericParser(culture, DateTimeStyles.AssumeLocal, NumberStyles.Any)).ParseTransactionCriteria(input);
+        var result = new TransactionCriteriaParser(new GenericParser(culture, DateTimeStyles.AssumeLocal, NumberStyles.Any)).ParseRecordedTransactionCriteria(input);
         result.Successful.Should().BeTrue();
         result.Errors.Should().BeEmpty();
 
