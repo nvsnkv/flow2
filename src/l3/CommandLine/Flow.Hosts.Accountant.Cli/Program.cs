@@ -16,9 +16,8 @@ builder.RegisterModule(new FlowConfiguration())
     .RegisterModule(new FlowIOComponents())
     .RegisterModule(new TransactionsManagement());
 
-builder.RegisterType<AddTransactionsCommand>();
-builder.RegisterType<ListTransactionsCommand>();
 builder.RegisterType<EditTransactionsCommand>();
+builder.RegisterType<ListTransactionsCommand>();
 builder.RegisterType<DeleteTransactionsCommand>();
 
 var container = builder.Build();
@@ -39,7 +38,7 @@ var parser = new Parser(settings => {
 
 var arguments = parser.ParseArguments<AddTransactionsArgs, ListTransactionsArgs, UpdateTransactionsArgs, EditTransactionsArgs, DeleteTransactionsArgs>(args);
 return await arguments.MapResult(
-    async (AddTransactionsArgs arg) => await container.Resolve<AddTransactionsCommand>().Execute(arg, CancellationToken.None),
+    async (AddTransactionsArgs arg) => await container.Resolve<EditTransactionsCommand>().Execute(arg, CancellationToken.None),
     async (ListTransactionsArgs arg) => await container.Resolve<ListTransactionsCommand>().Execute(arg, CancellationToken.None),
     async (UpdateTransactionsArgs arg) => await container.Resolve<EditTransactionsCommand>().Execute(arg, CancellationToken.None),
     async (EditTransactionsArgs arg) => await container.Resolve<EditTransactionsCommand>().Execute(arg, CancellationToken.None),

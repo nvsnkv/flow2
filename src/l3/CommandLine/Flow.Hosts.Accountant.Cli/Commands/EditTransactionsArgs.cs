@@ -13,6 +13,6 @@ internal class EditTransactionsArgs
     [Option('f', "format", Default = SupportedFormat.CSV, HelpText = "Processing format. App will use this format to export data for update.")]
     public SupportedFormat Format { get; [UsedImplicitly] set; }
 
-    [Option('o', "output-file", Required = false, HelpText = "Output file path. If specified, app will write list of rejected transactions to this file, otherwise it will either generate a new file or use standard output depending on configuration.")]
+    [Option('e', "output-errors", Required = false, HelpText = "Output file path. If specified, app will write list of rejected transactions to this file, otherwise it will either generate a new file or use standard output depending on configuration.")]
     public string? Output { get; [UsedImplicitly] set; }
 }
