@@ -19,7 +19,7 @@ internal class FlowDbContext : DbContext
             ab.Property(a => a.Name).IsRequired();
             ab.Property(a => a.Bank).IsRequired();
             ab.HasKey(a => new { a.Name, a.Bank });
-            ab.HasMany(a => Transactions).WithOne(t => t.DbAccount);
+            ab.HasMany(a => a.Transactions).WithOne(t => t.DbAccount);
         });
 
         modelBuilder.Entity<DbTransaction>(tb =>
