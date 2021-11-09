@@ -1,8 +1,10 @@
 ﻿using CsvHelper.Configuration;
+using JetBrains.Annotations;
 
 namespace Flow.Infrastructure.IO.Csv;
 
-internal class RecordedTransactionRowMap : ClassMap<RecordedTransactionRow>
+[UsedImplicitly]
+internal sealed class RecordedTransactionRowMap : ClassMap<RecordedTransactionRow>
 {
     public RecordedTransactionRowMap()
     {

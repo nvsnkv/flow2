@@ -1,9 +1,10 @@
-﻿using System.Linq.Expressions;
-using CsvHelper.Configuration;
+﻿using CsvHelper.Configuration;
+using JetBrains.Annotations;
 
 namespace Flow.Infrastructure.IO.Csv;
 
-internal class TransactionRowMap : ClassMap<TransactionRow>
+[UsedImplicitly]
+internal sealed class TransactionRowMap : ClassMap<TransactionRow>
 {
     public TransactionRowMap()
     {

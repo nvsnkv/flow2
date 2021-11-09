@@ -1,6 +1,7 @@
 ﻿using System.Linq.Expressions;
 using Flow.Application.Transactions.Infrastructure;
 using Flow.Domain.Transactions;
+using Flow.Infrastructure.Storage.Model;
 using Microsoft.EntityFrameworkCore;
 
 namespace Flow.Infrastructure.Storage;
@@ -18,7 +19,7 @@ internal class TransactionStorage : ITransactionsStorage
         await using var context = factory.CreateDbContext();
         foreach (var transaction in transactions)
         {
-            await context.Transactions.AddAsync(new RecordedTransaction(0, transaction), ct);
+            await context.Transactions.AddAsync(new DbTransaction(0, transaction), ct);
         }
 
         await context.SaveChangesAsync(ct);
@@ -50,7 +51,7 @@ internal class TransactionStorage : ITransactionsStorage
             else
             {
                 context.Transactions.Remove(target);
-                context.Transactions.Add(transaction);
+                context.Transactions.Add(new DbTransaction(transaction));
             }
         }
 
@@ -61,7 +62,7 @@ internal class TransactionStorage : ITransactionsStorage
     public async Task<int> Delete(Expression<Func<RecordedTransaction, bool>> conditions, CancellationToken ct)
     {
         await using var context = factory.CreateDbContext();
-        var targets = await context.Transactions.Where(conditions).ToListAsync(ct);
+        var targets = await context.Transactions.Where(conditions).Cast<DbTransaction>().ToListAsync(ct);
         foreach (var target in targets)
         {
             context.Transactions.Remove(target);

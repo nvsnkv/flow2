@@ -8,11 +8,13 @@ namespace Flow.Domain.Transactions.UnitTests;
 
 public class TransferShould
 {
-    private readonly RecordedTransaction source = new(1, DateTime.UtcNow, -100, "RUR", null, "Transfer");
-    private readonly RecordedTransaction anotherSource = new(5, DateTime.UtcNow, -100, "RUR", null, "Transfer");
-    private readonly RecordedTransaction sink = new(2, DateTime.UtcNow, 100, "RUR", null, "Transfer");
-    private readonly RecordedTransaction sinkWithFee = new(3, DateTime.UtcNow, 90, "RUR", null, "Transfer");
-    private readonly RecordedTransaction sinkWithDifferentCurrency = new(4, DateTime.UtcNow, 90, "EUR", null, "Transfer");
+    private static readonly AccountInfo Account = new("The name", "The Bank");
+
+    private readonly RecordedTransaction source = new(1, DateTime.UtcNow, -100, "RUR", null, "Transfer", Account);
+    private readonly RecordedTransaction anotherSource = new(5, DateTime.UtcNow, -100, "RUR", null, "Transfer", Account);
+    private readonly RecordedTransaction sink = new(2, DateTime.UtcNow, 100, "RUR", null, "Transfer", Account);
+    private readonly RecordedTransaction sinkWithFee = new(3, DateTime.UtcNow, 90, "RUR", null, "Transfer", Account);
+    private readonly RecordedTransaction sinkWithDifferentCurrency = new(4, DateTime.UtcNow, 90, "EUR", null, "Transfer", Account);
 
     [Fact] [UnitTest]
     public void ThrowArgumentExceptionIfSourceAndSinkAreTheSame()

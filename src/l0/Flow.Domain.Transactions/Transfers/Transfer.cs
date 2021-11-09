@@ -34,6 +34,4 @@ public class Transfer
     public decimal Fee { get; }
 
     public string Currency { get; }
-
-    public string? Comment { get; }
 }

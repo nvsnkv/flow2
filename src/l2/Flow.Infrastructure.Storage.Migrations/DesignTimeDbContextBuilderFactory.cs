@@ -1,8 +1,11 @@
+using Flow.Infrastructure.Storage.Model;
+using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 
 namespace Flow.Infrastructure.Storage.Migrations;
 
+[UsedImplicitly]
 internal class DesignTimeDbContextBuilderFactory : IDesignTimeDbContextFactory<FlowDbContext>
 {
     public FlowDbContext CreateDbContext(string[] args)

@@ -1,6 +1,7 @@
 ﻿using System.Runtime.CompilerServices;
 using Autofac;
 using Flow.Infrastructure.Configuration.Contract;
+using Flow.Infrastructure.Storage.Model;
 using Microsoft.EntityFrameworkCore;
 
 [assembly:InternalsVisibleTo("Flow.Infrastructure.Storage.Migrations")]

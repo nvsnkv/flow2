@@ -1,7 +1,6 @@
-﻿using Flow.Domain.Transactions;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 
-namespace Flow.Infrastructure.Storage;
+namespace Flow.Infrastructure.Storage.Model;
 
 internal class FlowDbContext : DbContext
 {
@@ -9,21 +8,21 @@ internal class FlowDbContext : DbContext
     {
     }
 
-    public DbSet<RecordedTransaction> Transactions { get; set; } = null!;
+    public DbSet<DbAccount> Accounts { get; set; } = null!;
+
+    public DbSet<DbTransaction> Transactions { get; set; } = null!;
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<AccountInfo>(ab =>
+        modelBuilder.Entity<DbAccount>(ab =>
         {
             ab.Property(a => a.Name).IsRequired();
             ab.Property(a => a.Bank).IsRequired();
             ab.HasKey(a => new { a.Name, a.Bank });
-            ab.HasMany(typeof(RecordedTransaction))
-                .WithOne()
-                .HasForeignKey("account_name", "bank_name");
+            ab.HasMany(a => Transactions).WithOne(t => t.DbAccount);
         });
 
-        modelBuilder.Entity<RecordedTransaction>(tb =>
+        modelBuilder.Entity<DbTransaction>(tb =>
         {
             tb.Property(t => t.Key).ValueGeneratedOnAdd();
             tb.Property(t => t.Timestamp).IsRequired();
@@ -32,9 +31,6 @@ internal class FlowDbContext : DbContext
             tb.Property(t => t.Category);
             tb.Property(t => t.Title).IsRequired();
             tb.HasKey(t => t.Key);
-
-            tb.Property(typeof(string), "account_name").IsRequired();
-            tb.Property(typeof(string), "bank_name").IsRequired();
 
             tb.OwnsOne(t => t.Overrides, ob =>
             {

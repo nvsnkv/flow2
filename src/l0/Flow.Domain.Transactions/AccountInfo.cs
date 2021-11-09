@@ -4,8 +4,6 @@ namespace Flow.Domain.Transactions;
 
 public class AccountInfo
 {
-    public static readonly AccountInfo Empty = new(string.Empty, string.Empty);
-
     public AccountInfo(string name, string bank)
     {
         Name = name;

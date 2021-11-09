@@ -4,11 +4,6 @@ namespace Flow.Domain.Transactions;
 
 public class RecordedTransaction: Transaction
 {
-    public RecordedTransaction(long key, DateTime timestamp, decimal amount, string currency, string? category, string title)
-        : this(key, timestamp, amount, currency, category, title, AccountInfo.Empty)
-    {
-    }
-
     public RecordedTransaction(long key, DateTime timestamp, decimal amount, string currency, string? category, string title, AccountInfo account) : base(timestamp, amount, currency, category, title, account)
     {
         Key = key;
