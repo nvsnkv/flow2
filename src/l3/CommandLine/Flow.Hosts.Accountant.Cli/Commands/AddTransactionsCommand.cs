@@ -36,11 +36,12 @@ internal class EditTransactionsCommand : CommandBase
         }
 
         var errsPath = args.Errors ?? GetFallbackOutputPath(args.Format, "add", "rejected-transactions");
-        if (!args.EditInEdior) { 
-        await using (var streamWriter = CreateWriter(errsPath))
-        {
-            await rejectionsWriter.WriteRejections(streamWriter, rejected, args.Format, ct);
-        }
+        if (!args.EditInEdior) 
+        { 
+            await using (var streamWriter = CreateWriter(errsPath))
+            {
+                await rejectionsWriter.WriteRejections(streamWriter, rejected, args.Format, ct);
+            }
 
             if (rejected.Count > 0)
             {
@@ -51,7 +52,7 @@ internal class EditTransactionsCommand : CommandBase
         if (args.EditInEdior)
         {
             var format = args.Format;
-            Expression<Func<RecordedTransaction, bool>>? conditions = t => initial.Min <= t.Timestamp && t.Timestamp <= initial.Max;
+            Expression<Func<RecordedTransaction, bool>> conditions = t => initial.Min <= t.Timestamp && t.Timestamp <= initial.Max;
             var interim = GetFallbackOutputPath(format, "add", "edit-appended");
 
             return await Edit(conditions, format, ct, errsPath, interim, rejected);
@@ -111,20 +112,19 @@ internal class EditTransactionsCommand : CommandBase
     {
         rejected ??= new EnumerableWithCount<RejectedTransaction>(Enumerable.Empty<RejectedTransaction>());
 
-        using (var streamReader = new StreamReader(interim))
+        using var streamReader = CreateReader(interim);
+
+        var updated = await reader.ReadRecordedTransactions(streamReader, format, ct);
+        rejected = new EnumerableWithCount<RejectedTransaction>(rejected.Concat(await accountant.Update(updated, ct)));
+
+        await using (var streamWriter = CreateWriter(errsPath))
         {
-            var updated = await reader.ReadRecordedTransactions(streamReader, format, ct);
-            rejected = new EnumerableWithCount<RejectedTransaction>(rejected.Concat(await accountant.Update(updated, ct)));
+            await rejectionsWriter.WriteRejections(streamWriter, rejected, format, ct);
+        }
 
-            await using (var streamWriter = CreateWriter(errsPath))
-            {
-                await rejectionsWriter.WriteRejections(streamWriter, rejected, format, ct);
-            }
-
-            if (rejected.Count > 0)
-            {
-                return await TryStartEditor(errsPath, format, false);
-            }
+        if (rejected.Count > 0)
+        {
+            return await TryStartEditor(errsPath, format, false);
         }
 
         return 0;
