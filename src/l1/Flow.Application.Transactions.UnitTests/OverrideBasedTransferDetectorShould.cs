@@ -1,10 +1,8 @@
-using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Flow.Application.Transactions.Infrastructure;
 using Flow.Application.Transactions.Transfers;
-using Flow.Domain.Transactions;
 using Flow.Domain.Transactions.Transfers;
 using FluentAssertions;
 using Moq;

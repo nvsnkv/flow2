@@ -4,33 +4,20 @@ using Flow.Domain.Transactions.Transfers;
 
 namespace Flow.Application.Transactions.Transfers;
 
-internal class OverridesBasedTransferDetector : ITransferDetector
+internal class OverridesBasedTransferDetector : TransferDetectorBase
 {
     private readonly HashSet<TransferKey> enforced;
-    
-    public OverridesBasedTransferDetector(HashSet<TransferKey> enforced)
+
+    private OverridesBasedTransferDetector(HashSet<TransferKey> enforced):base("User defined transfer")
     {
         this.enforced = enforced;
     }
 
-    public bool CheckIsTransfer(RecordedTransaction left, RecordedTransaction right)
+    public override bool CheckIsTransfer(RecordedTransaction left, RecordedTransaction right)
     {
         return enforced.Contains(new TransferKey(left.Key, right.Key));
     }
-
-    public Transfer Create(RecordedTransaction left, RecordedTransaction right)
-    {
-        if (!CheckIsTransfer(left, right))
-        {
-            throw new InvalidOperationException("Given transactions does not listed in overrides!");
-        }
-
-        return new Transfer(left, right)
-        {
-            Comment = "User defined transfer"
-        };
-    }
-
+    
     public static async Task<ITransferDetector> Create(ITransferOverridesStorage storage, CancellationToken ct)
     {
         var overrides = await storage.GetOverrides(ct);
