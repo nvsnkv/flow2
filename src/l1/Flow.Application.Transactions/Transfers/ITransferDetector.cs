@@ -5,7 +5,7 @@ namespace Flow.Application.Transactions.Transfers;
 
 public interface ITransferDetector
 {
-    bool IsTransfer(RecordedTransaction left, RecordedTransaction right);
+    bool CheckIsTransfer(RecordedTransaction left, RecordedTransaction right);
 
     Transfer Create(RecordedTransaction left, RecordedTransaction right);
 }

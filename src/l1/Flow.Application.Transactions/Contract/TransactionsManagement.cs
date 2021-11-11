@@ -1,5 +1,8 @@
-﻿using Autofac;
+﻿using System.Runtime.CompilerServices;
+using Autofac;
 using Flow.Application.Transactions.Validation;
+
+[assembly:InternalsVisibleTo("Flow.Application.Transactions.UnitTests")]
 
 namespace Flow.Application.Transactions.Contract;
 

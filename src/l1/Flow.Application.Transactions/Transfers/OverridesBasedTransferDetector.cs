@@ -13,14 +13,14 @@ class OverridesBasedTransferDetector : ITransferDetector
         this.enforced = enforced;
     }
 
-    public bool IsTransfer(RecordedTransaction left, RecordedTransaction right)
+    public bool CheckIsTransfer(RecordedTransaction left, RecordedTransaction right)
     {
         return enforced.Contains(new TransferKey(left.Key, right.Key));
     }
 
     public Transfer Create(RecordedTransaction left, RecordedTransaction right)
     {
-        if (!IsTransfer(left, right))
+        if (!CheckIsTransfer(left, right))
         {
             throw new InvalidOperationException("Given transactions does not listed in overrides!");
         }

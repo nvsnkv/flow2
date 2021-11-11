@@ -26,10 +26,18 @@ internal class TransfersBuilder
     public IEnumerable<Transfer> Build()
     {
         var list = transactions.ToList();
-        return list.Join(list,
-                    t => t,
-                    t => t,
-                    (l, r) => detectors.FirstOrDefault(d => d.IsTransfer(l, r))?.Create(l, r))
-                .Where(t => t != null)!;
+        foreach (var l in list)
+        {
+            foreach (var r in list)
+            {
+                foreach (var detector in detectors)
+                {
+                    if (detector.CheckIsTransfer(l, r))
+                    {
+                        yield return detector.Create(l, r);
+                    }
+                }
+            }
+        }
     }
 }
