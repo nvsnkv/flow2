@@ -19,7 +19,7 @@ public class Overrides
 
     protected bool Equals(Overrides other)
     {
-        return Comment == other.Comment && Title == other.Title && Category == other.Category;
+        return Comment == other.Comment && Title == other.Title && Category == other.Category;  
     }
 
     public override bool Equals(object? obj)

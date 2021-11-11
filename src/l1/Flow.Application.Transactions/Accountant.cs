@@ -10,7 +10,7 @@ internal class Accountant : IAccountant
 {
     private readonly ITransactionsStorage storage;
     private readonly IValidator<Transaction> transactionValidator;
-
+    
     public Accountant(ITransactionsStorage storage, IValidator<Transaction> transactionValidator)
     {
         this.storage = storage;

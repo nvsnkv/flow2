@@ -75,4 +75,43 @@ public class TransferShould
         transfer.Source.Should().Be(source.Key);
         transfer.Sink.Should().Be(sink.Key);
     }
+
+    [Theory] [UnitTest]
+    [InlineData(1, 2, 100, 100, "RUR", "RUR")]
+    [InlineData(1, 2, 100, 200, "RUR", "RUR")]
+    [InlineData(1, 2, 100, 100, "EUR", "RUR")]
+    [InlineData(1, 2, 100, 200, "EUR", "RUR")]
+
+    public void MatchIfKeysMatch(long source, long sink, decimal lFee, decimal rFee, string lCurrency, string rCurrency)
+    {
+        var left = new Transfer(source, sink, lFee, lCurrency);
+        var right = new Transfer(source, sink, rFee, rCurrency);
+
+        left.Should().Be(right);
+    }
+
+    [Fact] [UnitTest]
+    public void HaveHashKeyDefinedByTransferKey()
+    {
+        var transfer = new Transfer(100, 400, 0, "RUR");
+        var key = new TransferKey(100, 400);
+
+        key.GetHashCode().Should().Be(transfer.GetHashCode());
+    }
+
+    [Theory] [UnitTest]
+    [InlineData(1, 2, 1, 3, 100, 100, "RUR", "RUR")]
+    [InlineData(1, 2, 2, 1, 100, 200, "RUR", "RUR")]
+    [InlineData(1, 2, 3, 4, 100, 100, "EUR", "RUR")]
+    [InlineData(1, 2, 1, 3, 100, 200, "EUR", "RUR")]
+    [InlineData(1, 2, 1, 3, 100, 200, "RUR", "RUR")]
+    [InlineData(1, 2, 2, 1, 100, 100, "EUR", "RUR")]
+    [InlineData(1, 2, 3, 4, 100, 200, "EUR", "RUR")]
+    public void DifferIfKeysAreDifferent(long ls, long lsnk, long rs, long rsnk, decimal lFee, decimal rFee, string lCurrency, string rCurrency)
+    {
+        var left = new Transfer(ls, lsnk, lFee, lCurrency);
+        var right = new Transfer(rs, rsnk, rFee, rCurrency);
+
+        left.Should().NotBe(right);
+    }
 }
