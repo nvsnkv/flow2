@@ -4,7 +4,7 @@ using Flow.Domain.Transactions.Transfers;
 
 namespace Flow.Application.Transactions.Transfers;
 
-class OverridesBasedTransferDetector : ITransferDetector
+internal class OverridesBasedTransferDetector : ITransferDetector
 {
     private readonly HashSet<TransferKey> enforced;
     
@@ -27,7 +27,7 @@ class OverridesBasedTransferDetector : ITransferDetector
 
         return new Transfer(left, right)
         {
-            Comment = "User-defined transfer"
+            Comment = "User defined transfer"
         };
     }
 
