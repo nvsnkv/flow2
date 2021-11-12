@@ -1,8 +1,10 @@
 ﻿using System.Linq.Expressions;
 using Flow.Application.Transactions.Contract;
 using Flow.Application.Transactions.Infrastructure;
+using Flow.Application.Transactions.Transfers;
 using Flow.Domain.Patterns;
 using Flow.Domain.Transactions;
+using Flow.Domain.Transactions.Transfers;
 using FluentValidation;
 
 namespace Flow.Application.Transactions;
@@ -11,11 +13,19 @@ internal class Accountant : IAccountant
 {
     private readonly ITransactionsStorage storage;
     private readonly IValidator<Transaction> transactionValidator;
-    
-    public Accountant(ITransactionsStorage storage, IValidator<Transaction> transactionValidator)
+
+    private readonly ITransferOverridesStorage transferKeyStorage;
+    private readonly IList<ITransferDetector> transferDetectors;
+    private readonly IValidator<TransferKey> transferKeyValidator;
+
+
+    public Accountant(ITransactionsStorage storage, IValidator<Transaction> transactionValidator, IEnumerable<ITransferDetector> transferDetectors, ITransferOverridesStorage transferKeyStorage, IValidator<TransferKey> transferKeyValidator)
     {
         this.storage = storage;
         this.transactionValidator = transactionValidator;
+        this.transferDetectors = transferDetectors.ToList();
+        this.transferKeyStorage = transferKeyStorage;
+        this.transferKeyValidator = transferKeyValidator;
     }
 
     public async Task<IEnumerable<RecordedTransaction>> GetTransactions(Expression<Func<RecordedTransaction, bool>>? conditions,
@@ -47,12 +57,46 @@ internal class Accountant : IAccountant
         return await storage.Delete(conditions, ct);
     }
 
+    public async Task<IEnumerable<Transfer>> GetTransfers(Expression<Func<RecordedTransaction, bool>> conditions, CancellationToken ct)
+    {
+        var transactions = await storage.Read(conditions, ct);
+        
+
+        var builder = transferDetectors.Aggregate(new TransfersBuilder(transactions.ToList()), (b, d) => b.With(d));
+        builder.With(await OverridesBasedTransferDetector.Create(transferKeyStorage, ct));
+
+        return builder.Build();
+    }
+
+    public async Task<IEnumerable<RejectedTransferKey>> EnforceTransfers(IEnumerable<TransferKey> keys, CancellationToken ct)
+    {
+        var rejections = new List<RejectedTransferKey>();
+        return await transferKeyStorage.Enforce(keys.Where(k => Validate(k, rejections)), ct);
+    }
+
+    public async Task<IEnumerable<RejectedTransferKey>> AbandonTransfers(IEnumerable<TransferKey> keys, CancellationToken ct)
+    {
+        var rejections = new List<RejectedTransferKey>();
+        return await transferKeyStorage.Abandon(keys.Where(k => Validate(k, rejections)), ct);
+    }
+
     private bool Validate(Transaction t, ICollection<RejectedTransaction> rejected)
     {
         var result = transactionValidator.Validate(t);
         if (!result.IsValid)
         {
             rejected.Add(new RejectedTransaction(t, result.Errors.Select(e => e.ToString()).ToList().AsReadOnly()));
+        }
+
+        return result.IsValid;
+    }
+
+    private bool Validate(TransferKey t, ICollection<RejectedTransferKey> rejected)
+    {
+        var result = transferKeyValidator.Validate(t);
+        if (!result.IsValid)
+        {
+            rejected.Add(new RejectedTransferKey(t, result.Errors.Select(e => e.ToString()).ToList().AsReadOnly()));
         }
 
         return result.IsValid;
