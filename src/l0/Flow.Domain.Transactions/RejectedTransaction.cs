@@ -3,19 +3,15 @@ using System.Linq;
 
 namespace Flow.Domain.Transactions;
 
-public class RejectedTransaction
+public class RejectedTransaction :RejectedEntity<Transaction>
 {
     public RejectedTransaction(Transaction transaction, params string[] reasons) : this(transaction, reasons.ToList().AsReadOnly())
     {
     }
 
-    public RejectedTransaction(Transaction transaction, IReadOnlyList<string> reasons)
+    public RejectedTransaction(Transaction transaction, IReadOnlyList<string> reasons) : base(transaction, reasons)
     {
-        Transaction = transaction;
-        Reasons = reasons;
     }
 
-    public Transaction Transaction { get; }
-
-    public IReadOnlyList<string> Reasons { get; }
+    public Transaction Transaction => Entity;
 }

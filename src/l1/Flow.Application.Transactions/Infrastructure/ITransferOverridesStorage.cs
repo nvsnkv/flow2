@@ -6,7 +6,7 @@ public interface ITransferOverridesStorage
 {
     public Task<IEnumerable<TransferKey>> GetOverrides(CancellationToken ct);
 
-    Task Enforce(TransferKey t, CancellationToken ct);
+    Task<IEnumerable<RejectedTransferKey>> Enforce(IEnumerable<TransferKey> t, CancellationToken ct);
 
-    Task Abandon(TransferKey t, CancellationToken ct);
+    Task<IEnumerable<RejectedTransferKey>> Abandon(IEnumerable<TransferKey> t, CancellationToken ct);
 }

@@ -1,4 +1,5 @@
 ﻿using System.Linq.Expressions;
+using Flow.Application.Transactions.Contract;
 using Flow.Application.Transactions.Infrastructure;
 using Flow.Domain.Patterns;
 using Flow.Domain.Transactions;
@@ -17,7 +18,7 @@ internal class Accountant : IAccountant
         this.transactionValidator = transactionValidator;
     }
 
-    public async Task<IEnumerable<RecordedTransaction>> Get(Expression<Func<RecordedTransaction, bool>>? conditions,
+    public async Task<IEnumerable<RecordedTransaction>> GetTransactions(Expression<Func<RecordedTransaction, bool>>? conditions,
         CancellationToken ct)
     {
         conditions ??= Constants<RecordedTransaction>.Truth;
@@ -25,7 +26,7 @@ internal class Accountant : IAccountant
         return await storage.Read(conditions, ct);
     }
 
-    public async Task<IEnumerable<RejectedTransaction>> Create(IEnumerable<Transaction> transactions, CancellationToken ct)
+    public async Task<IEnumerable<RejectedTransaction>> CreateTransactions(IEnumerable<Transaction> transactions, CancellationToken ct)
     {
         var rejected = new List<RejectedTransaction>();
         var valid = transactions.Where(t => Validate(t, rejected));
@@ -33,7 +34,7 @@ internal class Accountant : IAccountant
         return (await storage.Create(valid, ct)).Concat(rejected);
     }
 
-    public async Task<IEnumerable<RejectedTransaction>> Update(IEnumerable<RecordedTransaction> transactions, CancellationToken ct)
+    public async Task<IEnumerable<RejectedTransaction>> UpdateTransactions(IEnumerable<RecordedTransaction> transactions, CancellationToken ct)
     {
         var rejected = new List<RejectedTransaction>();
         var valid = transactions.Where(t => Validate(t, rejected));
@@ -41,7 +42,7 @@ internal class Accountant : IAccountant
         return (await storage.Update(valid, ct)).Concat(rejected);
     }
 
-    public async Task<int> Delete(Expression<Func<RecordedTransaction, bool>> conditions, CancellationToken ct)
+    public async Task<int> DeleteTransactions(Expression<Func<RecordedTransaction, bool>> conditions, CancellationToken ct)
     {
         return await storage.Delete(conditions, ct);
     }

@@ -1,9 +1,9 @@
-﻿using Flow.Application.Transactions;
-using Flow.Domain.Transactions;
+﻿using Flow.Domain.Transactions;
 using Flow.Domain.Transactions.Collections;
 using Flow.Infrastructure.Configuration.Contract;
 using Flow.Infrastructure.IO.Contract;
 using System.Linq.Expressions;
+using Flow.Application.Transactions.Contract;
 
 namespace Flow.Hosts.Accountant.Cli.Commands;
 
@@ -32,7 +32,7 @@ internal class EditTransactionsCommand : CommandBase
         using (var streamReader = CreateReader(args.Input))
         {
             initial = new TransactionsWithDateRange<Transaction>(await reader.ReadTransactions(streamReader, args.Format, ct));
-            rejected = new EnumerableWithCount<RejectedTransaction>(await accountant.Create(initial, ct));
+            rejected = new EnumerableWithCount<RejectedTransaction>(await accountant.CreateTransactions(initial, ct));
         }
 
         var errsPath = args.Errors ?? GetFallbackOutputPath(args.Format, "add", "rejected-transactions");
@@ -93,7 +93,7 @@ internal class EditTransactionsCommand : CommandBase
             return -1;
         }
 
-        var appended = await accountant.Get(conditions, ct);
+        var appended = await accountant.GetTransactions(conditions, ct);
         await using (var streamWriter = CreateWriter(interim))
         {
             await writer.WriteRecordedTransactions(streamWriter, appended, format, ct);
@@ -115,7 +115,7 @@ internal class EditTransactionsCommand : CommandBase
         using var streamReader = CreateReader(interim);
 
         var updated = await reader.ReadRecordedTransactions(streamReader, format, ct);
-        rejected = new EnumerableWithCount<RejectedTransaction>(rejected.Concat(await accountant.Update(updated, ct)));
+        rejected = new EnumerableWithCount<RejectedTransaction>(rejected.Concat(await accountant.UpdateTransactions(updated, ct)));
 
         await using (var streamWriter = CreateWriter(errsPath))
         {

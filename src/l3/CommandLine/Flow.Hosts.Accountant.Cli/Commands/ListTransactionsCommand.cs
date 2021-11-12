@@ -1,4 +1,4 @@
-﻿using Flow.Application.Transactions;
+﻿using Flow.Application.Transactions.Contract;
 using Flow.Infrastructure.Configuration.Contract;
 using Flow.Infrastructure.IO.Contract;
 using JetBrains.Annotations;
@@ -29,7 +29,7 @@ internal class ListTransactionsCommand : CommandBase
                 return 1;
             }
         }
-        var transactions = await accountant.Get(criteria.Conditions, ct);
+        var transactions = await accountant.GetTransactions(criteria.Conditions, ct);
 
         var output = args.Output ?? (args.OpenEditor ? GetFallbackOutputPath(args.Format, "list", "transactions") : null);
         await using var streamWriter = CreateWriter(output);

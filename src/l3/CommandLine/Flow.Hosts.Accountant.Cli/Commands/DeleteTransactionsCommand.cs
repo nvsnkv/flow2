@@ -1,4 +1,4 @@
-﻿using Flow.Application.Transactions;
+﻿using Flow.Application.Transactions.Contract;
 using Flow.Infrastructure.Configuration.Contract;
 using Flow.Infrastructure.IO.Contract;
 
@@ -27,7 +27,7 @@ internal class DeleteTransactionsCommand : CommandBase
             }
         }
 
-        await accountant.Delete(criteria.Conditions!, ct);
+        await accountant.DeleteTransactions(criteria.Conditions!, ct);
 
         return 0;
     }
