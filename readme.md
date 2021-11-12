@@ -6,11 +6,11 @@ __Flow__ is a set of command line tools designed to simplify expences tracking, 
 __Flow__  works with a PostgreSQL database, so you'll need to spin one up and save connection string into flow configuration. Before the first use, you need to apply database migrations from `Flow.Infrastructure.Storage.Migrations` project using [EF Core .NET Core CLI tools](https://docs.microsoft.com/en-us/ef/core/get-started/overview/install#get-the-net-core-cli-tools). They are already referenced in `src\.config\dotnet-tools.json` so you'll just need to run `dotnet tool update` as mentioned in the guide.
 Once tools are installed, please use `dotnet database update -- %CONNECTION_STRING_HERE%` command in _Migrations_ project folder. Don't forget to replace `%CONNECTION_STRING_HERE%` with actual connection string.
 
-__Flow__ works best together with file editors, but they are optional. Apps can always record output to file or print it to STDOUT so you can examine the results of the command without any editor. 
+__Flow__ works best together with file editors, but they are optional. Apps can always record output to file or print it to STDOUT so you can examine the results of the command without any editor.
 
 ## Configuration
-CLI tools uses .NET Configuration with JSON and Environment Variables providers available. You can write settings to appsettings.json file in the working directory, or specify a separate file location in `FLOW_CONFIG_FILE` environment variable.
-Or you can set environment variables to override anyting what's already in settings file.
+CLI tools uses [.NET Configuration](https://docs.microsoft.com/en-us/dotnet/core/extensions/configuration) with [json](https://docs.microsoft.com/en-us/dotnet/core/extensions/configuration-providers#json-configuration-provider) and [Environment Variables](https://docs.microsoft.com/en-us/dotnet/core/extensions/configuration-providers#environment-variable-configuration-provider) providers available. 
+You can write settings to _appsettings.json_ file in the working directory, specify a separate file location in `FLOW_CONFIG_FILE` environment variable or set environment variables to override anyting what's already in settings file.
 
 There are quite a few settings to provide, and most of them optional:
 * `flow:ConnectionString` - required. A connection string to PostgreSQL database that handles data;
@@ -57,7 +57,7 @@ Flow automatically detects various occurences of money transfers between account
 To check correctness of transfer detection algorythms you can use `accountant transfer list` command. Like `accountant list`, it accepts the search criteria for the set of transactions in which app will try to find transfers.
 For each transfer tool returns Source (a Key of source transaction), Sink (a Key of sink transaction), Fee (difference between source and sink), Currency in which Fee was calculated and a Comment that explains why tool believe it's a transfer.
 
-If necessary user can enforse a particular transfer by providing a pair of Source and Sink to `accountant transfer enforce` command. Previously enforsed transfers can be abandoned using `accountant transfer abandon` command
+If necessary user can enforse a particular transfer by providing a pair of Source and Sink to `accountant transfer enforce` command. Previously enforsed transfers can be abandoned using `accountant transfer abandon` command.
 
 ### Exchange Rates
 TBD
