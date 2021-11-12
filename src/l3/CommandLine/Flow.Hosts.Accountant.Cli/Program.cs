@@ -4,6 +4,7 @@ using CommandLine;
 using CommandLine.Text;
 using Flow.Application.Transactions.Contract;
 using Flow.Hosts.Accountant.Cli.Commands;
+using Flow.Hosts.Accountant.Cli.Commands.Transfers;
 using Flow.Infrastructure.Configuration;
 using Flow.Infrastructure.Configuration.Contract;
 using Flow.Infrastructure.IO;
@@ -19,6 +20,10 @@ builder.RegisterModule(new FlowConfiguration())
 builder.RegisterType<EditTransactionsCommand>();
 builder.RegisterType<ListTransactionsCommand>();
 builder.RegisterType<DeleteTransactionsCommand>();
+
+builder.RegisterType<TransfersCommand>();
+builder.RegisterType<ListTransfersCommand>();
+builder.RegisterType<EditTransfersCommand>();
 
 var container = builder.Build();
 var config = container.Resolve<IFlowConfiguration>();
@@ -36,13 +41,14 @@ var parser = new Parser(settings => {
     settings.EnableDashDash = true;
 });
 
-var arguments = parser.ParseArguments<AddTransactionsArgs, ListTransactionsArgs, UpdateTransactionsArgs, EditTransactionsArgs, DeleteTransactionsArgs>(args);
+var arguments = parser.ParseArguments<AddTransactionsArgs, ListTransactionsArgs, UpdateTransactionsArgs, EditTransactionsArgs, DeleteTransactionsArgs, TransfersArgs>(args);
 return await arguments.MapResult(
     async (AddTransactionsArgs arg) => await container.Resolve<EditTransactionsCommand>().Execute(arg, CancellationToken.None),
     async (ListTransactionsArgs arg) => await container.Resolve<ListTransactionsCommand>().Execute(arg, CancellationToken.None),
     async (UpdateTransactionsArgs arg) => await container.Resolve<EditTransactionsCommand>().Execute(arg, CancellationToken.None),
     async (EditTransactionsArgs arg) => await container.Resolve<EditTransactionsCommand>().Execute(arg, CancellationToken.None),
     async (DeleteTransactionsArgs arg) => await container.Resolve<DeleteTransactionsCommand>().Execute(arg, CancellationToken.None),
+    async (TransfersArgs arg) => await container.Resolve<TransfersCommand>().Execute(arg, CancellationToken.None),
     async errs =>
     {
         var width = Console.WindowWidth;
