@@ -27,29 +27,6 @@ internal class TransactionStorage : ITransactionsStorage
         return Enumerable.Empty<RejectedTransaction>();
     }
 
-    private static async Task AddTransaction(Transaction t, FlowDbContext context, CancellationToken ct)
-    {
-        var account = await GetAccount(context, t.Account, ct);
-        if (account == null)
-        {
-            account = new DbAccount(t.Account);
-            await context.Accounts.AddAsync(account, ct);
-            await context.SaveChangesAsync(ct);
-            account = await GetAccount(context, t.Account, ct);
-            if (account == null)
-            {
-                throw new InvalidOperationException("Failed to add an account to context!");
-            }
-        }
-
-        account.Transactions.Add(new DbTransaction(t.Timestamp, t.Amount, t.Currency, t.Category, t.Title, account));
-    }
-
-    private  static async Task<DbAccount?> GetAccount(FlowDbContext context, AccountInfo account, CancellationToken ct)
-    {
-        return await context.Accounts.Include(a => a.Transactions).SingleOrDefaultAsync(a => a.Name == account.Name && a.Bank == account.Bank, ct);
-    }
-
     public async Task<IEnumerable<RecordedTransaction>> Read(Expression<Func<RecordedTransaction, bool>> conditions, CancellationToken ct)
     {
         await using var context = factory.CreateDbContext();
@@ -117,5 +94,28 @@ internal class TransactionStorage : ITransactionsStorage
         }
 
         return await context.SaveChangesAsync(ct);
+    }
+
+    private static async Task AddTransaction(Transaction t, FlowDbContext context, CancellationToken ct)
+    {
+        var account = await GetAccount(context, t.Account, ct);
+        if (account == null)
+        {
+            account = new DbAccount(t.Account);
+            await context.Accounts.AddAsync(account, ct);
+            await context.SaveChangesAsync(ct);
+            account = await GetAccount(context, t.Account, ct);
+            if (account == null)
+            {
+                throw new InvalidOperationException("Failed to add an account to context!");
+            }
+        }
+
+        account.Transactions.Add(new DbTransaction(t.Timestamp, t.Amount, t.Currency, t.Category, t.Title, account));
+    }
+
+    private  static async Task<DbAccount?> GetAccount(FlowDbContext context, AccountInfo account, CancellationToken ct)
+    {
+        return await context.Accounts.Include(a => a.Transactions).SingleOrDefaultAsync(a => a.Name == account.Name && a.Bank == account.Bank, ct);
     }
 }
