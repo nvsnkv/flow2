@@ -8,7 +8,7 @@ using Flow.Infrastructure.IO.Csv;
 using Flow.Infrastructure.IO.Json;
 using Newtonsoft.Json;
 
-[assembly:InternalsVisibleTo("Flow.Infrastructure.IO.UnitTests")]
+[assembly: InternalsVisibleTo("Flow.Infrastructure.IO.UnitTests")]
 
 namespace Flow.Infrastructure.IO;
 
@@ -25,7 +25,7 @@ public class FlowIOComponents : Module
                               .FirstOrDefault(ci => ci.Name == config.CultureCode)
                           ?? CultureInfo.CurrentCulture;
 
-            var csv = new CsvTransactionsSerializer(new CsvConfiguration(culture));
+            var csv = new CsvTransactionsSerializer(new CsvConfiguration(culture) { LeaveOpen = true, HeaderValidated = null });
             var json = new JsonTransactionsSerializer(new JsonSerializerSettings { Culture = culture });
             return new TransactionsIOFacade(csv, json);
         }).InstancePerLifetimeScope().AsImplementedInterfaces();
