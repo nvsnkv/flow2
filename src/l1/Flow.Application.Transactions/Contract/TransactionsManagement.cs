@@ -14,6 +14,7 @@ public class TransactionsManagement : Module
         builder.RegisterType<AccountValidator>().AsImplementedInterfaces();
         builder.RegisterType<TransactionValidator>().AsImplementedInterfaces();
         builder.RegisterType<RecordedTransactionValidator>().AsImplementedInterfaces();
+        builder.RegisterType<TransferKeysValidator>().AsImplementedInterfaces();
 
         base.Load(builder);
     }
