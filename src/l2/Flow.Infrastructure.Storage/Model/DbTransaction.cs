@@ -21,4 +21,8 @@ internal class DbTransaction : RecordedTransaction
 
     public virtual DbAccount DbAccount { get; set; } = null!;
 
+    public virtual DbTransferKey? SourceOf { get; set; }
+
+    public virtual DbTransferKey? SinkOf { get; set; }
+
 }

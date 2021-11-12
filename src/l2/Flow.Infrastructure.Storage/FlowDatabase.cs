@@ -20,7 +20,7 @@ public class FlowDatabase : Module
         }).InstancePerLifetimeScope().AsImplementedInterfaces();
 
         builder.Register(c => new TransactionStorage(c.Resolve<IDbContextFactory<FlowDbContext>>())).InstancePerLifetimeScope().AsImplementedInterfaces();
-        builder.Register(c => new TransferOverridesStorage()).AsImplementedInterfaces();
+        builder.Register(c => new TransferOverridesStorage(c.Resolve<IDbContextFactory<FlowDbContext>>())).InstancePerLifetimeScope().AsImplementedInterfaces();
          
         base.Load(builder);
     }

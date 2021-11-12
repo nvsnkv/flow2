@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Flow.Domain.Transactions.Transfers;
+using Microsoft.EntityFrameworkCore;
 
 namespace Flow.Infrastructure.Storage.Model;
 
@@ -12,6 +13,8 @@ internal class FlowDbContext : DbContext
 
     public DbSet<DbTransaction> Transactions { get; set; } = null!;
 
+    public DbSet<DbTransferKey> EnforcedTransfers { get; set; } = null!;
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<DbAccount>(ab =>
@@ -20,6 +23,13 @@ internal class FlowDbContext : DbContext
             ab.Property(a => a.Bank).IsRequired();
             ab.HasKey(a => new { a.Name, a.Bank });
             ab.HasMany(a => a.Transactions).WithOne(t => t.DbAccount);
+        });
+
+        modelBuilder.Entity<DbTransferKey>(kb =>
+        {
+            kb.Property(k => k.Source);
+            kb.Property(k => k.Sink);
+            kb.HasKey(k => new { k.Source, k.Sink });
         });
 
         modelBuilder.Entity<DbTransaction>(tb =>
@@ -38,6 +48,14 @@ internal class FlowDbContext : DbContext
                 ob.Property(o => o!.Category);
                 ob.Property(o => o!.Comment);
             });
+
+            tb.HasOne(t => t.SourceOf!)
+                .WithOne(k => k.SourceTransaction)
+                .HasForeignKey<DbTransferKey>(t => t.Source);
+
+            tb.HasOne(t => t.SinkOf!)
+                .WithOne(k => k.SinkTransaction)
+                .HasForeignKey<DbTransferKey>(t => t.Sink);
         });
 
         base.OnModelCreating(modelBuilder);
