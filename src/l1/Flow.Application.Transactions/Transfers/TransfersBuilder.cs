@@ -6,9 +6,9 @@ namespace Flow.Application.Transactions.Transfers;
 internal class TransfersBuilder
 {
     private readonly IList<ITransferDetector> detectors = new List<ITransferDetector>();
-    private readonly IEnumerable<RecordedTransaction> transactions;
+    private readonly ICollection<RecordedTransaction> transactions;
 
-    public TransfersBuilder(IEnumerable<RecordedTransaction> transactions)
+    public TransfersBuilder(ICollection<RecordedTransaction> transactions)
     {
         this.transactions = transactions;
     }
@@ -25,19 +25,10 @@ internal class TransfersBuilder
 
     public IEnumerable<Transfer> Build()
     {
-        var list = transactions.ToList();
-        foreach (var l in list)
-        {
-            foreach (var r in list)
-            {
-                foreach (var detector in detectors)
-                {
-                    if (detector.CheckIsTransfer(l, r))
-                    {
-                        yield return detector.Create(l, r);
-                    }
-                }
-            }
-        }
+        return transactions.Join(transactions,
+            t => t.Amount < 0,
+            t => t.Amount > 0,
+            (l, r) => detectors.FirstOrDefault(d => d.CheckIsTransfer(l, r))?.Create(l, r))
+            .Where(t => t != null)!;
     }
 }
