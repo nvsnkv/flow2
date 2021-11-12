@@ -48,7 +48,7 @@ return await arguments.MapResult(
     async (UpdateTransactionsArgs arg) => await container.Resolve<EditTransactionsCommand>().Execute(arg, CancellationToken.None),
     async (EditTransactionsArgs arg) => await container.Resolve<EditTransactionsCommand>().Execute(arg, CancellationToken.None),
     async (DeleteTransactionsArgs arg) => await container.Resolve<DeleteTransactionsCommand>().Execute(arg, CancellationToken.None),
-    async (TransfersArgs arg) => await container.Resolve<TransfersCommand>().Execute(arg, CancellationToken.None),
+    async (TransfersArgs arg) => await container.Resolve<TransfersCommand>().Execute(args.Skip(1), CancellationToken.None),
     async errs =>
     {
         var width = Console.WindowWidth;

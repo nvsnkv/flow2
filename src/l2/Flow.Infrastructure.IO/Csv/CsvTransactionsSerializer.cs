@@ -59,6 +59,8 @@ internal class CsvTransactionsSerializer
     public async Task WriterTransfers(StreamWriter writer, IEnumerable<Transfer> transfers, CancellationToken ct)
     {
         await using var csvWriter = new CsvWriter(writer, config);
+        csvWriter.Context.RegisterClassMap<TransferRowMap>();
+
         await csvWriter.WriteRecordsAsync(transfers.Select(k => (TransferRow)k), ct);
     }
 

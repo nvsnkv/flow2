@@ -61,7 +61,6 @@ internal class Accountant : IAccountant
     {
         var transactions = await storage.Read(conditions, ct);
         
-
         var builder = transferDetectors.Aggregate(new TransfersBuilder(transactions.ToList()), (b, d) => b.With(d));
         builder.With(await OverridesBasedTransferDetector.Create(transferKeyStorage, ct));
 

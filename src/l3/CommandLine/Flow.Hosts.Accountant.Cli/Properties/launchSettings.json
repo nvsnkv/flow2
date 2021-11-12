@@ -6,7 +6,7 @@
     },
     "flow list all": {
       "commandName": "Project",
-      "commandLineArgs": "k>0"
+      "commandLineArgs": "transfers list -e ts>2021-10-01"
     }
   }
 }

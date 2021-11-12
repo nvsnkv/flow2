@@ -17,9 +17,9 @@ internal class TransfersCommand : CommandBase
         this.editCommand = editCommand;
     }
 
-    public async Task<int> Execute(TransfersArgs args, CancellationToken ct)
+    public async Task<int> Execute(IEnumerable<string> args, CancellationToken ct)
     {
-        var arguments = parser.ParseArguments<ListTransfersArgs, EnforceTransfersArgs, AbandonTransfersArgs>(args.Args);
+        var arguments = parser.ParseArguments<ListTransfersArgs, EnforceTransfersArgs, AbandonTransfersArgs>(args);
         return await arguments.MapResult(
             async (ListTransfersArgs arg) => await listCommand.Execute(arg, ct),
             async (EnforceTransfersArgs arg) => await editCommand.Execute(arg, ct),
