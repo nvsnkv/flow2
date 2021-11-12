@@ -17,7 +17,7 @@ internal class TransferOverridesStorage : ITransferOverridesStorage
     public async Task<IEnumerable<TransferKey>> GetOverrides(CancellationToken ct)
     {
         await using var context = factory.CreateDbContext();
-        return context.EnforcedTransfers;
+        return await context.EnforcedTransfers.ToListAsync(ct);
     }
 
     public async Task<IEnumerable<RejectedTransferKey>> Enforce(IEnumerable<TransferKey> keys, CancellationToken ct)
