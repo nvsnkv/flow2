@@ -28,7 +28,7 @@ internal class TransactionRow
 
     public static explicit operator TransactionRow(Transaction t)
     {
-        return new TransactionRow()
+        return new TransactionRow
         {
             TIMESTAMP = t.Timestamp,
             AMOUNT = t.Amount,

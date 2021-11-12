@@ -1,5 +1,4 @@
-﻿using Flow.Domain.Transactions.Transfers;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 
 namespace Flow.Infrastructure.Storage.Model;
 
@@ -50,11 +49,11 @@ internal class FlowDbContext : DbContext
             });
 
             tb.HasOne(t => t.SourceOf!)
-                .WithOne(k => k.SourceTransaction)
+                .WithOne(k => k.SourceTransaction!)
                 .HasForeignKey<DbTransferKey>(t => t.Source);
 
             tb.HasOne(t => t.SinkOf!)
-                .WithOne(k => k.SinkTransaction)
+                .WithOne(k => k.SinkTransaction!)
                 .HasForeignKey<DbTransferKey>(t => t.Sink);
         });
 

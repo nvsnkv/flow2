@@ -1,6 +1,7 @@
 ﻿using CsvHelper;
 using CsvHelper.Configuration;
 using Flow.Domain.Transactions;
+using Flow.Domain.Transactions.Transfers;
 
 namespace Flow.Infrastructure.IO.Csv;
 
@@ -55,6 +56,31 @@ internal class CsvTransactionsSerializer
         return result;
     }
 
+    public async Task WriterTransfers(StreamWriter writer, IEnumerable<Transfer> transfers, CancellationToken ct)
+    {
+        await using var csvWriter = new CsvWriter(writer, config);
+        await csvWriter.WriteRecordsAsync(transfers.Select(k => (TransferRow)k), ct);
+    }
+
+    public async Task WriterTransferKeys(StreamWriter writer, IEnumerable<TransferKey> keys, CancellationToken ct)
+    {
+        await using var csvWriter = new CsvWriter(writer, config);
+        await csvWriter.WriteRecordsAsync(keys.Select(k => (TransferKeyRow)k), ct);
+    }
+
+    public async Task<IEnumerable<TransferKey>> ReadTransferKeys(StreamReader reader, CancellationToken ct)
+    {
+        using var csvReader = new CsvReader(reader, config);
+        var result = new List<TransferKey>();
+
+        await foreach (var row in csvReader.GetRecordsAsync(typeof(TransferKeyRow), ct))
+        {
+            result.Add((TransferKey)(TransferKeyRow)row);
+        }
+
+        return result;
+    }
+
     public async Task WriteRejections(StreamWriter writer, IEnumerable<RejectedTransaction> rejections, CancellationToken ct)
     {
         await using var csvWriter = new CsvWriter(writer, config);
@@ -67,6 +93,25 @@ internal class CsvTransactionsSerializer
 
             csvWriter.WriteRecord(rejected.Transaction is RecordedTransaction rr ? (RecordedTransactionRow)rr : (TransactionRow)rejected.Transaction);
             
+            foreach (var reason in rejected.Reasons)
+            {
+                await writer.WriteLineAsync(reason.ToCharArray(), ct);
+            }
+        }
+    }
+
+    public async Task WriteRejections(StreamWriter writer, IEnumerable<RejectedTransferKey> rejections, CancellationToken ct)
+    {
+        await using var csvWriter = new CsvWriter(writer, config);
+        foreach (var rejected in rejections)
+        {
+            if (ct.IsCancellationRequested)
+            {
+                return;
+            }
+
+            csvWriter.WriteRecord((TransferKeyRow)rejected.Entity);
+
             foreach (var reason in rejected.Reasons)
             {
                 await writer.WriteLineAsync(reason.ToCharArray(), ct);

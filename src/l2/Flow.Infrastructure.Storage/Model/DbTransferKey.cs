@@ -12,7 +12,7 @@ internal class DbTransferKey : TransferKey
     {
     }
 
-    public virtual DbTransaction SourceTransaction { get; set; }
+    public virtual DbTransaction? SourceTransaction { get; set; }
 
-    public virtual DbTransaction SinkTransaction { get; set; }
+    public virtual DbTransaction? SinkTransaction { get; set; }
 }
