@@ -35,7 +35,7 @@ internal class ExchangeRatesProvider : IExchangeRatesProvider
             {
                 SetToLoaded(remoteItem);
 
-                await storage.Create(remoteItem, ct);
+                var _ = storage.Create(remoteItem, ct);
                 if (ct.IsCancellationRequested) { return null; }
 
                 result = remoteItem;
