@@ -56,7 +56,7 @@ internal class CsvTransactionsSerializer
         return result;
     }
 
-    public async Task WriterTransfers(StreamWriter writer, IEnumerable<Transfer> transfers, CancellationToken ct)
+    public async Task WriteTransfers(StreamWriter writer, IEnumerable<Transfer> transfers, CancellationToken ct)
     {
         await using var csvWriter = new CsvWriter(writer, config);
         csvWriter.Context.RegisterClassMap<TransferRowMap>();
@@ -64,7 +64,7 @@ internal class CsvTransactionsSerializer
         await csvWriter.WriteRecordsAsync(transfers.Select(k => (TransferRow)k), ct);
     }
 
-    public async Task WriterTransferKeys(StreamWriter writer, IEnumerable<TransferKey> keys, CancellationToken ct)
+    public async Task WriteTransferKeys(StreamWriter writer, IEnumerable<TransferKey> keys, CancellationToken ct)
     {
         await using var csvWriter = new CsvWriter(writer, config);
         await csvWriter.WriteRecordsAsync(keys.Select(k => (TransferKeyRow)k), ct);

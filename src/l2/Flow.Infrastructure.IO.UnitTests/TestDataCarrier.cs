@@ -1,5 +1,6 @@
 using System;
 using Flow.Domain.Transactions;
+using Flow.Domain.Transactions.Transfers;
 
 namespace Flow.Infrastructure.IO.UnitTests;
 
@@ -17,11 +18,20 @@ public abstract class TestDataCarrier
         new Transaction(new(2021, 11, 05), 0.333M, "RUR", "Special symbols", "\',.;\" test", Account)
     };
 
-    protected static readonly RecordedTransaction[] RecordedTransactions = {
+    protected static readonly RecordedTransaction[] RecordedTransactions =
+    {
         new(1, Transactions[0]) { Overrides = new(null, null, null) },
-        new(2, Transactions[1]) {Overrides = new(null, null, null) },
+        new(2, Transactions[1]) { Overrides = new(null, null, null) },
         new(3, Transactions[2]) { Overrides = new("#1", "2", "noway") },
         new(4, Transactions[3]) { Overrides = new("Overriden Category", "Overriden Title", null) },
         new(5, Transactions[4]) { Overrides = new(null, null, "Comment on #5") }
     };
+
+    protected static readonly TransferKey[] TransferKeys =
+    {
+        new(1, 2),
+        new(3, 5),
+        new(1000, 3000)
+    };
+
 }

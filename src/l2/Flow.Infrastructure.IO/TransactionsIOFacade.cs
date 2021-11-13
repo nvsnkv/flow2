@@ -116,16 +116,16 @@ internal class TransactionsIOFacade : ITransactionsReader, ITransactionsWriter, 
         };
     }
 
-    public async Task WriterTransfers(StreamWriter writer, IEnumerable<Transfer> transfers, SupportedFormat format, CancellationToken ct)
+    public async Task WriteTransfers(StreamWriter writer, IEnumerable<Transfer> transfers, SupportedFormat format, CancellationToken ct)
     {
         switch (format)
         {
             case SupportedFormat.CSV:
-                await csv.WriterTransfers(writer, transfers, ct);
+                await csv.WriteTransfers(writer, transfers, ct);
                 return;
 
             case SupportedFormat.JSON:
-                await json.WriterTransfers(writer, transfers, ct);
+                await json.WriteTransfers(writer, transfers, ct);
                 return;
 
             default:
@@ -133,16 +133,16 @@ internal class TransactionsIOFacade : ITransactionsReader, ITransactionsWriter, 
         }
     }
 
-    public async Task WriterTransferKeys(StreamWriter writer, IEnumerable<TransferKey> keys, SupportedFormat format, CancellationToken ct)
+    public async Task WriteTransferKeys(StreamWriter writer, IEnumerable<TransferKey> keys, SupportedFormat format, CancellationToken ct)
     {
         switch (format)
         {
             case SupportedFormat.CSV:
-                await csv.WriterTransferKeys(writer, keys, ct);
+                await csv.WriteTransferKeys(writer, keys, ct);
                 return;
 
             case SupportedFormat.JSON:
-                await json.WriterTransferKeys(writer, keys, ct);
+                await json.WriteTransferKeys(writer, keys, ct);
                 return;
 
             default:

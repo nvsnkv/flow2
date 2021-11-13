@@ -54,4 +54,25 @@ public class JsonSerializerShould : TestDataCarrier
 
         result.ToList().Should().BeEquivalentTo(RecordedTransactions);
     }
+
+    [Theory] [UnitTest]
+    [InlineData("ru-RU")]
+    [InlineData("en-US")]
+    public async Task SerializeAndDeserializeTransferKeysProperly(string cultureCode)
+    {
+        var culture = CultureInfo.GetCultureInfo(cultureCode);
+        var serializer = new JsonTransactionsSerializer(new JsonSerializerSettings { Culture = culture, });
+
+        await using var writeStream = new MemoryStream();
+        await using var writer = new StreamWriter(writeStream);
+
+        await serializer.WriteTransferKeys(writer, TransferKeys, CancellationToken.None);
+        await using var readStream = new MemoryStream(writeStream.ToArray());
+
+        using var reader = new StreamReader(readStream);
+
+        var result = await serializer.ReadTransferKeys(reader);
+
+        result.ToList().Should().BeEquivalentTo(TransferKeys);
+    }
 }

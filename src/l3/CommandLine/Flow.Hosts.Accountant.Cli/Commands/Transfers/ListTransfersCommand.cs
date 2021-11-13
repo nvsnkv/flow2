@@ -35,7 +35,7 @@ internal class ListTransfersCommand : CommandBase
 
         var output = args.Output ?? (args.OpenEditor ? GetFallbackOutputPath(args.Format, "list", "transactions") : null);
         await using var streamWriter = CreateWriter(output);
-        await writer.WriterTransfers(streamWriter, transfers, args.Format, ct);
+        await writer.WriteTransfers(streamWriter, transfers, args.Format, ct);
 
         if (args.OpenEditor)
         {

@@ -48,7 +48,7 @@ internal class JsonTransactionsSerializer
         await Write(writer, rejections, ct);
     }
 
-    public async Task WriterTransferKeys(StreamWriter writer, IEnumerable<TransferKey> keys, CancellationToken ct)
+    public async Task WriteTransferKeys(StreamWriter writer, IEnumerable<TransferKey> keys, CancellationToken ct)
     {
         await Write(writer, keys, ct);
     }
@@ -58,7 +58,7 @@ internal class JsonTransactionsSerializer
         await Write(writer, rejections, ct);
     }
 
-    public async Task WriterTransfers(StreamWriter writer, IEnumerable<Transfer> transfers, CancellationToken ct)
+    public async Task WriteTransfers(StreamWriter writer, IEnumerable<Transfer> transfers, CancellationToken ct)
     {
         await Write(writer, transfers, ct);
     }
