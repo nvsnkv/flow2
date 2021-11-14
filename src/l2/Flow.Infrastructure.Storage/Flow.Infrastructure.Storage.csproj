@@ -12,6 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\l1\Flow.Application.ExchangeRates\Flow.Application.ExchangeRates.csproj" />
     <ProjectReference Include="..\..\l1\Flow.Application.Transactions\Flow.Application.Transactions.csproj" />
     <ProjectReference Include="..\Flow.Infrastructure.Configuration\Flow.Infrastructure.Configuration.csproj" />
   </ItemGroup>

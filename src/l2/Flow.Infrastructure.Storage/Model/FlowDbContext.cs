@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using FLow.Domain.ExchangeRates;
+using Microsoft.EntityFrameworkCore;
 
 namespace Flow.Infrastructure.Storage.Model;
 
@@ -13,6 +14,8 @@ internal class FlowDbContext : DbContext
     public DbSet<DbTransaction> Transactions { get; set; } = null!;
 
     public DbSet<DbTransferKey> EnforcedTransfers { get; set; } = null!;
+
+    public DbSet<ExchangeRate> ExchangeRates { get; set; } = null!;
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -55,6 +58,16 @@ internal class FlowDbContext : DbContext
             tb.HasOne(t => t.SinkOf!)
                 .WithOne(k => k.SinkTransaction!)
                 .HasForeignKey<DbTransferKey>(t => t.Sink);
+        });
+
+        modelBuilder.Entity<ExchangeRate>(rb =>
+        {
+            rb.Property(r => r.From);
+            rb.Property(r => r.To);
+            rb.Property(r => r.Date);
+            rb.Property(r => r.Rate);
+
+            rb.HasKey(r => new { r.From, r.To, r.Date });
         });
 
         base.OnModelCreating(modelBuilder);
