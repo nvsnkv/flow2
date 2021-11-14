@@ -50,6 +50,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Flow.Application.ExchangeRa
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Flow.Application.ExchangeRates.UnitTests", "l1\Flow.Application.ExchangeRates.UnitTests\Flow.Application.ExchangeRates.UnitTests.csproj", "{0F7D7B53-9DA2-467C-9FA4-1792AB136951}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Flow.Infrastructure.Rates.CBRF", "l2\Flow.Infrastructure.Rates.CBRF\Flow.Infrastructure.Rates.CBRF.csproj", "{793B41AE-C100-4A0F-8EF7-E00C05EDCFC1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -120,6 +122,10 @@ Global
 		{0F7D7B53-9DA2-467C-9FA4-1792AB136951}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0F7D7B53-9DA2-467C-9FA4-1792AB136951}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0F7D7B53-9DA2-467C-9FA4-1792AB136951}.Release|Any CPU.Build.0 = Release|Any CPU
+		{793B41AE-C100-4A0F-8EF7-E00C05EDCFC1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{793B41AE-C100-4A0F-8EF7-E00C05EDCFC1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{793B41AE-C100-4A0F-8EF7-E00C05EDCFC1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{793B41AE-C100-4A0F-8EF7-E00C05EDCFC1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -142,6 +148,7 @@ Global
 		{D6D0911A-9E94-4449-9FA0-4C1690BC9075} = {6DE04AF2-D489-4CCA-9EB2-DB6D44044259}
 		{C2E02FB9-D89F-42B3-AB31-58E04655B819} = {BF31D4DF-B59D-44E8-9EA4-D1EAC24CC3ED}
 		{0F7D7B53-9DA2-467C-9FA4-1792AB136951} = {BF31D4DF-B59D-44E8-9EA4-D1EAC24CC3ED}
+		{793B41AE-C100-4A0F-8EF7-E00C05EDCFC1} = {C2DD4A7B-704F-4C12-B89E-E6A7657A418D}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BD863072-1B8D-417A-BFF4-C60D20CE1D31}
