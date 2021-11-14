@@ -1,4 +1,5 @@
-﻿using Flow.Domain.Transactions;
+﻿using Flow.Application.ExchangeRates.Contract;
+using Flow.Domain.Transactions;
 
 namespace Flow.Application.Transactions.Transfers;
 
@@ -15,7 +16,7 @@ internal class ImmediateTransfersDetector : TransferDetectorBase
                && left.Account != right.Account;
     }
     
-    public ImmediateTransfersDetector() : base("Immediate transfer")
+    public ImmediateTransfersDetector(IExchangeRatesProvider ratesProvider) : base("Immediate transfer", ratesProvider)
     {
     }
 }

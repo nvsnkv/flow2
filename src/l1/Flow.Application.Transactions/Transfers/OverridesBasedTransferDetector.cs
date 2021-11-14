@@ -1,4 +1,5 @@
-﻿using Flow.Application.Transactions.Infrastructure;
+﻿using Flow.Application.ExchangeRates.Contract;
+using Flow.Application.Transactions.Infrastructure;
 using Flow.Domain.Transactions;
 using Flow.Domain.Transactions.Transfers;
 
@@ -7,8 +8,8 @@ namespace Flow.Application.Transactions.Transfers;
 internal class OverridesBasedTransferDetector : TransferDetectorBase
 {
     private readonly HashSet<TransferKey> enforced;
-
-    private OverridesBasedTransferDetector(HashSet<TransferKey> enforced):base("User defined transfer")
+    
+    private OverridesBasedTransferDetector(HashSet<TransferKey> enforced, IExchangeRatesProvider provider):base("User defined transfer", provider)
     {
         this.enforced = enforced;
     }
@@ -18,9 +19,9 @@ internal class OverridesBasedTransferDetector : TransferDetectorBase
         return enforced.Contains(new TransferKey(left.Key, right.Key));
     }
     
-    public static async Task<ITransferDetector> Create(ITransferOverridesStorage storage, CancellationToken ct)
+    public static async Task<ITransferDetector> Create(ITransferOverridesStorage storage, IExchangeRatesProvider provider, CancellationToken ct)
     {
         var overrides = await storage.GetOverrides(ct);
-        return new OverridesBasedTransferDetector(overrides.ToHashSet());
+        return new OverridesBasedTransferDetector(overrides.ToHashSet(), provider);
     }
 }

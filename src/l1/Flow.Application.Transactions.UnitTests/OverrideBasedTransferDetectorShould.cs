@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using Flow.Application.ExchangeRates.Contract;
 using Flow.Application.Transactions.Infrastructure;
 using Flow.Application.Transactions.Transfers;
 using Flow.Domain.Transactions.Transfers;
@@ -15,6 +16,7 @@ public class OverrideBasedTransferDetectorShould :TestDataCarrier
 {
     private static readonly IEnumerable<TransferKey> Enforced = new[] { new TransferKey(1, 2), new TransferKey(400, 344) };
     private readonly Mock<ITransferOverridesStorage> storage = new();
+    private readonly Mock<IExchangeRatesProvider> ratesProvider = new();
 
     public OverrideBasedTransferDetectorShould()
     {
@@ -24,7 +26,7 @@ public class OverrideBasedTransferDetectorShould :TestDataCarrier
     [Fact] [UnitTest]
     public async Task DetectEnforcedTransfers()
     {
-        var detector = await OverridesBasedTransferDetector.Create(storage.Object, CancellationToken.None);
+        var detector = await OverridesBasedTransferDetector.Create(storage.Object, ratesProvider.Object, CancellationToken.None);
         detector.CheckIsTransfer(Transactions[1], Transactions[2]).Should().BeTrue();
     }
 
@@ -32,18 +34,17 @@ public class OverrideBasedTransferDetectorShould :TestDataCarrier
     public async Task CreateEnforcedTransfers()
     {
         var expectedTransfer = new Transfer(Transactions[400], Transactions[344]) {Comment = "User defined transfer" };
-        var detector = await OverridesBasedTransferDetector.Create(storage.Object, CancellationToken.None);
-        var transfer = detector.Create(Transactions[400], Transactions[344]);
+        var detector = await OverridesBasedTransferDetector.Create(storage.Object, ratesProvider.Object, CancellationToken.None);
+        var transfer = await detector.Create(Transactions[400], Transactions[344], CancellationToken.None);
 
         transfer.Should().Be(expectedTransfer);
         transfer.Comment.Should().Be(expectedTransfer.Comment);
     }
 
-    [Fact]
-    [UnitTest]
+    [Fact] [UnitTest]
     public async Task IgnoreNotEnforcedTransfers()
     {
-        var detector = await OverridesBasedTransferDetector.Create(storage.Object, CancellationToken.None);
+        var detector = await OverridesBasedTransferDetector.Create(storage.Object, ratesProvider.Object, CancellationToken.None);
         detector.CheckIsTransfer(Transactions[5], Transactions[4]).Should().BeFalse();
     }
 }

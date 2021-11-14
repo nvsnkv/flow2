@@ -1,7 +1,12 @@
 using System;
+using System.Threading;
+using System.Threading.Tasks;
+using Flow.Application.ExchangeRates.Contract;
 using Flow.Application.Transactions.Transfers;
+using FLow.Domain.ExchangeRates;
 using Flow.Domain.Transactions;
 using FluentAssertions;
+using Moq;
 using Xunit;
 using Xunit.Categories;
 
@@ -9,6 +14,8 @@ namespace Flow.Application.Transactions.UnitTests;
 
 public class ImmediateTransfersDetectorShould
 {
+    private readonly Mock<IExchangeRatesProvider> ratesProvider = new();
+
     [Theory] [UnitTest]
     [InlineData(null)]
     [InlineData("")]
@@ -19,7 +26,7 @@ public class ImmediateTransfersDetectorShould
         var source = new RecordedTransaction(1, now, -20, "ZWL", category, "Transfer", new AccountInfo("From", "bank"));
         var sink = new RecordedTransaction(2, now, 20, "ZWL", category, "Transfer", new AccountInfo("To", "bank"));
 
-        new ImmediateTransfersDetector().CheckIsTransfer(source, sink).Should().BeTrue();
+        new ImmediateTransfersDetector(ratesProvider.Object).CheckIsTransfer(source, sink).Should().BeTrue();
     }
 
     [Fact] [UnitTest]
@@ -29,7 +36,7 @@ public class ImmediateTransfersDetectorShould
         var source = new RecordedTransaction(1, now, -20, "ZWL", null, "Transfer", new AccountInfo("From", "bank"));
         var sink = new RecordedTransaction(2, now, 20, "ZWL", null, "Transfer", new AccountInfo("To", "bank"));
 
-        new ImmediateTransfersDetector().CheckIsTransfer(source, sink).Should().BeTrue();
+        new ImmediateTransfersDetector(ratesProvider.Object).CheckIsTransfer(source, sink).Should().BeTrue();
     }
 
     [Theory] [UnitTest]
@@ -61,17 +68,16 @@ public class ImmediateTransfersDetectorShould
             new AccountInfo("To", "bank")
             );
 
-        new ImmediateTransfersDetector().CheckIsTransfer(source, sink).Should().BeFalse();
+        new ImmediateTransfersDetector(ratesProvider.Object).CheckIsTransfer(source, sink).Should().BeFalse();
     }
 
-    [Fact]
-    [UnitTest]
+    [Fact] [UnitTest]
     public void IgnoreTransactionsThatHasFromAccount()
     {
         var now = DateTime.UtcNow;
         var source = new RecordedTransaction(1, now, -100, "ZWL", "C", "Transfer", new AccountInfo("From", "bank"));
         var sink = new RecordedTransaction(1, now, 100, "ZWL", "C", "Transfer", new AccountInfo("From", "bank"));
 
-        new ImmediateTransfersDetector().CheckIsTransfer(source, sink).Should().BeFalse();
+        new ImmediateTransfersDetector(ratesProvider.Object).CheckIsTransfer(source, sink).Should().BeFalse();
     }
 }

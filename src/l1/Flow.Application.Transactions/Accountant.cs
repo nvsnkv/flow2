@@ -1,4 +1,5 @@
 ﻿using System.Linq.Expressions;
+using Flow.Application.ExchangeRates.Contract;
 using Flow.Application.Transactions.Contract;
 using Flow.Application.Transactions.Infrastructure;
 using Flow.Application.Transactions.Transfers;
@@ -18,14 +19,17 @@ internal class Accountant : IAccountant
     private readonly IList<ITransferDetector> transferDetectors;
     private readonly IValidator<TransferKey> transferKeyValidator;
 
+    private readonly IExchangeRatesProvider ratesProvider;
 
-    public Accountant(ITransactionsStorage storage, IValidator<Transaction> transactionValidator, IEnumerable<ITransferDetector> transferDetectors, ITransferOverridesStorage transferKeyStorage, IValidator<TransferKey> transferKeyValidator)
+
+    public Accountant(ITransactionsStorage storage, IValidator<Transaction> transactionValidator, IEnumerable<ITransferDetector> transferDetectors, ITransferOverridesStorage transferKeyStorage, IValidator<TransferKey> transferKeyValidator, IExchangeRatesProvider ratesProvider)
     {
         this.storage = storage;
         this.transactionValidator = transactionValidator;
         this.transferDetectors = transferDetectors.ToList();
         this.transferKeyStorage = transferKeyStorage;
         this.transferKeyValidator = transferKeyValidator;
+        this.ratesProvider = ratesProvider;
     }
 
     public async Task<IEnumerable<RecordedTransaction>> GetTransactions(Expression<Func<RecordedTransaction, bool>>? conditions,
@@ -62,9 +66,9 @@ internal class Accountant : IAccountant
         var transactions = await storage.Read(conditions, ct);
         
         var builder = transferDetectors.Aggregate(new TransfersBuilder(transactions.ToList()), (b, d) => b.With(d));
-        builder.With(await OverridesBasedTransferDetector.Create(transferKeyStorage, ct));
+        builder.With(await OverridesBasedTransferDetector.Create(transferKeyStorage, ratesProvider, ct));
 
-        return builder.Build();
+        return await builder.Build(ct);
     }
 
     public async Task<IEnumerable<RejectedTransferKey>> EnforceTransfers(IEnumerable<TransferKey> keys, CancellationToken ct)

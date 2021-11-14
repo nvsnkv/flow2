@@ -23,12 +23,20 @@ internal class TransfersBuilder
         return this;
     }
 
-    public IEnumerable<Transfer> Build()
+    public async Task<IEnumerable<Transfer>> Build(CancellationToken ct)
     {
-        return transactions.Join(transactions,
+        var tasks = transactions.Join(transactions,
             t => t.Amount < 0,
             t => t.Amount > 0,
-            (l, r) => detectors.FirstOrDefault(d => d.CheckIsTransfer(l, r))?.Create(l, r))
-            .Where(t => t != null)!;
+            (l, r) => detectors.FirstOrDefault(d => d.CheckIsTransfer(l, r))?.Create(l, r, ct))
+            .Where(t => t != null);
+
+        var result = new List<Transfer>();
+        foreach (var task in tasks)
+        {
+            result.Add(await (task!));
+        }
+
+        return result;
     }
 }
