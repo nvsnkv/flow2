@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Flow.Application.ExchangeRates.Infrastructure;
-using FLow.Domain.ExchangeRates;
+using Flow.Domain.ExchangeRates;
 using FluentAssertions;
 using Moq;
 using Xunit;

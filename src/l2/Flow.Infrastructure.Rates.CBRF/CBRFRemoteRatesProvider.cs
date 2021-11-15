@@ -1,7 +1,7 @@
 ﻿using System.Globalization;
 using System.Xml;
 using Flow.Application.ExchangeRates.Infrastructure;
-using FLow.Domain.ExchangeRates;
+using Flow.Domain.ExchangeRates;
 
 namespace Flow.Infrastructure.Rates.CBRF;
 internal class CBRFRemoteRatesProvider : IRemoteExchangeRatesProvider

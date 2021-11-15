@@ -1,7 +1,7 @@
 ﻿using System.Runtime.CompilerServices;
 using Autofac;
 
-[assembly:InternalsVisibleTo("FLow.Application.ExchangeRates.UnitTests")]
+[assembly:InternalsVisibleTo("Flow.Application.ExchangeRates.UnitTests")]
 
 namespace Flow.Application.ExchangeRates.Contract;
 

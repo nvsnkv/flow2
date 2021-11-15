@@ -11,7 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\l0\FLow.Domain.ExchangeRates\FLow.Domain.ExchangeRates.csproj" />
+    <ProjectReference Include="..\..\l0\Flow.Domain.ExchangeRates\Flow.Domain.ExchangeRates.csproj" />
   </ItemGroup>
 
 </Project>

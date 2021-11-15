@@ -1,4 +1,4 @@
-﻿using FLow.Domain.ExchangeRates;
+﻿using Flow.Domain.ExchangeRates;
 using Microsoft.EntityFrameworkCore;
 
 namespace Flow.Infrastructure.Storage.Model;

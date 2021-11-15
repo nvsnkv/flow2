@@ -1,5 +1,5 @@
 ﻿using Flow.Application.ExchangeRates.Infrastructure;
-using FLow.Domain.ExchangeRates;
+using Flow.Domain.ExchangeRates;
 using Flow.Infrastructure.Storage.Model;
 using Microsoft.EntityFrameworkCore;
 

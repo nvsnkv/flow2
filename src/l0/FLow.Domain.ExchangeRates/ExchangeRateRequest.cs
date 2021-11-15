@@ -1,4 +1,4 @@
-﻿namespace FLow.Domain.ExchangeRates;
+﻿namespace Flow.Domain.ExchangeRates;
 
 public class ExchangeRateRequest
 {

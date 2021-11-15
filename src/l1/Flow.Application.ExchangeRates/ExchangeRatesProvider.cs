@@ -1,6 +1,6 @@
 ﻿using Flow.Application.ExchangeRates.Contract;
 using Flow.Application.ExchangeRates.Infrastructure;
-using FLow.Domain.ExchangeRates;
+using Flow.Domain.ExchangeRates;
 
 namespace Flow.Application.ExchangeRates;
 

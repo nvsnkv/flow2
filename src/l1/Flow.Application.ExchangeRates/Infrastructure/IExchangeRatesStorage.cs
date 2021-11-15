@@ -1,4 +1,4 @@
-﻿using FLow.Domain.ExchangeRates;
+﻿using Flow.Domain.ExchangeRates;
 
 namespace Flow.Application.ExchangeRates.Infrastructure;
 

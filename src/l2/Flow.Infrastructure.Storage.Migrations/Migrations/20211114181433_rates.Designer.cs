@@ -21,7 +21,7 @@ namespace Flow.Infrastructure.Storage.Migrations.Migrations
                 .HasAnnotation("ProductVersion", "5.0.11")
                 .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-            modelBuilder.Entity("FLow.Domain.ExchangeRates.ExchangeRate", b =>
+            modelBuilder.Entity("Flow.Domain.ExchangeRates.ExchangeRate", b =>
                 {
                     b.Property<string>("From")
                         .HasColumnType("text");

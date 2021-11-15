@@ -3,7 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Flow.Application.ExchangeRates.Contract;
 using Flow.Application.Transactions.Transfers;
-using FLow.Domain.ExchangeRates;
+using Flow.Domain.ExchangeRates;
 using Flow.Domain.Transactions;
 using FluentAssertions;
 using Moq;

@@ -42,15 +42,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Flow.Infrastructure.Storage
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Flow.Application.Transactions.UnitTests", "l1\Flow.Application.Transactions.UnitTests\Flow.Application.Transactions.UnitTests.csproj", "{6A0964C3-1399-4AA7-B874-DAD5929E9846}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FLow.Domain.ExchangeRates", "l0\FLow.Domain.ExchangeRates\FLow.Domain.ExchangeRates.csproj", "{617C68D3-17A4-4632-9B89-404BAD963843}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Flow.Domain.ExchangeRates", "l0\Flow.Domain.ExchangeRates\Flow.Domain.ExchangeRates.csproj", "{617C68D3-17A4-4632-9B89-404BAD963843}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Flow.Domain.ExchangeRates.UnitTests", "l0\Flow.Domain.ExchangeRates.UnitTests\Flow.Domain.ExchangeRates.UnitTests.csproj", "{D6D0911A-9E94-4449-9FA0-4C1690BC9075}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Flow.Domain.ExchangeRates.UnitTests", "l0\Flow.Domain.ExchangeRates.UnitTests\Flow.Domain.ExchangeRates.UnitTests.csproj", "{D6D0911A-9E94-4449-9FA0-4C1690BC9075}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Flow.Application.ExchangeRates", "l1\Flow.Application.ExchangeRates\Flow.Application.ExchangeRates.csproj", "{C2E02FB9-D89F-42B3-AB31-58E04655B819}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Flow.Application.ExchangeRates", "l1\Flow.Application.ExchangeRates\Flow.Application.ExchangeRates.csproj", "{C2E02FB9-D89F-42B3-AB31-58E04655B819}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Flow.Application.ExchangeRates.UnitTests", "l1\Flow.Application.ExchangeRates.UnitTests\Flow.Application.ExchangeRates.UnitTests.csproj", "{0F7D7B53-9DA2-467C-9FA4-1792AB136951}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Flow.Application.ExchangeRates.UnitTests", "l1\Flow.Application.ExchangeRates.UnitTests\Flow.Application.ExchangeRates.UnitTests.csproj", "{0F7D7B53-9DA2-467C-9FA4-1792AB136951}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Flow.Infrastructure.Rates.CBRF", "l2\Flow.Infrastructure.Rates.CBRF\Flow.Infrastructure.Rates.CBRF.csproj", "{793B41AE-C100-4A0F-8EF7-E00C05EDCFC1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Flow.Infrastructure.Rates.CBRF", "l2\Flow.Infrastructure.Rates.CBRF\Flow.Infrastructure.Rates.CBRF.csproj", "{793B41AE-C100-4A0F-8EF7-E00C05EDCFC1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

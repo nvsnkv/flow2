@@ -1,5 +1,5 @@
 ﻿using Flow.Application.ExchangeRates.Contract;
-using FLow.Domain.ExchangeRates;
+using Flow.Domain.ExchangeRates;
 using Flow.Domain.Transactions;
 using Flow.Domain.Transactions.Transfers;
 

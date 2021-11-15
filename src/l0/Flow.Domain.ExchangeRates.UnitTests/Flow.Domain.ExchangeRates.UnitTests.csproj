@@ -23,7 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\FLow.Domain.ExchangeRates\FLow.Domain.ExchangeRates.csproj" />
+    <ProjectReference Include="..\Flow.Domain.ExchangeRates\Flow.Domain.ExchangeRates.csproj" />
   </ItemGroup>
 
 </Project>
