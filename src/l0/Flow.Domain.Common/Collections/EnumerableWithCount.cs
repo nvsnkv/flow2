@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections;
 
-namespace Flow.Domain.Transactions.Collections;
+namespace Flow.Domain.Common.Collections;
 
 public class EnumerableWithCount<T> : IEnumerable<T>
 {

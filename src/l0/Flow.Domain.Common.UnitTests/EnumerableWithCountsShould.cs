@@ -1,5 +1,5 @@
 ﻿using System;
-using Flow.Domain.Transactions.Collections;
+using Flow.Domain.Common.Collections;
 using FluentAssertions;
 using Xunit;
 using Xunit.Categories;
@@ -10,8 +10,7 @@ public class EnumerableWithCountsShould
 {
     private readonly int[] collection = { 1, 2, 4 };
 
-    [Fact]
-    [UnitTest]
+    [Fact] [UnitTest]
     public void IndicateThatCollectionWasNotEnumerated()
     {
         var stats = new EnumerableWithCount<int>(collection);

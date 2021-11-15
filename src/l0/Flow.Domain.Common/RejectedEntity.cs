@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace Flow.Domain.Transactions;
+﻿namespace Flow.Domain.Common;
 
 public abstract class RejectedEntity<T>
 {
@@ -10,7 +8,7 @@ public abstract class RejectedEntity<T>
         Reasons = reasons;
     }
 
-    public T Entity { get; }
+    protected T Entity { get; }
 
     public IReadOnlyList<string> Reasons { get; }
 }

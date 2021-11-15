@@ -112,7 +112,7 @@ internal class CsvTransactionsSerializer
                 return;
             }
 
-            csvWriter.WriteRecord((TransferKeyRow)rejected.Entity);
+            csvWriter.WriteRecord((TransferKeyRow)rejected.TransferKey);
 
             foreach (var reason in rejected.Reasons)
             {

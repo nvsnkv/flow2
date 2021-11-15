@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Flow.Domain.Common;
 
 namespace Flow.Domain.Transactions;
 

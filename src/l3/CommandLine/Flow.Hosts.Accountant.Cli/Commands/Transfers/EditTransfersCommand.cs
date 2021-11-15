@@ -1,4 +1,5 @@
 ﻿using Flow.Application.Transactions.Contract;
+using Flow.Domain.Common.Collections;
 using Flow.Domain.Transactions.Collections;
 using Flow.Domain.Transactions.Transfers;
 using Flow.Infrastructure.Configuration.Contract;

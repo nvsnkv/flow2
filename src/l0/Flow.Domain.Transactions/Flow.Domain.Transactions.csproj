@@ -6,6 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Flow.Domain.Common\Flow.Domain.Common.csproj" />
     <ProjectReference Include="..\Flow.Domain.Patterns\Flow.Domain.Patterns.csproj" />
   </ItemGroup>
 
