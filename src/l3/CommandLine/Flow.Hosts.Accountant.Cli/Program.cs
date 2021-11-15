@@ -2,12 +2,14 @@
 using Autofac;
 using CommandLine;
 using CommandLine.Text;
+using Flow.Application.ExchangeRates.Contract;
 using Flow.Application.Transactions.Contract;
 using Flow.Hosts.Accountant.Cli.Commands;
 using Flow.Hosts.Accountant.Cli.Commands.Transfers;
 using Flow.Infrastructure.Configuration;
 using Flow.Infrastructure.Configuration.Contract;
 using Flow.Infrastructure.IO;
+using Flow.Infrastructure.Rates.CBRF.Contract;
 using Flow.Infrastructure.Storage;
 
 var builder = new ContainerBuilder();
@@ -15,7 +17,10 @@ var builder = new ContainerBuilder();
 builder.RegisterModule(new FlowConfiguration())
     .RegisterModule(new FlowDatabase())
     .RegisterModule(new FlowIOComponents())
+    .RegisterModule(new CBRFData())
+    .RegisterModule(new MoneyExchange())
     .RegisterModule(new TransactionsManagement());
+    
 
 builder.RegisterType<EditTransactionsCommand>();
 builder.RegisterType<ListTransactionsCommand>();
