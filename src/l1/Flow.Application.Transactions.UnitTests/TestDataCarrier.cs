@@ -7,7 +7,7 @@ namespace Flow.Application.Transactions.UnitTests;
 
 public class TestDataCarrier
 {
-    private static readonly AccountInfo Account = new AccountInfo("name", "bank");
+    private static readonly AccountInfo Account = new("name", "bank");
 
     protected static readonly IDictionary<long, RecordedTransaction> Transactions = new[]
     {
@@ -21,5 +21,8 @@ public class TestDataCarrier
         
         new RecordedTransaction(344, DateTime.Now, 20, "RUB", null, "Regular 2", Account),
         new RecordedTransaction(400, DateTime.Now, -30, "RUB", null, "Regular 3", Account),
+
+        new RecordedTransaction(500, DateTime.Now, -100, "RUB", "Transfer", "With Conversion", Account),
+        new RecordedTransaction(501, DateTime.Now, 3, "BYN", "Transfer", "With Conversion", Account)
     }.ToDictionary(r => r.Key);
 }
