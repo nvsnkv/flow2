@@ -11,7 +11,7 @@ using Xunit.Categories;
 
 namespace Flow.Infrastructure.IO.UnitTests;
 
-public class CsvSerializerShould : TestDataCarrier
+public class CsvSerializersShould : TestDataCarrier
 {
     [Theory]
     [UnitTest]
@@ -64,7 +64,7 @@ public class CsvSerializerShould : TestDataCarrier
     public async Task SerializeAndDeserializeTransferKeysProperly(string cultureCode)
     {
         var culture = CultureInfo.GetCultureInfo(cultureCode);
-        var serializer = new CsvTransactionsSerializer(new CsvConfiguration(culture) { LeaveOpen = true });
+        var serializer = new CsvTransfersSerializer(new CsvConfiguration(culture) { LeaveOpen = true });
 
         await using var stream = new MemoryStream();
         await using var writer = new StreamWriter(stream);

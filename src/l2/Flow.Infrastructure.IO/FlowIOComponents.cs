@@ -29,6 +29,34 @@ public class FlowIOComponents : Module
             var json = new JsonTransactionsSerializer(new JsonSerializerSettings { Culture = culture });
             return new TransactionsIOFacade(csv, json);
         }).InstancePerLifetimeScope().AsImplementedInterfaces();
+        
+        builder.Register(c =>
+        {
+            var config = c.Resolve<IFlowConfiguration>();
+
+            var culture = CultureInfo
+                              .GetCultures(CultureTypes.AllCultures)
+                              .FirstOrDefault(ci => ci.Name == config.CultureCode)
+                          ?? CultureInfo.CurrentCulture;
+
+            var csv = new CsvRejectionsWriter(new CsvConfiguration(culture) { LeaveOpen = true, HeaderValidated = null });
+            var json = new JsonRejectionsWriter(new JsonSerializerSettings { Culture = culture });
+            return new RejectionsWriter(csv, json);
+        }).InstancePerLifetimeScope().AsImplementedInterfaces();
+        
+        builder.Register(c =>
+        {
+            var config = c.Resolve<IFlowConfiguration>();
+
+            var culture = CultureInfo
+                              .GetCultures(CultureTypes.AllCultures)
+                              .FirstOrDefault(ci => ci.Name == config.CultureCode)
+                          ?? CultureInfo.CurrentCulture;
+
+            var csv = new CsvTransfersSerializer(new CsvConfiguration(culture) { LeaveOpen = true, HeaderValidated = null });
+            var json = new JsonTransfersSerilalizer(new JsonSerializerSettings { Culture = culture });
+            return new TransfersIOFacade(csv, json);
+        }).InstancePerLifetimeScope().AsImplementedInterfaces();
 
         builder.Register(c =>
         {

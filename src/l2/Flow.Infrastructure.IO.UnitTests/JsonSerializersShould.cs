@@ -11,7 +11,7 @@ using Xunit.Categories;
 
 namespace Flow.Infrastructure.IO.UnitTests;
 
-public class JsonSerializerShould : TestDataCarrier
+public class JsonSerializersShould : TestDataCarrier
 {
     [Theory] [UnitTest]
     [InlineData("ru-RU")]
@@ -61,7 +61,7 @@ public class JsonSerializerShould : TestDataCarrier
     public async Task SerializeAndDeserializeTransferKeysProperly(string cultureCode)
     {
         var culture = CultureInfo.GetCultureInfo(cultureCode);
-        var serializer = new JsonTransactionsSerializer(new JsonSerializerSettings { Culture = culture, });
+        var serializer = new JsonTransfersSerilalizer(new JsonSerializerSettings { Culture = culture, });
 
         await using var writeStream = new MemoryStream();
         await using var writer = new StreamWriter(writeStream);
