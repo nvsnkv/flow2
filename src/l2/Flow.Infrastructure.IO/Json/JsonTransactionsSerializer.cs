@@ -1,5 +1,4 @@
 ﻿using Flow.Domain.Transactions;
-using JetBrains.Annotations;
 using Newtonsoft.Json;
 
 namespace Flow.Infrastructure.IO.Json;

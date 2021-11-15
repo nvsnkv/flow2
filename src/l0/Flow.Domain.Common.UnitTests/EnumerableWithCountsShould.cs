@@ -4,7 +4,7 @@ using FluentAssertions;
 using Xunit;
 using Xunit.Categories;
 
-namespace Flow.Domain.Transactions.UnitTests;
+namespace Flow.Domain.Common.UnitTests;
 
 public class EnumerableWithCountsShould
 {

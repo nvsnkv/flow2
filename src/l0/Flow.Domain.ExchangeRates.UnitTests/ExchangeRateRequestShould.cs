@@ -1,5 +1,4 @@
 using System;
-using Flow.Domain.ExchangeRates;
 using FluentAssertions;
 using Xunit;
 using Xunit.Categories;

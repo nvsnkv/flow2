@@ -46,9 +46,9 @@ internal class FlowDbContext : DbContext
 
             tb.OwnsOne(t => t.Overrides, ob =>
             {
-                ob.Property(o => o!.Title);
-                ob.Property(o => o!.Category);
-                ob.Property(o => o!.Comment);
+                ob.Property(o => o.Title);
+                ob.Property(o => o.Category);
+                ob.Property(o => o.Comment);
             });
 
             tb.HasOne(t => t.SourceOf!)

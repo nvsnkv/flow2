@@ -1,9 +1,6 @@
 using System;
-using System.Threading;
-using System.Threading.Tasks;
 using Flow.Application.ExchangeRates.Contract;
 using Flow.Application.Transactions.Transfers;
-using Flow.Domain.ExchangeRates;
 using Flow.Domain.Transactions;
 using FluentAssertions;
 using Moq;
