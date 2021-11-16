@@ -1,4 +1,5 @@
-﻿using Flow.Domain.Transactions;
+﻿using Flow.Domain.ExchangeRates;
+using Flow.Domain.Transactions;
 using Flow.Domain.Transactions.Transfers;
 using Newtonsoft.Json;
 
@@ -16,6 +17,11 @@ internal class JsonRejectionsWriter : JsonTransactionsSerializerBase
     }
 
     public async Task WriteRejections(StreamWriter writer, IEnumerable<RejectedTransferKey> rejections, CancellationToken ct)
+    {
+        await Write(writer, rejections, ct);
+    }
+
+    public async Task WriteRejections(StreamWriter writer, IEnumerable<RejectedRate> rejections, CancellationToken ct)
     {
         await Write(writer, rejections, ct);
     }

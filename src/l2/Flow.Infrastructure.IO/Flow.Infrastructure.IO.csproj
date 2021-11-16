@@ -13,6 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\l0\Flow.Domain.ExchangeRates\Flow.Domain.ExchangeRates.csproj" />
     <ProjectReference Include="..\..\l0\Flow.Domain.Transactions\Flow.Domain.Transactions.csproj" />
     <ProjectReference Include="..\Flow.Infrastructure.Configuration\Flow.Infrastructure.Configuration.csproj" />
   </ItemGroup>
