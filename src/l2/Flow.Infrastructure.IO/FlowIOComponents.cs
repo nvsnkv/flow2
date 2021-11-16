@@ -7,6 +7,7 @@ using Flow.Infrastructure.IO.Criteria;
 using Flow.Infrastructure.IO.Csv;
 using Flow.Infrastructure.IO.Json;
 using Newtonsoft.Json;
+using JsonSerializer = Flow.Infrastructure.IO.Json.JsonSerializer;
 
 [assembly: InternalsVisibleTo("Flow.Infrastructure.IO.UnitTests")]
 
@@ -54,8 +55,22 @@ public class FlowIOComponents : Module
                           ?? CultureInfo.CurrentCulture;
 
             var csv = new CsvTransfersSerializer(new CsvConfiguration(culture) { LeaveOpen = true, HeaderValidated = null });
-            var json = new JsonTransfersSerilalizer(new JsonSerializerSettings { Culture = culture });
+            var json = new JsonTransfersSerializer(new JsonSerializerSettings { Culture = culture });
             return new TransfersIOFacade(csv, json);
+        }).InstancePerLifetimeScope().AsImplementedInterfaces();
+        
+        builder.Register(c =>
+        {
+            var config = c.Resolve<IFlowConfiguration>();
+
+            var culture = CultureInfo
+                              .GetCultures(CultureTypes.AllCultures)
+                              .FirstOrDefault(ci => ci.Name == config.CultureCode)
+                          ?? CultureInfo.CurrentCulture;
+
+            var csv = new CsvSerializer(new CsvConfiguration(culture) { LeaveOpen = true, HeaderValidated = null });
+            var json = new JsonSerializer(new JsonSerializerSettings { Culture = culture });
+            return new ExchangeRatesSerializer(csv, json);
         }).InstancePerLifetimeScope().AsImplementedInterfaces();
 
         builder.Register(c =>

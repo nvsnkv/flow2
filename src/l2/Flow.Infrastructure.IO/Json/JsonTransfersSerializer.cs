@@ -3,16 +3,16 @@ using Newtonsoft.Json;
 
 namespace Flow.Infrastructure.IO.Json;
 
-internal class JsonTransfersSerilalizer: JsonTransactionsSerializerBase
+internal class JsonTransfersSerializer: JsonSerializer
 {
-    public JsonTransfersSerilalizer(JsonSerializerSettings? settings) : base(settings)
+    public JsonTransfersSerializer(JsonSerializerSettings? settings) : base(settings)
     {
     }
 
-    public Task<IEnumerable<TransferKey>> ReadTransferKeys(StreamReader reader)
+    [Obsolete("Use Read() instead")]
+    public async Task<IEnumerable<TransferKey>> ReadTransferKeys(StreamReader reader)
     {
-        var result = Read<JsonTransferKey>(reader).Select(j => (TransferKey)j);
-        return Task.FromResult(result);
+        return await Read(reader, (JsonTransferKey j) => (TransferKey)j);
     }
 
     public async Task WriteTransferKeys(StreamWriter writer, IEnumerable<TransferKey> keys, CancellationToken ct)

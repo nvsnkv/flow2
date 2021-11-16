@@ -61,7 +61,7 @@ public class JsonSerializersShould : TestDataCarrier
     public async Task SerializeAndDeserializeTransferKeysProperly(string cultureCode)
     {
         var culture = CultureInfo.GetCultureInfo(cultureCode);
-        var serializer = new JsonTransfersSerilalizer(new JsonSerializerSettings { Culture = culture, });
+        var serializer = new JsonTransfersSerializer(new JsonSerializerSettings { Culture = culture, });
 
         await using var writeStream = new MemoryStream();
         await using var writer = new StreamWriter(writeStream);

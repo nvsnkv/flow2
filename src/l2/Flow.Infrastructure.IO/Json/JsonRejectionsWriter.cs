@@ -5,7 +5,7 @@ using Newtonsoft.Json;
 
 namespace Flow.Infrastructure.IO.Json;
 
-internal class JsonRejectionsWriter : JsonTransactionsSerializerBase
+internal class JsonRejectionsWriter : JsonSerializer
 {
     public JsonRejectionsWriter(JsonSerializerSettings? settings) : base(settings)
     {

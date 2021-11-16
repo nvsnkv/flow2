@@ -4,11 +4,11 @@ using Flow.Domain.Transactions;
 
 namespace Flow.Infrastructure.IO.Csv;
 
-internal class CsvTransactionsSerializer
+internal class CsvTransactionsSerializer : CsvSerializer
 {
     private readonly CsvConfiguration config;
 
-    public CsvTransactionsSerializer(CsvConfiguration config)
+    public CsvTransactionsSerializer(CsvConfiguration config) : base(config)
     {
         this.config = config;
     }
@@ -29,29 +29,15 @@ internal class CsvTransactionsSerializer
         await csvWriter.WriteRecordsAsync(transactions.Select(t => (RecordedTransactionRow)t), ct);
     }
 
+    [Obsolete("Use Read() instead")]
     public async Task<IEnumerable<Transaction>> ReadTransactions(StreamReader reader, CancellationToken ct)
     {
-        using var csvReader = new CsvReader(reader, config);
-        var result = new List<Transaction>();
-
-        await foreach (var row in csvReader.GetRecordsAsync(typeof(TransactionRow), ct))
-        {
-            result.Add((Transaction)(TransactionRow)row);
-        }
-
-        return result;
+        return await Read(reader, (TransactionRow r) => (Transaction)r, ct);
     }
 
+    [Obsolete("Use Read() instead")]
     public async Task<IEnumerable<RecordedTransaction>> ReadRecordedTransactions(StreamReader reader, CancellationToken ct)
     {
-        using var csvReader = new CsvReader(reader, config);
-        var result = new List<RecordedTransaction>();
-
-        await foreach (var row in csvReader.GetRecordsAsync(typeof(RecordedTransactionRow), ct))
-        {
-            result.Add((RecordedTransaction)(RecordedTransactionRow)row);
-        }
-
-        return result;
+        return await Read(reader, (RecordedTransactionRow r) => (RecordedTransaction)r, ct);
     }
 }

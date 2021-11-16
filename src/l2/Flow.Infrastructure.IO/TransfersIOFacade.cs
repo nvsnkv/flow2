@@ -9,9 +9,9 @@ namespace Flow.Infrastructure.IO;
 internal class TransfersIOFacade : ITransferKeysReader, ITransfersWriter
 {
     private readonly CsvTransfersSerializer csv;
-    private readonly JsonTransfersSerilalizer json;
+    private readonly JsonTransfersSerializer json;
 
-    public TransfersIOFacade(CsvTransfersSerializer csv, JsonTransfersSerilalizer json)
+    public TransfersIOFacade(CsvTransfersSerializer csv, JsonTransfersSerializer json)
     {
         this.csv = csv;
         this.json = json;
