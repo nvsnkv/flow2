@@ -55,7 +55,7 @@ public class FlowIOComponents : Module
                           ?? CultureInfo.CurrentCulture;
 
             var csv = new CsvTransfersSerializer(new CsvConfiguration(culture) { LeaveOpen = true, HeaderValidated = null });
-            var json = new JsonTransfersSerializer(new JsonSerializerSettings { Culture = culture });
+            var json = new JsonSerializer(new JsonSerializerSettings { Culture = culture });
             return new TransfersIOFacade(csv, json);
         }).InstancePerLifetimeScope().AsImplementedInterfaces();
         

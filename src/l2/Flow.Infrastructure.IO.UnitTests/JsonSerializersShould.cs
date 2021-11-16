@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using CsvHelper.Configuration;
 using Flow.Domain.ExchangeRates;
 using Flow.Domain.Transactions;
+using Flow.Domain.Transactions.Transfers;
 using Flow.Infrastructure.IO.Csv;
 using Flow.Infrastructure.IO.Json;
 using FluentAssertions;
@@ -66,17 +67,17 @@ public class JsonSerializersShould : TestDataCarrier
     public async Task SerializeAndDeserializeTransferKeysProperly(string cultureCode)
     {
         var culture = CultureInfo.GetCultureInfo(cultureCode);
-        var serializer = new JsonTransfersSerializer(new JsonSerializerSettings { Culture = culture, });
+        var serializer = new JsonSerializer(new JsonSerializerSettings { Culture = culture, });
 
         await using var writeStream = new MemoryStream();
         await using var writer = new StreamWriter(writeStream);
 
-        await serializer.WriteTransferKeys(writer, TransferKeys, CancellationToken.None);
+        await serializer.Write(writer, TransferKeys, CancellationToken.None);
         await using var readStream = new MemoryStream(writeStream.ToArray());
 
         using var reader = new StreamReader(readStream);
 
-        var result = await serializer.ReadTransferKeys(reader);
+        var result = await serializer.Read(reader, (JsonTransferKey j) => (TransferKey)j);
 
         result.ToList().Should().BeEquivalentTo(TransferKeys);
     }
