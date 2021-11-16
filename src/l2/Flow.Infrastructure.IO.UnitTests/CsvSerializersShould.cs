@@ -5,6 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using CsvHelper.Configuration;
 using Flow.Domain.ExchangeRates;
+using Flow.Domain.Transactions;
 using Flow.Infrastructure.IO.Csv;
 using FluentAssertions;
 using Xunit;
@@ -20,17 +21,17 @@ public class CsvSerializersShould : TestDataCarrier
     public async Task SerializeAndDeserializeTransactionsProperly(string cultureCode)
     {
         var culture = CultureInfo.GetCultureInfo(cultureCode);
-        var serializer = new CsvTransactionsSerializer(new CsvConfiguration(culture) { LeaveOpen = true });
+        var serializer = new CsvSerializer(new CsvConfiguration(culture) { LeaveOpen = true });
 
         await using var stream = new MemoryStream();
         await using var writer = new StreamWriter(stream);
 
-        await serializer.WriteTransactions(writer, Transactions, CancellationToken.None);
+        await serializer.Write<Transaction, TransactionRow, TransactionRowMap>(writer, Transactions, t => (TransactionRow)t, CancellationToken.None);
         stream.Seek(0, SeekOrigin.Begin);
 
         using var reader = new StreamReader(stream);
 
-        var result = await serializer.ReadTransactions(reader, CancellationToken.None);
+        var result = await serializer.Read(reader, (TransactionRow r) => (Transaction)r, CancellationToken.None);
 
         result.ToList().Should().BeEquivalentTo(Transactions);
     }
@@ -41,17 +42,17 @@ public class CsvSerializersShould : TestDataCarrier
     public async Task SerializeAndDeserializeRecordedTransactionsProperly(string cultureCode)
     {
         var culture = CultureInfo.GetCultureInfo(cultureCode);
-        var serializer = new CsvTransactionsSerializer(new CsvConfiguration(culture) { LeaveOpen = true });
+        var serializer = new CsvSerializer(new CsvConfiguration(culture) { LeaveOpen = true });
 
         await using var stream = new MemoryStream();
         await using var writer = new StreamWriter(stream);
 
-        await serializer.WriteRecordedTransactions(writer, RecordedTransactions, CancellationToken.None);
+        await serializer.Write<RecordedTransaction, RecordedTransactionRow, RecordedTransactionRowMap>(writer, RecordedTransactions, t => (RecordedTransactionRow)t, CancellationToken.None);
         stream.Seek(0, SeekOrigin.Begin);
 
         using var reader = new StreamReader(stream);
 
-        var result = await serializer.ReadRecordedTransactions(reader, CancellationToken.None);
+        var result = await serializer.Read(reader, (RecordedTransactionRow r) => (RecordedTransaction)r, CancellationToken.None); ;
 
         result.ToList().Should().BeEquivalentTo(RecordedTransactions);
     }
