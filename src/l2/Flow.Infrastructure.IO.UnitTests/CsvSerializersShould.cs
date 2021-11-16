@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using CsvHelper.Configuration;
 using Flow.Domain.ExchangeRates;
 using Flow.Domain.Transactions;
+using Flow.Domain.Transactions.Transfers;
 using Flow.Infrastructure.IO.Csv;
 using FluentAssertions;
 using Xunit;
@@ -63,17 +64,17 @@ public class CsvSerializersShould : TestDataCarrier
     public async Task SerializeAndDeserializeTransferKeysProperly(string cultureCode)
     {
         var culture = CultureInfo.GetCultureInfo(cultureCode);
-        var serializer = new CsvTransfersSerializer(new CsvConfiguration(culture) { LeaveOpen = true });
+        var serializer = new CsvSerializer(new CsvConfiguration(culture) { LeaveOpen = true });
 
         await using var stream = new MemoryStream();
         await using var writer = new StreamWriter(stream);
 
-        await serializer.WriteTransferKeys(writer, TransferKeys, CancellationToken.None);
+        await serializer.Write(writer, TransferKeys, t => (TransferKeyRow)t, CancellationToken.None);
         stream.Seek(0, SeekOrigin.Begin);
 
         using var reader = new StreamReader(stream);
 
-        var result = await serializer.ReadTransferKeys(reader, CancellationToken.None);
+        var result = await serializer.Read<TransferKey, TransferKeyRow>(reader, r => (TransferKey)r, CancellationToken.None); ;
 
         result.ToList().Should().BeEquivalentTo(TransferKeys);
     }

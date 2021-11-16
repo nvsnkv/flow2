@@ -8,10 +8,10 @@ namespace Flow.Infrastructure.IO;
 
 internal class TransfersIOFacade : ITransferKeysReader, ITransfersWriter
 {
-    private readonly CsvTransfersSerializer csv;
+    private readonly CsvSerializer csv;
     private readonly JsonSerializer json;
 
-    public TransfersIOFacade(CsvTransfersSerializer csv, JsonSerializer json)
+    public TransfersIOFacade(CsvSerializer csv, JsonSerializer json)
     {
         this.csv = csv;
         this.json = json;
@@ -21,7 +21,7 @@ internal class TransfersIOFacade : ITransferKeysReader, ITransfersWriter
     {
         return format switch
         {
-            SupportedFormat.CSV => await csv.ReadTransferKeys(reader, ct),
+            SupportedFormat.CSV => await csv.Read<TransferKey, TransferKeyRow>(reader, r => (TransferKey)r, ct),
             SupportedFormat.JSON => await json.Read(reader, (JsonTransferKey j) => (TransferKey)j),
             _ => throw new NotSupportedException($"Format {format} is not supported!")
         };
@@ -32,7 +32,7 @@ internal class TransfersIOFacade : ITransferKeysReader, ITransfersWriter
         switch (format)
         {
             case SupportedFormat.CSV:
-                await csv.WriteTransfers(writer, transfers, ct);
+                await csv.Write<Transfer, TransferRow, TransferRowMap>(writer, transfers, t => (TransferRow)t, ct);
                 return;
 
             case SupportedFormat.JSON:
@@ -49,7 +49,7 @@ internal class TransfersIOFacade : ITransferKeysReader, ITransfersWriter
         switch (format)
         {
             case SupportedFormat.CSV:
-                await csv.WriteTransferKeys(writer, keys, ct);
+                await csv.Write(writer, keys, t => (TransferKeyRow)t, ct);
                 return;
 
             case SupportedFormat.JSON:
