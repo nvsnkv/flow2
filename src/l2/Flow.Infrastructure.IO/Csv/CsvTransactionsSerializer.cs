@@ -13,20 +13,16 @@ internal class CsvTransactionsSerializer : CsvSerializer
         this.config = config;
     }
 
+    [Obsolete("Use Write() instead")]
     public async Task WriteTransactions(StreamWriter writer, IEnumerable<Transaction> transactions, CancellationToken ct)
     {
-        await using var csvWriter = new CsvWriter(writer, config);
-        csvWriter.Context.RegisterClassMap<TransactionRowMap>();
-
-        await csvWriter.WriteRecordsAsync(transactions.Select(t => (TransactionRow)t), ct);
+        await Write<Transaction, TransactionRow, TransactionRowMap>(writer, transactions, t => (TransactionRow)t, ct);
     }
 
+    [Obsolete("Use Write() instead")]
     public async Task WriteRecordedTransactions(StreamWriter writer, IEnumerable<RecordedTransaction> transactions,  CancellationToken ct)
     {
-        await using var csvWriter = new CsvWriter(writer, config);
-        csvWriter.Context.RegisterClassMap<RecordedTransactionRowMap>();
-
-        await csvWriter.WriteRecordsAsync(transactions.Select(t => (RecordedTransactionRow)t), ct);
+        await Write<RecordedTransaction, RecordedTransactionRow, RecordedTransactionRowMap>(writer, transactions, t => (RecordedTransactionRow)t, ct);
     }
 
     [Obsolete("Use Read() instead")]

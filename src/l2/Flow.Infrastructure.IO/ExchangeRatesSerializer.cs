@@ -6,7 +6,7 @@ using Flow.Infrastructure.IO.Json;
 
 namespace Flow.Infrastructure.IO;
 
-internal class ExchangeRatesSerializer : IExchangeRatesReader
+internal class ExchangeRatesSerializer : IExchangeRatesReader, IExchangeRatesWriter
 {
     private readonly CsvSerializer csv;
     private readonly JsonSerializer json;
@@ -27,6 +27,23 @@ internal class ExchangeRatesSerializer : IExchangeRatesReader
             case SupportedFormat.JSON:
                 return await json.Read(reader,(JsonExchangeRate j) => (ExchangeRate)j);
                 
+            default:
+                throw new ArgumentOutOfRangeException(nameof(format), format, null);
+        }
+    }
+
+    public async Task WriteRates(StreamWriter writer, IEnumerable<ExchangeRate> rates, SupportedFormat format, CancellationToken ct)
+    {
+        switch (format)
+        {
+            case SupportedFormat.CSV:
+                await csv.Write<ExchangeRate, ExchangeRateRow, ExchangeRateRowMap>(writer, rates, r => (ExchangeRateRow)r, ct);
+                break;
+
+            case SupportedFormat.JSON:
+                await json.Write(writer, rates, ct);
+                break;
+
             default:
                 throw new ArgumentOutOfRangeException(nameof(format), format, null);
         }

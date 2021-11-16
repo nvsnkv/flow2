@@ -21,7 +21,7 @@ internal class JsonSerializer
         return Task.FromResult(result.Select(convertFunc));
     }
 
-    protected async Task Write<T>(StreamWriter writer, IEnumerable<T> transactions, CancellationToken ct)
+    public async Task Write<T>(StreamWriter writer, IEnumerable<T> transactions, CancellationToken ct)
     {
         using var jsonWriter = new JsonTextWriter(writer) { CloseOutput = false };
         serializer.Serialize(jsonWriter, transactions);

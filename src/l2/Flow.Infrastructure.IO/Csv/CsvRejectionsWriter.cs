@@ -16,6 +16,7 @@ internal class CsvRejectionsWriter
         this.config = config;
     }
 
+    [Obsolete("Use Write() instead")]
     public async Task WriteRejections(StreamWriter writer, IEnumerable<RejectedTransaction> rejections, CancellationToken ct)
     {
         await Write<RejectedTransaction, Transaction, TransactionRow>(
@@ -25,6 +26,7 @@ internal class CsvRejectionsWriter
             ct);
     }
 
+    [Obsolete("Use Write() instead")]
     public async Task WriteRejections(StreamWriter writer, IEnumerable<RejectedTransferKey> rejections, CancellationToken ct)
     {
         await Write<RejectedTransferKey, TransferKey, TransferKeyRow>(
@@ -34,6 +36,7 @@ internal class CsvRejectionsWriter
             ct);
     }
 
+    [Obsolete("Use Write() instead")]
     public async Task WriteRejections(StreamWriter writer, IEnumerable<RejectedRate> rejections, CancellationToken ct)
     {
         await Write<RejectedRate, ExchangeRate, ExchangeRateRow>(

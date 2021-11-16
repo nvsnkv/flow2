@@ -22,11 +22,13 @@ internal class JsonTransactionsSerializer : JsonSerializer
         return await Read(reader, (JsonRecordedTransaction j) => (RecordedTransaction)j);
     }
 
+    [Obsolete("Use Write() instead")]
     public async Task WriteTransactions(StreamWriter writer, IEnumerable<Transaction> transactions, CancellationToken ct)
     {
         await Write(writer, transactions, ct);
     }
 
+    [Obsolete("Use Write() instead")]
     public async Task WriteRecordedTransactions(StreamWriter writer, IEnumerable<RecordedTransaction> transactions, CancellationToken ct)
     {
         await Write(writer, transactions, ct);
