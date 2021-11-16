@@ -5,6 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using CsvHelper.Configuration;
 using Flow.Domain.ExchangeRates;
+using Flow.Domain.Transactions;
 using Flow.Infrastructure.IO.Csv;
 using Flow.Infrastructure.IO.Json;
 using FluentAssertions;
@@ -23,17 +24,17 @@ public class JsonSerializersShould : TestDataCarrier
     public async Task SerializeAndDeserializeTransactionsProperly(string cultureCode)
     {
         var culture = CultureInfo.GetCultureInfo(cultureCode);
-        var serializer = new JsonTransactionsSerializer(new JsonSerializerSettings() { Culture = culture });
+        var serializer = new JsonSerializer(new JsonSerializerSettings() { Culture = culture });
 
         await using var writeStream = new MemoryStream();
         await using var writer = new StreamWriter(writeStream);
 
-        await serializer.WriteTransactions(writer, Transactions, CancellationToken.None);
+        await serializer.Write(writer, Transactions, CancellationToken.None);
         await using var readStream = new MemoryStream(writeStream.ToArray());
         
         using var reader = new StreamReader(readStream);
 
-        var result = await serializer.ReadTransactions(reader);
+        var result = await serializer.Read(reader, (JsonTransaction j) => (Transaction)j);
 
         result.ToList().Should().BeEquivalentTo(Transactions);
     }
@@ -44,17 +45,17 @@ public class JsonSerializersShould : TestDataCarrier
     public async Task SerializeAndDeserializeRecordedTransactionsProperly(string cultureCode)
     {
         var culture = CultureInfo.GetCultureInfo(cultureCode);
-        var serializer = new JsonTransactionsSerializer(new JsonSerializerSettings { Culture = culture,  });
+        var serializer = new JsonSerializer(new JsonSerializerSettings { Culture = culture,  });
 
         await using var writeStream = new MemoryStream();
         await using var writer = new StreamWriter(writeStream);
 
-        await serializer.WriteRecordedTransactions(writer, RecordedTransactions, CancellationToken.None);
+        await serializer.Write(writer, RecordedTransactions, CancellationToken.None);
         await using var readStream = new MemoryStream(writeStream.ToArray());
 
         using var reader = new StreamReader(readStream);
 
-        var result = await serializer.ReadRecordedTransactions(reader);
+        var result = await serializer.Read(reader, (JsonRecordedTransaction j) => (RecordedTransaction)j);
 
         result.ToList().Should().BeEquivalentTo(RecordedTransactions);
     }

@@ -9,9 +9,9 @@ namespace Flow.Infrastructure.IO;
 internal class TransactionsIOFacade : ITransactionsReader, ITransactionsWriter
 {
     private readonly CsvTransactionsSerializer csv;
-    private readonly JsonTransactionsSerializer json;
+    private readonly JsonSerializer json;
 
-    public TransactionsIOFacade(CsvTransactionsSerializer csv, JsonTransactionsSerializer json)
+    public TransactionsIOFacade(CsvTransactionsSerializer csv, JsonSerializer json)
     {
         this.csv = csv;
         this.json = json;
@@ -22,7 +22,7 @@ internal class TransactionsIOFacade : ITransactionsReader, ITransactionsWriter
         return format switch
         {
             SupportedFormat.CSV => await csv.ReadTransactions(reader, ct),
-            SupportedFormat.JSON => await json.ReadTransactions(reader),
+            SupportedFormat.JSON => await json.Read(reader, (JsonTransaction j) => (Transaction)j),
             _ => throw new NotSupportedException($"Format {format} is not supported!")
         };
     }
@@ -32,7 +32,7 @@ internal class TransactionsIOFacade : ITransactionsReader, ITransactionsWriter
         return format switch
         {
             SupportedFormat.CSV => await csv.ReadRecordedTransactions(reader, ct),
-            SupportedFormat.JSON => await json.ReadRecordedTransactions(reader),
+            SupportedFormat.JSON => await json.Read(reader, (JsonRecordedTransaction j) => (RecordedTransaction)j),
             _ => throw new NotSupportedException($"Format {format} is not supported!")
         };
     }
@@ -46,7 +46,7 @@ internal class TransactionsIOFacade : ITransactionsReader, ITransactionsWriter
                  return;
                 
             case SupportedFormat.JSON:
-                await json.WriteTransactions(writer, transactions, ct);
+                await json.Write(writer, transactions, ct);
                 return;
 
             default:
@@ -63,7 +63,7 @@ internal class TransactionsIOFacade : ITransactionsReader, ITransactionsWriter
                 return;
 
             case SupportedFormat.JSON:
-                await json.WriteRecordedTransactions(writer, transactions, ct);
+                await json.Write(writer, transactions, ct);
                 return;
 
             default:
