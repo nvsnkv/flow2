@@ -18,6 +18,7 @@ public class TestDataCarrier
         new RecordedTransaction(5, DateTime.Now.AddMilliseconds(-5), -20, "EUR", "Transfer 2", "Source", Account),
         new RecordedTransaction(6, DateTime.Now, 20, "EUR", null, "Regular 2", Account),
         new RecordedTransaction(7, DateTime.Now, -30, "RUB", null, "Regular 3", Account),
+        new RecordedTransaction(8, DateTime.Now, -30, "EUR", null, "Regular 3", Account),
         
         new RecordedTransaction(344, DateTime.Now, 20, "RUB", null, "Regular 2", Account),
         new RecordedTransaction(400, DateTime.Now, -30, "RUB", null, "Regular 3", Account),

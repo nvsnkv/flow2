@@ -25,10 +25,10 @@ internal class TransfersBuilder
 
     public async Task<IEnumerable<Transfer>> Build(CancellationToken ct)
     {
-        var tasks = transactions.Join(transactions,
-            t => t.Amount < 0,
-            t => t.Amount > 0,
-            (l, r) => detectors.FirstOrDefault(d => d.CheckIsTransfer(l, r))?.Create(l, r, ct))
+        var tasks = transactions.OrderBy(t => t.Timestamp).Join(transactions.OrderBy(t => t.Timestamp),
+                t => t.Amount < 0,
+                t => t.Amount > 0,
+                (l, r) => detectors.FirstOrDefault(d => d.CheckIsTransfer(l, r))?.Create(l, r, ct))
             .Where(t => t != null);
 
         var result = new List<Transfer>();
@@ -37,6 +37,6 @@ internal class TransfersBuilder
             result.Add(await (task!));
         }
 
-        return result;
+        return result.DistinctBy(t => t.Source).DistinctBy(t => t.Sink);
     }
 }
