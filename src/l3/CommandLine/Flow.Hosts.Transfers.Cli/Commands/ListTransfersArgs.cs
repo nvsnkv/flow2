@@ -3,7 +3,7 @@ using Flow.Hosts.Common.Commands;
 using Flow.Infrastructure.Configuration.Contract;
 using JetBrains.Annotations;
 
-namespace Flow.Hosts.Accountant.Cli.Commands.Transfers;
+namespace Flow.Hosts.Transfers.Cli.Commands;
 
 [Verb("list", true, HelpText = "Generates list of transfers detected within selected transactions")]
 internal class ListTransfersArgs : ArgsBase

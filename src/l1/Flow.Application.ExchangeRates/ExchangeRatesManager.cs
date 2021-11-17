@@ -1,5 +1,4 @@
-﻿using System.Net.Http.Headers;
-using Flow.Application.ExchangeRates.Contract;
+﻿using Flow.Application.ExchangeRates.Contract;
 using Flow.Application.ExchangeRates.Infrastructure;
 using Flow.Domain.ExchangeRates;
 using FluentValidation;

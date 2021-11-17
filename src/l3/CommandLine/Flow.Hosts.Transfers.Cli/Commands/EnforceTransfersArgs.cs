@@ -3,10 +3,10 @@ using Flow.Hosts.Common.Commands;
 using Flow.Infrastructure.Configuration.Contract;
 using JetBrains.Annotations;
 
-namespace Flow.Hosts.Accountant.Cli.Commands.Transfers;
+namespace Flow.Hosts.Transfers.Cli.Commands;
 
-[Verb("abandon", HelpText = "Abandon previously enforced transfers.")]
-internal class AbandonTransfersArgs : ArgsBase
+[Verb("enforce", HelpText = "Enforces transfers.")]
+internal class EnforceTransfersArgs : ArgsBase
 {
     private string? input;
 
@@ -27,4 +27,5 @@ internal class AbandonTransfersArgs : ArgsBase
 
     [Option("output-errors", Required = false, HelpText = "Errors file path. If specified, app will write list of rejected transfers to this file, otherwise it will either generate a new file or use standard output depending on configuration.")]
     public string? Errors { get; [UsedImplicitly] set; }
+
 }

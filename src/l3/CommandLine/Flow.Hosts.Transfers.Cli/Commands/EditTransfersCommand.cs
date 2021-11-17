@@ -6,7 +6,7 @@ using Flow.Infrastructure.Configuration.Contract;
 using Flow.Infrastructure.IO.Contract;
 using JetBrains.Annotations;
 
-namespace Flow.Hosts.Accountant.Cli.Commands.Transfers;
+namespace Flow.Hosts.Transfers.Cli.Commands;
 
 [UsedImplicitly]
 internal class EditTransfersCommand : CommandBase
