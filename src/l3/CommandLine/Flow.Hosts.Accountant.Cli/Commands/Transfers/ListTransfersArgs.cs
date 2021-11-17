@@ -1,4 +1,5 @@
 ﻿using CommandLine;
+using Flow.Hosts.Common.Commands;
 using Flow.Infrastructure.Configuration.Contract;
 using JetBrains.Annotations;
 

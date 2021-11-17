@@ -3,9 +3,9 @@ using System.Globalization;
 using System.Text;
 using Flow.Infrastructure.Configuration.Contract;
 
-namespace Flow.Hosts.Accountant.Cli.Commands;
+namespace Flow.Hosts.Common.Commands;
 
-internal abstract class CommandBase
+public abstract class CommandBase
 {
     private readonly IFlowConfiguration config;
     private readonly CultureInfo culture;

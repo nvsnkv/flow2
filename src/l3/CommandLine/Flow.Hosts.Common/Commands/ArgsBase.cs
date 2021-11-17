@@ -1,8 +1,8 @@
 ﻿using Flow.Infrastructure.Configuration.Contract;
 
-namespace Flow.Hosts.Accountant.Cli.Commands;
+namespace Flow.Hosts.Common.Commands;
 
-internal class ArgsBase
+public class ArgsBase
 {
     protected SupportedFormat? GuessFormatFromPath(string? input)
     {

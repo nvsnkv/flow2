@@ -5,6 +5,7 @@ using Flow.Infrastructure.IO.Contract;
 using System.Linq.Expressions;
 using Flow.Application.Transactions.Contract;
 using Flow.Domain.Common.Collections;
+using Flow.Hosts.Common.Commands;
 
 namespace Flow.Hosts.Accountant.Cli.Commands;
 
