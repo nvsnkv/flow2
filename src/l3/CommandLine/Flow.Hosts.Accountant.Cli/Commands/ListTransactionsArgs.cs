@@ -24,7 +24,7 @@ internal class ListTransactionsArgs : ArgsBase
         }
     }
 
-    [Option('e', "open-in-edior", Default = false, Required = false, HelpText = "Display transactions in external editor")]
+    [Option('e', "open-in-editor", Default = false, Required = false, HelpText = "Display transactions in external editor")]
     public bool OpenEditor { get; [UsedImplicitly] set;}
 
     [Value(0, MetaName = "Criteria", Required = true, HelpText = "Criteria for items that should be returned.")]
