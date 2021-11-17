@@ -71,7 +71,7 @@ internal class GenericParser
             // ReSharper disable once AssignmentInConditionalExpression
             if (result = DateTime.TryParse(arg, culture, dateTimeStyles, out var d))
             {
-                o = (T)(object)d;
+                o = (T)(object)d.ToUniversalTime();
             }
         }
 
