@@ -3,11 +3,9 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using CsvHelper.Configuration;
 using Flow.Domain.ExchangeRates;
 using Flow.Domain.Transactions;
 using Flow.Domain.Transactions.Transfers;
-using Flow.Infrastructure.IO.Csv;
 using Flow.Infrastructure.IO.Json;
 using FluentAssertions;
 using Newtonsoft.Json;
@@ -88,7 +86,7 @@ public class JsonSerializersShould : TestDataCarrier
     public async Task SerializeAndDeserializeExchangeRatesProperly(string cultureCode)
     {
         var culture = CultureInfo.GetCultureInfo(cultureCode);
-        var serializer = new JsonSerializer(new JsonSerializerSettings { Culture = culture }); ;
+        var serializer = new JsonSerializer(new JsonSerializerSettings { Culture = culture });
 
         await using var stream = new MemoryStream();
         await using var writer = new StreamWriter(stream);

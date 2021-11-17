@@ -53,7 +53,7 @@ public class CsvSerializersShould : TestDataCarrier
 
         using var reader = new StreamReader(stream);
 
-        var result = await serializer.Read(reader, (RecordedTransactionRow r) => (RecordedTransaction)r, CancellationToken.None); ;
+        var result = await serializer.Read(reader, (RecordedTransactionRow r) => (RecordedTransaction)r, CancellationToken.None);
 
         result.ToList().Should().BeEquivalentTo(RecordedTransactions);
     }
@@ -74,7 +74,7 @@ public class CsvSerializersShould : TestDataCarrier
 
         using var reader = new StreamReader(stream);
 
-        var result = await serializer.Read<TransferKey, TransferKeyRow>(reader, r => (TransferKey)r, CancellationToken.None); ;
+        var result = await serializer.Read<TransferKey, TransferKeyRow>(reader, r => (TransferKey)r, CancellationToken.None);
 
         result.ToList().Should().BeEquivalentTo(TransferKeys);
     }

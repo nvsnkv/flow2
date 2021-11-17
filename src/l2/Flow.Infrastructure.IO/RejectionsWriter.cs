@@ -24,7 +24,11 @@ internal class RejectionsWriter : IRejectionsWriter
         switch (format)
         {
             case SupportedFormat.CSV:
-                await csv.WriteRejections(writer, rejections, ct);
+                await csv.Write<RejectedTransaction, Transaction, TransactionRow>(
+                    writer,
+                    rejections,
+                    r => r.Transaction is RecordedTransaction rr ? (RecordedTransactionRow)rr : (TransactionRow)r.Transaction,
+                    ct);
                 return;
 
             case SupportedFormat.JSON:
@@ -41,7 +45,11 @@ internal class RejectionsWriter : IRejectionsWriter
         switch (format)
         {
             case SupportedFormat.CSV:
-                await csv.WriteRejections(writer, rejections, ct);
+                await csv.Write<RejectedTransferKey, TransferKey, TransferKeyRow>(
+                    writer,
+                    rejections,
+                    r => (TransferKeyRow)r.TransferKey,
+                    ct);
                 return;
 
             case SupportedFormat.JSON:
@@ -58,7 +66,11 @@ internal class RejectionsWriter : IRejectionsWriter
         switch (format)
         {
             case SupportedFormat.CSV:
-                await csv.WriteRejections(writer, rejections, ct);
+                await csv.Write<RejectedRate, ExchangeRate, ExchangeRateRow>(
+                    writer,
+                    rejections,
+                    r => (ExchangeRateRow)r.Rate,
+                    ct);
                 return;
 
             case SupportedFormat.JSON:
