@@ -5,6 +5,7 @@ using System.Linq;
 using Flow.Domain.Transactions;
 using Flow.Infrastructure.IO.Criteria;
 using FluentAssertions;
+using FluentAssertions.Extensions;
 using Xunit;
 using Xunit.Categories;
 
@@ -50,12 +51,12 @@ public class TransactionCriteriaParserShould : TestDataCarrier
         new object[] {"a<=-150", (Func<Transaction, bool>)(a => a.Amount <= -150) },
         new object[] { "!a>0 c=RUB t%Кирил", (Func<Transaction, bool>)(a => !(a.Amount > 0) && a.Currency == "RUB" && a.Title.Contains("Кирил")) },
 
-        new object[] {"ts[2021-11-05:2021-11-06)", (Func<Transaction, bool>)(a => new DateTime(2021, 11, 05) <= a.Timestamp &&  a.Timestamp < new DateTime(2021, 11, 06)) },
-        new object[] {"ts(2021-11-05:2021-11-06]", (Func<Transaction, bool>)(a => new DateTime(2021, 11, 05) < a.Timestamp &&  a.Timestamp <= new DateTime(2021, 11, 06)) },
-        new object[] {"ts[2021-11-05:2021-11-06]", (Func<Transaction, bool>)(a => new DateTime(2021, 11, 05) <= a.Timestamp &&  a.Timestamp <= new DateTime(2021, 11, 06)) },
-        new object[] {"ts[2021-11-05:2021-11-06)", (Func<Transaction, bool>)(a => new DateTime(2021, 11, 05) <= a.Timestamp &&  a.Timestamp < new DateTime(2021, 11, 06)) },
-        new object[] {"ts(2021-11-05:2021-11-06]", (Func<Transaction, bool>)(a => new DateTime(2021, 11, 05) < a.Timestamp &&  a.Timestamp <= new DateTime(2021, 11, 06)) },
-        new object[] {"ts[2021-11-05:2021-11-06]", (Func<Transaction, bool>)(a => new DateTime(2021, 11, 05) <= a.Timestamp &&  a.Timestamp <= new DateTime(2021, 11, 06)) },
+        new object[] {"ts[2021-11-05:2021-11-06)", (Func<Transaction, bool>)(a => new DateTime(2021, 11, 05).ToUniversalTime() <= a.Timestamp &&  a.Timestamp < new DateTime(2021, 11, 06).ToUniversalTime()) },
+        new object[] {"ts(2021-11-05:2021-11-06]", (Func<Transaction, bool>)(a => new DateTime(2021, 11, 05).ToUniversalTime() < a.Timestamp &&  a.Timestamp <= new DateTime(2021, 11, 06).ToUniversalTime()) },
+        new object[] {"ts[2021-11-05:2021-11-06]", (Func<Transaction, bool>)(a => new DateTime(2021, 11, 05).ToUniversalTime() <= a.Timestamp &&  a.Timestamp <= new DateTime(2021, 11, 06).ToUniversalTime()) },
+        new object[] {"ts[2021-11-05:2021-11-06)", (Func<Transaction, bool>)(a => new DateTime(2021, 11, 05).ToUniversalTime() <= a.Timestamp &&  a.Timestamp < new DateTime(2021, 11, 06).ToUniversalTime()) },
+        new object[] {"ts(2021-11-05:2021-11-06]", (Func<Transaction, bool>)(a => new DateTime(2021, 11, 05).ToUniversalTime() < a.Timestamp &&  a.Timestamp <= new DateTime(2021, 11, 06).ToUniversalTime()) },
+        new object[] {"ts[2021-11-05:2021-11-06]", (Func<Transaction, bool>)(a => new DateTime(2021, 11, 05).ToUniversalTime() <= a.Timestamp &&  a.Timestamp <= new DateTime(2021, 11, 06).ToUniversalTime()) },
 
         new object[] {"c(RUB,EUR) t%s", (Func<Transaction, bool>)(a => new [] {"RUB", "EUR" }.Contains(a.Currency) && a.Title.Contains("s")), },
         new object[] {"c(RUB,EUR) t%s", (Func<Transaction, bool>)(a => new [] {"RUB", "EUR" }.Contains(a.Currency) && a.Title.Contains("s")), }
@@ -79,7 +80,7 @@ public class TransactionCriteriaParserShould : TestDataCarrier
         new object[] {"a<=-150", (Func<RecordedTransaction, bool>)(a => a.Amount <= -150) },
         new object[] { "!a>0 c=RUB t%Кирил", (Func<RecordedTransaction, bool>)(a => !(a.Amount > 0) && a.Currency == "RUB" && a.Title.Contains("Кирил")) },
 
-        new object[] {"ts[2021-11-05:2021-11-06)", (Func<RecordedTransaction, bool>)(a => new DateTime(2021, 11, 05) <= a.Timestamp &&  a.Timestamp < new DateTime(2021, 11, 06)) },
+        new object[] {"ts[2021-11-05:2021-11-06)", (Func<RecordedTransaction, bool>)(a => new DateTime(2021, 11, 05).ToUniversalTime() <= a.Timestamp &&  a.Timestamp < new DateTime(2021, 11, 06).ToUniversalTime()) },
         
         new object[] {"c(RUB,EUR) t%s", (Func<RecordedTransaction, bool>)(a => new [] {"RUB", "EUR" }.Contains(a.Currency) && a.Title.Contains("s")), }
     }.Join(
