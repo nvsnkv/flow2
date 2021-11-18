@@ -25,18 +25,31 @@ internal class TransfersBuilder
 
     public async Task<IEnumerable<Transfer>> Build(CancellationToken ct)
     {
-        var tasks = transactions.OrderBy(t => t.Timestamp).Join(transactions.OrderBy(t => t.Timestamp),
-                t => t.Amount < 0,
-                t => t.Amount > 0,
-                (l, r) => detectors.FirstOrDefault(d => d.CheckIsTransfer(l, r))?.Create(l, r, ct))
-            .Where(t => t != null);
+        var sources = transactions.OrderBy(t => t.Timestamp);
+        var sinks = transactions.OrderBy(t => t.Timestamp).ToList();
+        var usedSinks = new HashSet<int>();
+        var results = new List<Transfer>();
 
-        var result = new List<Transfer>();
-        foreach (var task in tasks)
+        foreach (var source in sources)
         {
-            result.Add(await (task!));
+            for (var i = 0; i < sinks.Count; i++)
+            {
+                if (!usedSinks.Contains(i))
+                {
+                    var sink = sinks[i];
+
+                    var detector = detectors.FirstOrDefault(d => d.CheckIsTransfer(source, sink));
+                    if (detector != null)
+                    {
+                        var transfer = await detector.Create(source, sink, ct);
+                        results.Add(transfer);
+                        usedSinks.Add(i);
+                        break;
+                    }
+                }
+            }
         }
 
-        return result.DistinctBy(t => t.Source).DistinctBy(t => t.Sink);
+        return results;
     }
 }
