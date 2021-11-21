@@ -5,7 +5,6 @@ using System.Linq;
 using Flow.Domain.Transactions;
 using Flow.Infrastructure.IO.Criteria;
 using FluentAssertions;
-using FluentAssertions.Extensions;
 using Xunit;
 using Xunit.Categories;
 
