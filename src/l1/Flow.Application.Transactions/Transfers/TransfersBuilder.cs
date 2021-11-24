@@ -24,12 +24,12 @@ internal class TransfersBuilder
         return this;
     }
 
-    public Task<IEnumerable<Transfer>> Build(CancellationToken ct)
+    public IEnumerable<Transfer> Build(CancellationToken ct)
     {
         var sources = transactions.OrderBy(t => t.Timestamp);
         var sinks = transactions.OrderBy(t => t.Timestamp).ToList();
         var usedSinks = new HashSet<int>();
-        
+
         var result = sources.Select(async source =>
             {
                 for (var i = 0; i < sinks.Count; i++)
@@ -54,6 +54,6 @@ internal class TransfersBuilder
             .Where(t => t != null)
             .Cast<Transfer>();
 
-        return Task.FromResult(result);
+        return result;
     }
 }

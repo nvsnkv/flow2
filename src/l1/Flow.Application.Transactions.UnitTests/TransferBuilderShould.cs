@@ -14,19 +14,19 @@ namespace Flow.Application.Transactions.UnitTests;
 public class TransferBuilderShould : TestDataCarrier
 {
     [Fact] [UnitTest]
-    public async Task BuildTransfersIfDetectorsDetectThem()
+    public void BuildTransfersIfDetectorsDetectThem()
     {
         var detector = new Mock<ITransferDetector>();
 
         var expectedTransfer = SetupDetector(detector, Transactions[1], Transactions[2]);
 
         var builder = new TransfersBuilder(Transactions.Values).With(detector.Object);
-        var result = await builder.Build(CancellationToken.None);
+        var result = builder.Build(CancellationToken.None);
         result.Should().BeEquivalentTo(new[] { expectedTransfer });
     }
 
     [Fact] [UnitTest]
-    public async Task UseAllDetectorsProvided()
+    public void UseAllDetectorsProvided()
     {
         var detector1 = new Mock<ITransferDetector>();
         var detector2 = new Mock<ITransferDetector>();
@@ -41,12 +41,12 @@ public class TransferBuilderShould : TestDataCarrier
             .With(detector1.Object)
             .With(detector2.Object);
 
-        var result = await builder.Build(CancellationToken.None);
+        var result = builder.Build(CancellationToken.None);
         result.Should().BeEquivalentTo(expectedTransfers);
     }
 
     [Fact] [UnitTest]
-    public async Task NotHaveDuplicatesInSources()
+    public void NotHaveDuplicatesInSources()
     {
         var detector = new Mock<ITransferDetector>();
         SetupDetector(detector, Transactions[1], Transactions[2]);
@@ -56,13 +56,13 @@ public class TransferBuilderShould : TestDataCarrier
 
         var builder = new TransfersBuilder(Transactions.Values).With(detector.Object);
 
-        var result = (await builder.Build(CancellationToken.None)).ToList();
+        var result = (builder.Build(CancellationToken.None)).ToList();
 
         result.Should().HaveCount(1);
     }
 
     [Fact] [UnitTest]
-    public async Task NotHaveDuplicatesInSinks()
+    public void NotHaveDuplicatesInSinks()
     {
         var detector = new Mock<ITransferDetector>();
         SetupDetector(detector, Transactions[1], Transactions[2]);
@@ -70,7 +70,7 @@ public class TransferBuilderShould : TestDataCarrier
         SetupDetector(detector, Transactions[8], Transactions[2]);
         var builder = new TransfersBuilder(Transactions.Values).With(detector.Object);
 
-        var result = (await builder.Build(CancellationToken.None)).ToList();
+        var result = (builder.Build(CancellationToken.None)).ToList();
 
         result.Should().HaveCount(1);
     }
