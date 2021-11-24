@@ -1,4 +1,5 @@
-﻿using Flow.Domain.Transactions;
+﻿using Flow.Domain.Common;
+using Flow.Domain.Transactions;
 using Flow.Domain.Transactions.Transfers;
 
 namespace Flow.Application.Transactions.Transfers;
@@ -23,33 +24,36 @@ internal class TransfersBuilder
         return this;
     }
 
-    public async Task<IEnumerable<Transfer>> Build(CancellationToken ct)
+    public Task<IEnumerable<Transfer>> Build(CancellationToken ct)
     {
         var sources = transactions.OrderBy(t => t.Timestamp);
         var sinks = transactions.OrderBy(t => t.Timestamp).ToList();
         var usedSinks = new HashSet<int>();
-        var results = new List<Transfer>();
-
-        foreach (var source in sources)
-        {
-            for (var i = 0; i < sinks.Count; i++)
+        
+        var result = sources.Select(async source =>
             {
-                if (!usedSinks.Contains(i))
+                for (var i = 0; i < sinks.Count; i++)
                 {
-                    var sink = sinks[i];
-
-                    var detector = detectors.FirstOrDefault(d => d.CheckIsTransfer(source, sink));
-                    if (detector != null)
+                    if (!usedSinks.Contains(i))
                     {
-                        var transfer = await detector.Create(source, sink, ct);
-                        results.Add(transfer);
-                        usedSinks.Add(i);
-                        break;
+                        var sink = sinks[i];
+
+                        var detector = detectors.FirstOrDefault(d => d.CheckIsTransfer(source, sink));
+                        if (detector != null)
+                        {
+                            var transfer = await detector.Create(source, sink, ct);
+                            usedSinks.Add(i);
+                            return transfer;
+                        }
                     }
                 }
-            }
-        }
 
-        return results;
+                return null;
+            })
+            .Select(t => t.Await(ct))
+            .Where(t => t != null)
+            .Cast<Transfer>();
+
+        return Task.FromResult(result);
     }
 }

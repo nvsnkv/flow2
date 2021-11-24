@@ -16,7 +16,7 @@ internal class TransactionStorage : ITransactionsStorage
 
     public async Task<IEnumerable<RejectedTransaction>> Create(IEnumerable<Transaction> transactions, CancellationToken ct)
     {
-        await using var context = factory.CreateDbContext();
+        await using var context = await factory.CreateDbContextAsync(ct);
         foreach (var t in transactions)
         {
             await AddTransaction(t, context, ct);
@@ -29,7 +29,7 @@ internal class TransactionStorage : ITransactionsStorage
 
     public async Task<IEnumerable<RecordedTransaction>> Read(Expression<Func<RecordedTransaction, bool>> conditions, CancellationToken ct)
     {
-        await using var context = factory.CreateDbContext();
+        await using var context = await factory.CreateDbContextAsync(ct);
         return await context.Transactions
             .Include(t => t.DbAccount)
             .Include(t => t.Overrides)
@@ -40,7 +40,7 @@ internal class TransactionStorage : ITransactionsStorage
 
     public async Task<IEnumerable<RejectedTransaction>> Update(IEnumerable<RecordedTransaction> transactions, CancellationToken ct)
     {
-        await using var context = factory.CreateDbContext();
+        await using var context = await factory.CreateDbContextAsync(ct);
         var rejections = new List<RejectedTransaction>();
         foreach (var upd in transactions)
         {
@@ -83,7 +83,7 @@ internal class TransactionStorage : ITransactionsStorage
 
     public async Task<int> Delete(Expression<Func<RecordedTransaction, bool>> conditions, CancellationToken ct)
     {
-        await using var context = factory.CreateDbContext();
+        await using var context = await factory.CreateDbContextAsync(ct);
         var targets = await context.Transactions
             .Include(t => t.DbAccount)
             .Where(conditions).Cast<DbTransaction>().ToListAsync(ct);
