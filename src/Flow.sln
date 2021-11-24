@@ -64,6 +64,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Flow.Hosts.ExchangeRates.Cl
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Flow.Domain.Analysis", "l0\Flow.Domain.Analysis\Flow.Domain.Analysis.csproj", "{850B9C43-3C52-4E6D-B7E2-C408E393B103}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Flow.Application.Analysis", "l1\Flow.Application.Analysis\Flow.Application.Analysis.csproj", "{8288C5FE-9DC3-4E6C-83E7-5368B2C3CD55}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -162,6 +164,10 @@ Global
 		{850B9C43-3C52-4E6D-B7E2-C408E393B103}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{850B9C43-3C52-4E6D-B7E2-C408E393B103}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{850B9C43-3C52-4E6D-B7E2-C408E393B103}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8288C5FE-9DC3-4E6C-83E7-5368B2C3CD55}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8288C5FE-9DC3-4E6C-83E7-5368B2C3CD55}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8288C5FE-9DC3-4E6C-83E7-5368B2C3CD55}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8288C5FE-9DC3-4E6C-83E7-5368B2C3CD55}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -191,6 +197,7 @@ Global
 		{AC5F1179-5A33-4AA0-93FC-3A7B9DB06829} = {128C34A4-0A1B-44B2-AD90-F3B76381F851}
 		{189E948D-01CE-4CF1-927E-447253559BFC} = {128C34A4-0A1B-44B2-AD90-F3B76381F851}
 		{850B9C43-3C52-4E6D-B7E2-C408E393B103} = {6DE04AF2-D489-4CCA-9EB2-DB6D44044259}
+		{8288C5FE-9DC3-4E6C-83E7-5368B2C3CD55} = {BF31D4DF-B59D-44E8-9EA4-D1EAC24CC3ED}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BD863072-1B8D-417A-BFF4-C60D20CE1D31}

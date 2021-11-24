@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\l0\Flow.Domain.Analysis\Flow.Domain.Analysis.csproj" />
+    <ProjectReference Include="..\..\l0\Flow.Domain.Transactions\Flow.Domain.Transactions.csproj" />
+    <ProjectReference Include="..\Flow.Application.ExchangeRates\Flow.Application.ExchangeRates.csproj" />
+  </ItemGroup>
+
+</Project>
