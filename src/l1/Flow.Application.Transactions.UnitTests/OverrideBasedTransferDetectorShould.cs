@@ -55,7 +55,7 @@ public class OverrideBasedTransferDetectorShould :TestDataCarrier
     {
         const decimal rate = 0.034M;
         ratesProvider
-            .Setup(s => s.GetRate(It.IsAny<ExchangeRateRequest>(), CancellationToken.None))
+            .Setup(s => s.GetRate(It.IsAny<ExchangeRateRequest>(), It.IsAny<CancellationToken>()))
             .Returns(Task.FromResult(new ExchangeRate("RUB", "BYN", DateTime.Now, rate))!);
 
         var detector = await OverridesBasedTransferDetector.Create(storage.Object, ratesProvider.Object, CancellationToken.None);

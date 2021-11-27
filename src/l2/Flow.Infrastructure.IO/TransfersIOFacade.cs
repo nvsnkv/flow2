@@ -27,7 +27,7 @@ internal class TransfersIOFacade : ITransferKeysReader, ITransfersWriter
         };
     }
 
-    public async Task WriteTransfers(StreamWriter writer, IEnumerable<Transfer> transfers, SupportedFormat format, CancellationToken ct)
+    public async Task WriteTransfers(StreamWriter writer, IAsyncEnumerable<Transfer> transfers, SupportedFormat format, CancellationToken ct)
     {
         switch (format)
         {

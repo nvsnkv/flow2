@@ -32,7 +32,7 @@ internal class ListTransfersCommand : CommandBase
             }
         }
 
-        var transfers = await accountant.GetTransfers(criteria.Conditions!, ct);
+        var transfers = accountant.GetTransfers(criteria.Conditions!, ct);
 
         var output = args.Output ?? (args.OpenEditor ? GetFallbackOutputPath(args.Format, "list", "transactions") : null);
         await using var streamWriter = CreateWriter(output);

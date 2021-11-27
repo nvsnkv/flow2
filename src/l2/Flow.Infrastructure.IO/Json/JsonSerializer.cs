@@ -27,4 +27,9 @@ internal class JsonSerializer
         serializer.Serialize(jsonWriter, transactions);
         await jsonWriter.FlushAsync(ct);
     }
+
+    public async Task Write<T>(StreamWriter writer, IAsyncEnumerable<T> transactions, CancellationToken ct)
+    {
+        await Write(writer, await transactions.ToListAsync(ct), ct);
+    }
 }

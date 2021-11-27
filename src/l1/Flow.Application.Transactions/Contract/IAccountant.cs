@@ -14,7 +14,7 @@ public interface IAccountant
 
     Task<int> DeleteTransactions(Expression<Func<RecordedTransaction, bool>> conditions, CancellationToken ct);
 
-    Task<IEnumerable<Transfer>> GetTransfers(Expression<Func<RecordedTransaction, bool>> conditions, CancellationToken ct);
+    IAsyncEnumerable<Transfer> GetTransfers(Expression<Func<RecordedTransaction, bool>> conditions, CancellationToken ct);
 
     Task<IEnumerable<RejectedTransferKey>> EnforceTransfers(IEnumerable<TransferKey> keys, CancellationToken ct);
 

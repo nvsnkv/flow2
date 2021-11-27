@@ -1,4 +1,5 @@
-﻿using Flow.Domain.Common;
+﻿using System.Runtime.CompilerServices;
+using Flow.Domain.Common;
 using Flow.Domain.Transactions;
 using Flow.Domain.Transactions.Transfers;
 
@@ -24,36 +25,30 @@ internal class TransfersBuilder
         return this;
     }
 
-    public IEnumerable<Transfer> Build(CancellationToken ct)
+    public async IAsyncEnumerable<Transfer> Build([EnumeratorCancellation] CancellationToken ct)
     {
         var sources = transactions.OrderBy(t => t.Timestamp);
         var sinks = transactions.OrderBy(t => t.Timestamp).ToList();
         var usedSinks = new HashSet<int>();
 
-        var result = sources.Select(async source =>
+        foreach (var source in sources)
+        {
+            for (var i = 0; i < sinks.Count; i++)
             {
-                for (var i = 0; i < sinks.Count; i++)
+                if (!usedSinks.Contains(i))
                 {
-                    if (!usedSinks.Contains(i))
-                    {
-                        var sink = sinks[i];
+                    var sink = sinks[i];
 
-                        var detector = detectors.FirstOrDefault(d => d.CheckIsTransfer(source, sink));
-                        if (detector != null)
-                        {
-                            var transfer = await detector.Create(source, sink, ct);
-                            usedSinks.Add(i);
-                            return transfer;
-                        }
+                    var detector = detectors.FirstOrDefault(d => d.CheckIsTransfer(source, sink));
+                    if (detector != null)
+                    {
+                        var transfer = await detector.Create(source, sink, ct);
+                        usedSinks.Add(i);
+                        yield return transfer;
+                        break;
                     }
                 }
-
-                return null;
-            })
-            .Select(t => t.Await(ct))
-            .Where(t => t != null)
-            .Cast<Transfer>();
-
-        return result;
+            }
+        }
     }
 }

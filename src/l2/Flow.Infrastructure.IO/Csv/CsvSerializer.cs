@@ -15,17 +15,16 @@ internal class CsvSerializer
     public async Task<IEnumerable<T>> Read<T, TRow>(StreamReader reader, Func<TRow, T> convertFunc, CancellationToken ct)
     {
         using var csvReader = new CsvReader(reader, config);
-        var result = new List<T>();
 
-        await foreach (var row in csvReader.GetRecordsAsync(typeof(TRow), ct))
-        {
-            result.Add(convertFunc((TRow)row));
-        }
-
-        return result;
+        return await csvReader.GetRecordsAsync(typeof(TRow), ct).Select(row => convertFunc((TRow)row)).ToListAsync(ct);
     }
 
     public async Task Write<T, TRow, TMap>(StreamWriter writer, IEnumerable<T> records, Func<T, TRow> convertFunc, CancellationToken ct) where TMap : ClassMap
+    {
+        await Write<T, TRow, TMap>(writer, records.ToAsyncEnumerable(), convertFunc, ct);
+    }
+    
+    public async Task Write<T, TRow, TMap>(StreamWriter writer, IAsyncEnumerable<T> records, Func<T, TRow> convertFunc, CancellationToken ct) where TMap : ClassMap
     {
         await using var csvWriter = new CsvWriter(writer, config);
         csvWriter.Context.RegisterClassMap<TMap>();

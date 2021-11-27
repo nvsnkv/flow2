@@ -1,4 +1,5 @@
 ﻿using System.Linq.Expressions;
+using System.Runtime.CompilerServices;
 using Flow.Application.ExchangeRates.Contract;
 using Flow.Application.Transactions.Contract;
 using Flow.Application.Transactions.Infrastructure;
@@ -61,14 +62,17 @@ internal class Accountant : IAccountant
         return await storage.Delete(conditions, ct);
     }
 
-    public async Task<IEnumerable<Transfer>> GetTransfers(Expression<Func<RecordedTransaction, bool>> conditions, CancellationToken ct)
+    public async IAsyncEnumerable<Transfer> GetTransfers(Expression<Func<RecordedTransaction, bool>> conditions, [EnumeratorCancellation] CancellationToken ct)
     {
         var transactions = await storage.Read(conditions, ct);
         
         var builder = transferDetectors.Aggregate(new TransfersBuilder(transactions.ToList()), (b, d) => b.With(d));
         builder.With(await OverridesBasedTransferDetector.Create(transferKeyStorage, ratesProvider, ct));
 
-        return builder.Build(ct);
+        await foreach (var t in builder.Build(ct))
+        {
+            yield return t;
+        };
     }
 
     public async Task<IEnumerable<RejectedTransferKey>> EnforceTransfers(IEnumerable<TransferKey> keys, CancellationToken ct)

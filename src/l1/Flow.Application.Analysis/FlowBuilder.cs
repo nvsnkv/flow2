@@ -1,4 +1,5 @@
-﻿using Flow.Application.ExchangeRates.Contract;
+﻿using System.Runtime.CompilerServices;
+using Flow.Application.ExchangeRates.Contract;
 using Flow.Domain.Analysis;
 using Flow.Domain.Common;
 using Flow.Domain.ExchangeRates;
@@ -34,36 +35,44 @@ public class FlowBuilder
     }
 
 
-    public IEnumerable<FlowItem> Build(CancellationToken ct)
+    public async IAsyncEnumerable<FlowItem> Build([EnumeratorCancellation] CancellationToken ct)
     {
         var sources = (transfers ?? Enumerable.Empty<Transfer>()).ToDictionary(s => s.Source);
         var sinks = sources.Values.Select(t => t.Sink).ToHashSet();
 
-        return transactions
+        // meaningful transactions: transactions that changes amount of money within the system.
+        var meaningfulTransactions = transactions
             .Where(t => !sinks.Contains(t.Key))
             .Select(t => sources.ContainsKey(t.Key)
                 ? new RecordedTransaction(t.Key, t.Timestamp, sources[t.Key].Fee, sources[t.Key].Currency, $"TRANSFER: {sources[t.Key].Comment}", $"{t.Category}: {t.Title}", t.Account)
                 : t)
-            .Where(t => t.Amount != 0)
-            .Select(async t =>
+            .Where(t => t.Amount != 0);
+        foreach (var t in meaningfulTransactions)
+        {
+            var item = t;
+            if (targetCurrency != null && t.Currency != targetCurrency)
             {
-                if (targetCurrency != null && t.Currency != targetCurrency)
-                {
-                    var request = new ExchangeRateRequest(t.Currency, targetCurrency, t.Timestamp);
-                    var rate = await ratesProvider!.GetRate(request, ct);
-                    if (rate == null)
-                    {
-                        throw new InvalidOperationException("No exchange rate found!")
-                        {
-                            Data = { { "Request", request } }
-                        };
-                    }
-                    return new RecordedTransaction(t.Key, t.Timestamp, t.Amount * rate.Rate, targetCurrency, t.Category, t.Title, t.Account) { Overrides = t.Overrides };
-                }
+                item = await ConvertCurrency(t, ct);
+            }
 
-                return t;
-            })
-            .Select(t => t.Await(ct))
-            .Select(t => t.Amount > 0 ? (FlowItem)new Income(t) : new Expense(t));
+            yield return item.Amount > 0 ? new Income(item) : new Expense(item);
+        }
+    }
+
+    private async Task<RecordedTransaction> ConvertCurrency(RecordedTransaction t, CancellationToken ct)
+    {
+        ExchangeRateRequest request = (t.Currency, targetCurrency!, t.Timestamp);
+        var rate = await ratesProvider!.GetRate(request, ct);
+        if (rate == null)
+        {
+            throw new InvalidOperationException("No exchange rate found!")
+            {
+                Data = { { "Request", request } }
+            };
+        }
+
+        return new RecordedTransaction(t.Key, t.Timestamp, t.Amount * rate.Rate, targetCurrency!, t.Category, t.Title,
+            t.Account)
+        { Overrides = t.Overrides };
     }
 }
