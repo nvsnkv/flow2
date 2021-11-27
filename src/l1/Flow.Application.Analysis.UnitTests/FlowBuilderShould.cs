@@ -1,7 +1,10 @@
-﻿using Flow.Domain.Analysis;
+﻿using Flow.Application.ExchangeRates.Contract;
+using Flow.Domain.Analysis;
+using Flow.Domain.ExchangeRates;
 using Flow.Domain.Transactions;
 using Flow.Domain.Transactions.Transfers;
 using FluentAssertions;
+using Moq;
 using Xunit;
 using Xunit.Categories;
 
@@ -49,11 +52,24 @@ public class FlowBuilderShould
         var transfersWithZeroFee = Transfers.Where(t => t.Fee == 0).ToList();
         var transferKeys = transfersWithZeroFee.Select(t => t.Source).Union(transfersWithZeroFee.Select(t => t.Sink)).ToHashSet();
 
-        var builder = new FlowBuilder(Expenses.Concat(Incomes));
-        builder.WithTransfers(transfersWithZeroFee);
+        var builder = new FlowBuilder(Expenses.Concat(Incomes)).WithTransfers(transfersWithZeroFee);
 
 
         var flow = await builder.Build(CancellationToken.None).ToListAsync();
         flow.Any(f => transferKeys.Contains(f.Key)).Should().BeFalse();
+    }
+
+    [Fact, UnitTest]
+    public async Task ConvertCurrencyIfRequested()
+    {
+        var ratesProvider = new Mock<IExchangeRatesProvider>();
+        ratesProvider
+            .Setup(x => x.GetRate(It.IsAny<ExchangeRateRequest>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(new ExchangeRate("RUR", "EUR", DateTime.UtcNow, 85));
+
+        var builder = new FlowBuilder(Expenses).InCurrency("EUR", ratesProvider.Object);
+        var flow = await builder.Build(CancellationToken.None).ToListAsync();
+
+        flow.Select(f => f.Amount).Should().BeEquivalentTo(Expenses.Select(e => e.Amount * 85));
     }
 }
