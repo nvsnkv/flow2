@@ -9,6 +9,8 @@ public class EnumerableWithCount<T> : IEnumerable<T>
 
     public bool Enumerated { get; private set; }
 
+    public int Count => Enumerated ? count : throw new InvalidOperationException("Collection was not enumerated!");
+
     public EnumerableWithCount(IEnumerable<T> items)
     {
         Items = items.Select(i =>
@@ -17,8 +19,6 @@ public class EnumerableWithCount<T> : IEnumerable<T>
             return i;
         });
     }
-
-    public int Count => Enumerated ? count : throw new InvalidOperationException("Collection was not enumerated!");
 
     public IEnumerator<T> GetEnumerator()
     {

@@ -1,27 +1,29 @@
 ﻿using System;
-using Flow.Domain.Common.Collections;
+using System.Linq;
+using System.Threading.Tasks;
+using Flow.Domain.Common.Collections.Async;
 using FluentAssertions;
 using Xunit;
 using Xunit.Categories;
 
 namespace Flow.Domain.Common.UnitTests;
 
-public class EnumerableWithCountsShould
+public class AsyncEnumerableWithCountsShould
 {
     private readonly int[] collection = { 1, 2, 4 };
 
     [Fact] [UnitTest]
     public void IndicateThatCollectionWasNotEnumerated()
     {
-        var stats = new EnumerableWithCount<int>(collection);
+        var stats = new AsyncEnumerableWithCount<int>(collection.ToAsyncEnumerable());
         stats.Enumerated.Should().BeFalse();
     }
 
     [Fact] [UnitTest]
-    public void IndicateThatCollectionWasEnumerated()
+    public async Task IndicateThatCollectionWasEnumerated()
     {
-        var stats = new EnumerableWithCount<int>(collection);
-        foreach (var _ in stats)
+        var stats = new AsyncEnumerableWithCount<int>(collection.ToAsyncEnumerable());
+        await foreach (var _ in stats)
         {
         }
 
@@ -31,17 +33,17 @@ public class EnumerableWithCountsShould
     [Fact] [UnitTest]
     public void ThrowInvalidOperationExceptionIfCountRequestedBeforeCollectionWasEnumerated()
     {
-        var stats = new EnumerableWithCount<int>(collection);
+        var stats = new AsyncEnumerableWithCount<int>(collection.ToAsyncEnumerable());
         Func<int> f = () => stats.Count;
 
         f.Should().Throw<InvalidOperationException>();
     }
 
     [Fact] [UnitTest]
-    public void CountCollectionProperly()
+    public async Task CountCollectionProperly()
     {
-        var stats = new EnumerableWithCount<int>(collection);
-        foreach (var _ in stats)
+        var stats = new AsyncEnumerableWithCount<int>(collection.ToAsyncEnumerable());
+        await foreach (var _ in stats)
         {
         }
 
