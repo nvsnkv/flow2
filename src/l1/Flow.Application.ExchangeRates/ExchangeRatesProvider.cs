@@ -92,15 +92,17 @@ internal class ExchangeRatesProvider : IExchangeRatesProvider
         {
             try
             {
-                var data = await storage.Read(ct);
-                exchangeRates = data.GroupBy(r => r.From)
-                    .ToDictionary(
-                        gFrom => gFrom.Key,
+                var data = storage.Read(ct);
+
+                exchangeRates = await data.GroupBy(r => r.From)
+                    .ToDictionaryAwaitAsync(
+                        gFrom => ValueTask.FromResult(gFrom.Key), 
                         gFrom => gFrom.GroupBy(r => r.To)
-                            .ToDictionary(
-                                gBy => gBy.Key,
-                                gBy => gBy.ToDictionary(r => r.Date))
-                    );
+                            .ToDictionaryAwaitAsync(
+                                gBy => ValueTask.FromResult(gBy.Key), 
+                                gBy => gBy.ToDictionaryAsync(r => r.Date, ct),
+                                ct),
+                        ct);
             }
             finally
             {

@@ -11,17 +11,17 @@ internal class JsonRejectionsWriter : JsonSerializer
     {
     }
 
-    public async Task WriteRejections(StreamWriter writer, IEnumerable<RejectedTransaction> rejections, CancellationToken ct)
+    public async Task WriteRejections(StreamWriter writer, IAsyncEnumerable<RejectedTransaction> rejections, CancellationToken ct)
     {
         await Write(writer, rejections, ct);
     }
 
-    public async Task WriteRejections(StreamWriter writer, IEnumerable<RejectedTransferKey> rejections, CancellationToken ct)
+    public async Task WriteRejections(StreamWriter writer, IAsyncEnumerable<RejectedTransferKey> rejections, CancellationToken ct)
     {
         await Write(writer, rejections, ct);
     }
 
-    public async Task WriteRejections(StreamWriter writer, IEnumerable<RejectedRate> rejections, CancellationToken ct)
+    public async Task WriteRejections(StreamWriter writer, IAsyncEnumerable<RejectedRate> rejections, CancellationToken ct)
     {
         await Write(writer, rejections, ct);
     }

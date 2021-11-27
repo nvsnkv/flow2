@@ -37,7 +37,7 @@ internal class TransactionsIOFacade : ITransactionsReader, ITransactionsWriter
         };
     }
 
-    public async Task WriteTransactions(StreamWriter writer, IEnumerable<Transaction> transactions, SupportedFormat format, CancellationToken ct)
+    public async Task WriteTransactions(StreamWriter writer, IAsyncEnumerable<Transaction> transactions, SupportedFormat format, CancellationToken ct)
     {
         switch (format)
         {
@@ -54,7 +54,7 @@ internal class TransactionsIOFacade : ITransactionsReader, ITransactionsWriter
         }
     }
 
-    public async Task WriteRecordedTransactions(StreamWriter writer, IEnumerable<RecordedTransaction> transactions, SupportedFormat format, CancellationToken ct)
+    public async Task WriteRecordedTransactions(StreamWriter writer, IAsyncEnumerable<RecordedTransaction> transactions, SupportedFormat format, CancellationToken ct)
     {
         switch (format)
         {

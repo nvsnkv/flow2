@@ -28,7 +28,7 @@ public class JsonSerializersShould : TestDataCarrier
         await using var writeStream = new MemoryStream();
         await using var writer = new StreamWriter(writeStream);
 
-        await serializer.Write(writer, Transactions, CancellationToken.None);
+        await serializer.Write(writer, Transactions.ToAsyncEnumerable(), CancellationToken.None);
         await using var readStream = new MemoryStream(writeStream.ToArray());
         
         using var reader = new StreamReader(readStream);
@@ -49,7 +49,7 @@ public class JsonSerializersShould : TestDataCarrier
         await using var writeStream = new MemoryStream();
         await using var writer = new StreamWriter(writeStream);
 
-        await serializer.Write(writer, RecordedTransactions, CancellationToken.None);
+        await serializer.Write(writer, RecordedTransactions.ToAsyncEnumerable(), CancellationToken.None);
         await using var readStream = new MemoryStream(writeStream.ToArray());
 
         using var reader = new StreamReader(readStream);
@@ -70,7 +70,7 @@ public class JsonSerializersShould : TestDataCarrier
         await using var writeStream = new MemoryStream();
         await using var writer = new StreamWriter(writeStream);
 
-        await serializer.Write(writer, TransferKeys, CancellationToken.None);
+        await serializer.Write(writer, TransferKeys.ToAsyncEnumerable(), CancellationToken.None);
         await using var readStream = new MemoryStream(writeStream.ToArray());
 
         using var reader = new StreamReader(readStream);
@@ -91,7 +91,7 @@ public class JsonSerializersShould : TestDataCarrier
         await using var stream = new MemoryStream();
         await using var writer = new StreamWriter(stream);
 
-        await serializer.Write(writer, Rates, CancellationToken.None);
+        await serializer.Write(writer, Rates.ToAsyncEnumerable(), CancellationToken.None);
         stream.Seek(0, SeekOrigin.Begin);
 
         using var reader = new StreamReader(stream);

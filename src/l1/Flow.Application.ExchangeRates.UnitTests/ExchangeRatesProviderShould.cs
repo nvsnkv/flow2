@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Flow.Application.ExchangeRates.Infrastructure;
@@ -29,7 +30,7 @@ public class ExchangeRatesProviderShould
     {
         storageMock
             .Setup(s => s.Read(It.IsAny<CancellationToken>()))
-            .Returns(Task.FromResult((IEnumerable<ExchangeRate>)storedRates))
+            .Returns(storedRates.ToAsyncEnumerable())
             .Verifiable();
 
         storageMock

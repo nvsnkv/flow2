@@ -21,10 +21,10 @@ internal class JsonSerializer
         return Task.FromResult(result.Select(convertFunc));
     }
 
-    public async Task Write<T>(StreamWriter writer, IEnumerable<T> transactions, CancellationToken ct)
+    public async Task Write<T>(StreamWriter writer, IAsyncEnumerable<T> transactions, CancellationToken ct)
     {
         using var jsonWriter = new JsonTextWriter(writer) { CloseOutput = false };
-        serializer.Serialize(jsonWriter, transactions);
+        serializer.Serialize(jsonWriter, await transactions.ToListAsync(ct));
         await jsonWriter.FlushAsync(ct);
     }
 }

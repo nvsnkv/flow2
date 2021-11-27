@@ -34,9 +34,9 @@ internal class ExchangeRatesManager : IExchangeRatesManager
         return await remote.GetRate(request, ct);
     }
 
-    public async Task<IEnumerable<ExchangeRate>> List(CancellationToken ct)
+    public IAsyncEnumerable<ExchangeRate> List(CancellationToken ct)
     {
-        return await storage.Read(ct);
+        return storage.Read(ct);
     }
 
     public async Task<IEnumerable<RejectedRate>> Update(IEnumerable<ExchangeRate> rates, CancellationToken ct)
@@ -50,7 +50,7 @@ internal class ExchangeRatesManager : IExchangeRatesManager
 
     public async Task<IEnumerable<RejectedRate>> Delete(IEnumerable<ExchangeRate> rates, CancellationToken ct)
     {
-        var existing = (await storage.Read(ct)).ToList();
+        var existing = await storage.Read(ct).ToListAsync(ct);
         var rejections = new List<RejectedRate>();
 
         await storage.Update(rates.Where(r => Validate(r, rejections)).Where(r => Exists(r, existing, rejections)), ct);

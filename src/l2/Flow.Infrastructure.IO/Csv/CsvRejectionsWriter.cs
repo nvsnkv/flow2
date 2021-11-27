@@ -13,10 +13,10 @@ internal class CsvRejectionsWriter
         this.config = config;
     }
     
-    public async Task Write<TR, TE, TRow>(StreamWriter writer, IEnumerable<TR> rejections, Func<TR, TRow> convertFunc, CancellationToken ct) where TR : RejectedEntity<TE>
+    public async Task Write<TR, TE, TRow>(StreamWriter writer, IAsyncEnumerable<TR> rejections, Func<TR, TRow> convertFunc, CancellationToken ct) where TR : RejectedEntity<TE>
     {
         await using var csvWriter = new CsvWriter(writer, config);
-        foreach (var rejected in rejections)
+        await foreach (var rejected in rejections.WithCancellation(ct))
         {
             var record = convertFunc(rejected);
             await csvWriter.WriteRecordsAsync(Enumerable.Repeat(record, 1), ct);

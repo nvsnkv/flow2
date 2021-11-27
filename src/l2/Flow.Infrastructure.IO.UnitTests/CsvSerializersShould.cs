@@ -27,7 +27,7 @@ public class CsvSerializersShould : TestDataCarrier
         await using var stream = new MemoryStream();
         await using var writer = new StreamWriter(stream);
 
-        await serializer.Write<Transaction, TransactionRow, TransactionRowMap>(writer, Transactions, t => (TransactionRow)t, CancellationToken.None);
+        await serializer.Write<Transaction, TransactionRow, TransactionRowMap>(writer, Transactions.ToAsyncEnumerable(), t => (TransactionRow)t, CancellationToken.None);
         stream.Seek(0, SeekOrigin.Begin);
 
         using var reader = new StreamReader(stream);
@@ -48,7 +48,7 @@ public class CsvSerializersShould : TestDataCarrier
         await using var stream = new MemoryStream();
         await using var writer = new StreamWriter(stream);
 
-        await serializer.Write<RecordedTransaction, RecordedTransactionRow, RecordedTransactionRowMap>(writer, RecordedTransactions, t => (RecordedTransactionRow)t, CancellationToken.None);
+        await serializer.Write<RecordedTransaction, RecordedTransactionRow, RecordedTransactionRowMap>(writer, RecordedTransactions.ToAsyncEnumerable(), t => (RecordedTransactionRow)t, CancellationToken.None);
         stream.Seek(0, SeekOrigin.Begin);
 
         using var reader = new StreamReader(stream);
@@ -69,7 +69,7 @@ public class CsvSerializersShould : TestDataCarrier
         await using var stream = new MemoryStream();
         await using var writer = new StreamWriter(stream);
 
-        await serializer.Write(writer, TransferKeys, t => (TransferKeyRow)t, CancellationToken.None);
+        await serializer.Write(writer, TransferKeys.ToAsyncEnumerable(), t => (TransferKeyRow)t, CancellationToken.None);
         stream.Seek(0, SeekOrigin.Begin);
 
         using var reader = new StreamReader(stream);
@@ -90,7 +90,7 @@ public class CsvSerializersShould : TestDataCarrier
         await using var stream = new MemoryStream();
         await using var writer = new StreamWriter(stream);
 
-        await serializer.Write(writer, Rates, r => (ExchangeRateRow)r, CancellationToken.None);
+        await serializer.Write(writer, Rates.ToAsyncEnumerable(), r => (ExchangeRateRow)r, CancellationToken.None);
         stream.Seek(0, SeekOrigin.Begin);
 
         using var reader = new StreamReader(stream);

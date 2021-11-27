@@ -35,7 +35,7 @@ internal class EditTransfersCommand : CommandBase
         var errsPath = args.Errors ?? GetFallbackOutputPath(args.Format, "enforce", "rejected-transfers");
         await using (var streamWriter = CreateWriter(args.Errors))
         {
-            await writer.WriteRejections(streamWriter, rejections, args.Format, ct);
+            await writer.WriteRejections(streamWriter, rejections.ToAsyncEnumerable(), args.Format, ct);
         }
 
         if (rejections.Count > 0)
@@ -59,7 +59,7 @@ internal class EditTransfersCommand : CommandBase
         var errsPath = args.Errors ?? GetFallbackOutputPath(args.Format, "abandon", "rejected-transfers");
         await using (var streamWriter = CreateWriter(args.Errors))
         {
-            await writer.WriteRejections(streamWriter, rejections, args.Format, ct);
+            await writer.WriteRejections(streamWriter, rejections.ToAsyncEnumerable(), args.Format, ct);
         }
 
         if (rejections.Count > 0)

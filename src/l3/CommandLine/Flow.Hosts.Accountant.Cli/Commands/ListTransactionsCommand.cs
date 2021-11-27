@@ -34,7 +34,7 @@ internal class ListTransactionsCommand : CommandBase
 
         var output = args.Output ?? (args.OpenEditor ? GetFallbackOutputPath(args.Format, "list", "transactions") : null);
         await using var streamWriter = CreateWriter(output);
-        await writer.WriteRecordedTransactions(streamWriter, transactions, args.Format, ct);
+        await writer.WriteRecordedTransactions(streamWriter, transactions.ToAsyncEnumerable(), args.Format, ct);
 
         if (args.OpenEditor) 
         { 

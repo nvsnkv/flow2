@@ -42,7 +42,7 @@ internal class EditTransactionsCommand : CommandBase
         { 
             await using (var streamWriter = CreateWriter(errsPath))
             {
-                await rejectionsWriter.WriteRejections(streamWriter, rejected, args.Format, ct);
+                await rejectionsWriter.WriteRejections(streamWriter, rejected.ToAsyncEnumerable(), args.Format, ct);
             }
 
             if (rejected.Count > 0)
@@ -98,7 +98,7 @@ internal class EditTransactionsCommand : CommandBase
         var appended = await accountant.GetTransactions(conditions, ct);
         await using (var streamWriter = CreateWriter(interim))
         {
-            await writer.WriteRecordedTransactions(streamWriter, appended, format, ct);
+            await writer.WriteRecordedTransactions(streamWriter, appended.ToAsyncEnumerable(), format, ct);
         }
 
         var exitCode = await TryStartEditor(interim, format, true);
@@ -121,7 +121,7 @@ internal class EditTransactionsCommand : CommandBase
 
         await using (var streamWriter = CreateWriter(errsPath))
         {
-            await rejectionsWriter.WriteRejections(streamWriter, rejected, format, ct);
+            await rejectionsWriter.WriteRejections(streamWriter, rejected.ToAsyncEnumerable(), format, ct);
         }
 
         if (rejected.Count > 0)

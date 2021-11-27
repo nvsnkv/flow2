@@ -1,4 +1,5 @@
-﻿using Flow.Application.ExchangeRates.Infrastructure;
+﻿using System.Runtime.CompilerServices;
+using Flow.Application.ExchangeRates.Infrastructure;
 using Flow.Domain.ExchangeRates;
 using Flow.Infrastructure.Storage.Model;
 using Microsoft.EntityFrameworkCore;
@@ -22,10 +23,13 @@ internal class ExchangeRatesStorage : IExchangeRatesStorage
         await context.SaveChangesAsync(ct);
     }
 
-    public async Task<IEnumerable<ExchangeRate>> Read(CancellationToken ct)
+    public async IAsyncEnumerable<ExchangeRate> Read([EnumeratorCancellation] CancellationToken ct)
     {
         await using var context = await contextFactory.CreateDbContextAsync(ct);
-        return await context.ExchangeRates.ToListAsync(ct);
+        await foreach (var rate in context.ExchangeRates.AsAsyncEnumerable().WithCancellation(ct))
+        {
+            yield return rate;
+        }
     }
 
     public async Task Update(IEnumerable<ExchangeRate> rates, CancellationToken ct)

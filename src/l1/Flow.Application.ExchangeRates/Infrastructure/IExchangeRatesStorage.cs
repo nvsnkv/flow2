@@ -6,7 +6,7 @@ public interface IExchangeRatesStorage
 {
     Task Create(ExchangeRate rate, CancellationToken ct);
 
-    Task<IEnumerable<ExchangeRate>> Read(CancellationToken ct);
+    IAsyncEnumerable<ExchangeRate> Read(CancellationToken ct);
 
     Task Update(IEnumerable<ExchangeRate> rates, CancellationToken ct);
 

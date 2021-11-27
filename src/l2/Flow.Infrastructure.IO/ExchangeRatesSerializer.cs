@@ -32,7 +32,7 @@ internal class ExchangeRatesSerializer : IExchangeRatesReader, IExchangeRatesWri
         }
     }
 
-    public async Task WriteRates(StreamWriter writer, IEnumerable<ExchangeRate> rates, SupportedFormat format, CancellationToken ct)
+    public async Task WriteRates(StreamWriter writer, IAsyncEnumerable<ExchangeRate> rates, SupportedFormat format, CancellationToken ct)
     {
         switch (format)
         {
