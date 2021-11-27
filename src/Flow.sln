@@ -66,6 +66,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Flow.Domain.Analysis", "l0\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Flow.Application.Analysis", "l1\Flow.Application.Analysis\Flow.Application.Analysis.csproj", "{8288C5FE-9DC3-4E6C-83E7-5368B2C3CD55}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Flow.Application.Analysis.UnitTests", "l1\Flow.Application.Analysis.UnitTests\Flow.Application.Analysis.UnitTests.csproj", "{19A8D219-062D-4D88-82C2-1BD160006B29}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -168,6 +170,10 @@ Global
 		{8288C5FE-9DC3-4E6C-83E7-5368B2C3CD55}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8288C5FE-9DC3-4E6C-83E7-5368B2C3CD55}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8288C5FE-9DC3-4E6C-83E7-5368B2C3CD55}.Release|Any CPU.Build.0 = Release|Any CPU
+		{19A8D219-062D-4D88-82C2-1BD160006B29}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{19A8D219-062D-4D88-82C2-1BD160006B29}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{19A8D219-062D-4D88-82C2-1BD160006B29}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{19A8D219-062D-4D88-82C2-1BD160006B29}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -198,6 +204,7 @@ Global
 		{189E948D-01CE-4CF1-927E-447253559BFC} = {128C34A4-0A1B-44B2-AD90-F3B76381F851}
 		{850B9C43-3C52-4E6D-B7E2-C408E393B103} = {6DE04AF2-D489-4CCA-9EB2-DB6D44044259}
 		{8288C5FE-9DC3-4E6C-83E7-5368B2C3CD55} = {BF31D4DF-B59D-44E8-9EA4-D1EAC24CC3ED}
+		{19A8D219-062D-4D88-82C2-1BD160006B29} = {BF31D4DF-B59D-44E8-9EA4-D1EAC24CC3ED}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BD863072-1B8D-417A-BFF4-C60D20CE1D31}

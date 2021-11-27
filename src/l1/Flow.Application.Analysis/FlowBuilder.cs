@@ -1,7 +1,6 @@
 ﻿using System.Runtime.CompilerServices;
 using Flow.Application.ExchangeRates.Contract;
 using Flow.Domain.Analysis;
-using Flow.Domain.Common;
 using Flow.Domain.ExchangeRates;
 using Flow.Domain.Transactions;
 using Flow.Domain.Transactions.Transfers;
