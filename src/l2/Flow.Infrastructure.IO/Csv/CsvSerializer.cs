@@ -12,17 +12,11 @@ internal class CsvSerializer
         this.config = config;
     }
 
-    public async Task<IEnumerable<T>> Read<T, TRow>(StreamReader reader, Func<TRow, T> convertFunc, CancellationToken ct)
+    public IAsyncEnumerable<T> Read<T, TRow>(StreamReader reader, Func<TRow, T> convertFunc, CancellationToken ct)
     {
         using var csvReader = new CsvReader(reader, config);
-        var result = new List<T>();
 
-        await foreach (var row in csvReader.GetRecordsAsync(typeof(TRow), ct))
-        {
-            result.Add(convertFunc((TRow)row));
-        }
-
-        return result;
+        return csvReader.GetRecordsAsync(typeof(TRow), ct).Select(r => convertFunc((TRow)r));
     }
 
     public async Task Write<T, TRow, TMap>(StreamWriter writer, IAsyncEnumerable<T> records, Func<T, TRow> convertFunc, CancellationToken ct) where TMap : ClassMap

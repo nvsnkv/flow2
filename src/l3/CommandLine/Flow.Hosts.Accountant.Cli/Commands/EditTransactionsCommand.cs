@@ -33,7 +33,7 @@ internal class EditTransactionsCommand : CommandBase
 
         using (var streamReader = CreateReader(args.Input))
         {
-            initial = new TransactionsWithDateRange<Transaction>(await reader.ReadTransactions(streamReader, args.Format, ct));
+            initial = new TransactionsWithDateRange<Transaction>(await reader.ReadTransactions(streamReader, args.Format, ct).ToListAsync(CancellationToken.None));
             rejected = new EnumerableWithCount<RejectedTransaction>(await accountant.CreateTransactions(initial, ct));
         }
 
@@ -116,7 +116,7 @@ internal class EditTransactionsCommand : CommandBase
 
         using var streamReader = CreateReader(interim);
 
-        var updated = await reader.ReadRecordedTransactions(streamReader, format, ct);
+        var updated = await reader.ReadRecordedTransactions(streamReader, format, ct).ToListAsync(CancellationToken.None);
         rejected = new EnumerableWithCount<RejectedTransaction>(rejected.Concat(await accountant.UpdateTransactions(updated, ct)));
 
         await using (var streamWriter = CreateWriter(errsPath))

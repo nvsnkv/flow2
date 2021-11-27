@@ -28,7 +28,7 @@ internal class EditTransfersCommand : CommandBase
 
         using (var streamReader = CreateReader(args.Input))
         {
-            var keys = await reader.ReadTransferKeys(streamReader, args.Format, ct);
+            var keys = await reader.ReadTransferKeys(streamReader, args.Format, ct).ToListAsync(CancellationToken.None);
             rejections = new EnumerableWithCount<RejectedTransferKey>(await accountant.EnforceTransfers(keys, ct));
         }
 
@@ -52,7 +52,7 @@ internal class EditTransfersCommand : CommandBase
 
         using (var streamReader = CreateReader(args.Input))
         {
-            var keys = await reader.ReadTransferKeys(streamReader, args.Format, ct);
+            var keys = await reader.ReadTransferKeys(streamReader, args.Format, ct).ToListAsync(CancellationToken.None);
             rejections = new EnumerableWithCount<RejectedTransferKey>(await accountant.AbandonTransfers(keys, ct));
         }
 

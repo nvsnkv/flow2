@@ -5,5 +5,5 @@ namespace Flow.Infrastructure.IO.Contract;
 
 public interface IExchangeRatesReader
 {
-    Task<IEnumerable<ExchangeRate>> ReadExchangeRates(StreamReader reader, SupportedFormat format, CancellationToken ct);
+    IAsyncEnumerable<ExchangeRate> ReadExchangeRates(StreamReader reader, SupportedFormat format, CancellationToken ct);
 }

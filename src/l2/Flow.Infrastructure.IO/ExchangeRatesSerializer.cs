@@ -17,15 +17,15 @@ internal class ExchangeRatesSerializer : IExchangeRatesReader, IExchangeRatesWri
         this.json = json;
     }
 
-    public async Task<IEnumerable<ExchangeRate>> ReadExchangeRates(StreamReader reader, SupportedFormat format, CancellationToken ct)
+    public IAsyncEnumerable<ExchangeRate> ReadExchangeRates(StreamReader reader, SupportedFormat format, CancellationToken ct)
     {
         switch (format)
         {
             case SupportedFormat.CSV:
-                return await csv.Read(reader,(ExchangeRateRow r) => (ExchangeRate)r, ct);
+                return csv.Read(reader,(ExchangeRateRow r) => (ExchangeRate)r, ct);
                 
             case SupportedFormat.JSON:
-                return await json.Read(reader,(JsonExchangeRate j) => (ExchangeRate)j);
+                return json.Read(reader,(JsonExchangeRate j) => (ExchangeRate)j);
                 
             default:
                 throw new ArgumentOutOfRangeException(nameof(format), format, null);

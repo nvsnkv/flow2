@@ -17,12 +17,12 @@ internal class TransfersIOFacade : ITransferKeysReader, ITransfersWriter
         this.json = json;
     }
 
-    public async Task<IEnumerable<TransferKey>> ReadTransferKeys(StreamReader reader, SupportedFormat format, CancellationToken ct)
+    public IAsyncEnumerable<TransferKey> ReadTransferKeys(StreamReader reader, SupportedFormat format, CancellationToken ct)
     {
         return format switch
         {
-            SupportedFormat.CSV => await csv.Read<TransferKey, TransferKeyRow>(reader, r => (TransferKey)r, ct),
-            SupportedFormat.JSON => await json.Read(reader, (JsonTransferKey j) => (TransferKey)j),
+            SupportedFormat.CSV => csv.Read<TransferKey, TransferKeyRow>(reader, r => (TransferKey)r, ct),
+            SupportedFormat.JSON => json.Read(reader, (JsonTransferKey j) => (TransferKey)j),
             _ => throw new NotSupportedException($"Format {format} is not supported!")
         };
     }

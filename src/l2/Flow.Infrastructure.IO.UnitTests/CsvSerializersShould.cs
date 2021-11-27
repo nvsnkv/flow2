@@ -32,7 +32,7 @@ public class CsvSerializersShould : TestDataCarrier
 
         using var reader = new StreamReader(stream);
 
-        var result = await serializer.Read(reader, (TransactionRow r) => (Transaction)r, CancellationToken.None);
+        var result = await serializer.Read(reader, (TransactionRow r) => (Transaction)r, CancellationToken.None).ToListAsync(CancellationToken.None);
 
         result.ToList().Should().BeEquivalentTo(Transactions);
     }
@@ -53,7 +53,7 @@ public class CsvSerializersShould : TestDataCarrier
 
         using var reader = new StreamReader(stream);
 
-        var result = await serializer.Read(reader, (RecordedTransactionRow r) => (RecordedTransaction)r, CancellationToken.None);
+        var result = await serializer.Read(reader, (RecordedTransactionRow r) => (RecordedTransaction)r, CancellationToken.None).ToListAsync(CancellationToken.None);
 
         result.ToList().Should().BeEquivalentTo(RecordedTransactions);
     }
@@ -74,7 +74,7 @@ public class CsvSerializersShould : TestDataCarrier
 
         using var reader = new StreamReader(stream);
 
-        var result = await serializer.Read<TransferKey, TransferKeyRow>(reader, r => (TransferKey)r, CancellationToken.None);
+        var result = await serializer.Read<TransferKey, TransferKeyRow>(reader, r => (TransferKey)r, CancellationToken.None).ToListAsync(CancellationToken.None);
 
         result.ToList().Should().BeEquivalentTo(TransferKeys);
     }
@@ -95,7 +95,7 @@ public class CsvSerializersShould : TestDataCarrier
 
         using var reader = new StreamReader(stream);
 
-        var result = await serializer.Read(reader, (ExchangeRateRow r) => (ExchangeRate)r, CancellationToken.None);
+        var result = await serializer.Read(reader, (ExchangeRateRow r) => (ExchangeRate)r, CancellationToken.None).ToListAsync(CancellationToken.None);
 
         result.ToList().Should().BeEquivalentTo(Rates);
     }

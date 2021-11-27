@@ -13,12 +13,12 @@ internal class JsonSerializer
             : Newtonsoft.Json.JsonSerializer.Create(settings);
     }
 
-    public Task<IEnumerable<T>> Read<T, TJson>(StreamReader reader, Func<TJson, T> convertFunc)
+    public IAsyncEnumerable<T> Read<T, TJson>(StreamReader reader, Func<TJson, T> convertFunc)
     {
         using var jsonReader = new JsonTextReader(reader) { CloseInput = false };
         var result = serializer.Deserialize<List<TJson>>(jsonReader) ?? Enumerable.Empty<TJson>();
 
-        return Task.FromResult(result.Select(convertFunc));
+        return result.Select(convertFunc).ToAsyncEnumerable();
     }
 
     public async Task Write<T>(StreamWriter writer, IAsyncEnumerable<T> transactions, CancellationToken ct)

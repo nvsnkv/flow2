@@ -33,7 +33,7 @@ public class JsonSerializersShould : TestDataCarrier
         
         using var reader = new StreamReader(readStream);
 
-        var result = await serializer.Read(reader, (JsonTransaction j) => (Transaction)j);
+        var result = await serializer.Read(reader, (JsonTransaction j) => (Transaction)j).ToListAsync(CancellationToken.None);
 
         result.ToList().Should().BeEquivalentTo(Transactions);
     }
@@ -54,7 +54,7 @@ public class JsonSerializersShould : TestDataCarrier
 
         using var reader = new StreamReader(readStream);
 
-        var result = await serializer.Read(reader, (JsonRecordedTransaction j) => (RecordedTransaction)j);
+        var result = await serializer.Read(reader, (JsonRecordedTransaction j) => (RecordedTransaction)j).ToListAsync(CancellationToken.None);
 
         result.ToList().Should().BeEquivalentTo(RecordedTransactions);
     }
@@ -75,7 +75,7 @@ public class JsonSerializersShould : TestDataCarrier
 
         using var reader = new StreamReader(readStream);
 
-        var result = await serializer.Read(reader, (JsonTransferKey j) => (TransferKey)j);
+        var result = await serializer.Read(reader, (JsonTransferKey j) => (TransferKey)j).ToListAsync(CancellationToken.None);
 
         result.ToList().Should().BeEquivalentTo(TransferKeys);
     }
@@ -96,7 +96,7 @@ public class JsonSerializersShould : TestDataCarrier
 
         using var reader = new StreamReader(stream);
 
-        var result = await serializer.Read(reader, (JsonExchangeRate j) => (ExchangeRate)j);
+        var result = await serializer.Read(reader, (JsonExchangeRate j) => (ExchangeRate)j).ToListAsync(CancellationToken.None);
 
         result.ToList().Should().BeEquivalentTo(Rates);
     }
