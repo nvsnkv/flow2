@@ -6,7 +6,7 @@ using Flow.Domain.Transactions;
 using Flow.Domain.Transactions.Transfers;
 
 namespace Flow.Application.Analysis;
-public class FlowBuilder
+internal class FlowBuilder
 {
     private readonly IEnumerable<RecordedTransaction> transactions;
     private IEnumerable<Transfer>? transfers;

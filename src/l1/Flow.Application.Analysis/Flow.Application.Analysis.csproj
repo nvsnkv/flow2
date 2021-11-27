@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
@@ -7,9 +7,15 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Autofac" Version="6.3.0" />
+    <PackageReference Include="System.Linq.Async" Version="5.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\..\l0\Flow.Domain.Analysis\Flow.Domain.Analysis.csproj" />
     <ProjectReference Include="..\..\l0\Flow.Domain.Transactions\Flow.Domain.Transactions.csproj" />
     <ProjectReference Include="..\Flow.Application.ExchangeRates\Flow.Application.ExchangeRates.csproj" />
+    <ProjectReference Include="..\Flow.Application.Transactions\Flow.Application.Transactions.csproj" />
   </ItemGroup>
 
 </Project>
