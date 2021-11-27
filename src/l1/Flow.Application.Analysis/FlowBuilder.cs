@@ -49,7 +49,7 @@ public class FlowBuilder
             {
                 if (targetCurrency != null && t.Currency != targetCurrency)
                 {
-                    var request = new ExchangeRateRequest(t.Currency, targetCurrency, t.Timestamp);
+                    var request = (t.Currency, targetCurrency, t.Timestamp);
                     var rate = await ratesProvider!.GetRate(request, ct);
                     if (rate == null)
                     {

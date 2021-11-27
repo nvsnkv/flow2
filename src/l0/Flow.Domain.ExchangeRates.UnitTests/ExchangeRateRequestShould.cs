@@ -11,8 +11,8 @@ public class ExchangeRateRequestShould
     public void BeEqualWithSameRequest()
     {
         var now = DateTime.UtcNow;
-        var expected = new ExchangeRateRequest("RUB", "ZWL", now);
-        var actual = new ExchangeRateRequest("RUB", "ZWL", now);
+        var expected = ("RUB", "ZWL", now);
+        var actual = ("RUB", "ZWL", now);
 
         actual.Should().Be(expected);
     }
@@ -26,8 +26,8 @@ public class ExchangeRateRequestShould
     [InlineData("BLR", "EUR", "2021-11-11")]
     public void BeNotEqualToDifferentRequests(string from, string to, string dateTime)
     {
-        var expected = new ExchangeRateRequest("RUB", "ZWL", DateTime.Parse("2021-11-13"));
-        var actual = new ExchangeRateRequest(from, to, DateTime.Parse(dateTime));
+        var expected = ("RUB", "ZWL", DateTime.Parse("2021-11-13"));
+        var actual = (from, to, DateTime.Parse(dateTime));
 
         expected.Should().NotBe(actual);
     }

@@ -30,4 +30,10 @@ public class ExchangeRateRequest
     {
         return HashCode.Combine(From, To, Date);
     }
+
+    public static implicit operator ExchangeRateRequest((string, string, DateTime) req)
+    {
+        var (from, to, date) = req;
+        return new(from, to, date);
+    }
 }

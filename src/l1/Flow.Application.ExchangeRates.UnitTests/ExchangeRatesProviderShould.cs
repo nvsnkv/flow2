@@ -48,7 +48,7 @@ public class ExchangeRatesProviderShould
     [Fact] [UnitTest]
     public async Task ReturnRateLoadedFromStorage()
     {
-        var rate = await provider.GetRate(new ExchangeRateRequest("RUR", "MNT", DateTime.Parse("2021-11-13")), CancellationToken.None);
+        var rate = await provider.GetRate(("RUR", "MNT", DateTime.Parse("2021-11-13")), CancellationToken.None);
 
         rate.Should().Be(storedRates[0]);
         remoteMock
@@ -63,8 +63,8 @@ public class ExchangeRatesProviderShould
     {
         var tasks = new Task[]
         {
-            provider.GetRate(new ExchangeRateRequest("RUR", "MNT", DateTime.Parse("2021-11-13")), CancellationToken.None),
-            provider.GetRate(new ExchangeRateRequest("MNT", "RUR", DateTime.Parse("2021-11-13")), CancellationToken.None),
+            provider.GetRate(("RUR", "MNT", DateTime.Parse("2021-11-13")), CancellationToken.None),
+            provider.GetRate(("MNT", "RUR", DateTime.Parse("2021-11-13")), CancellationToken.None),
         };
 
         Task.WaitAll(tasks);
@@ -75,7 +75,7 @@ public class ExchangeRatesProviderShould
     [Fact] [UnitTest]
     public async Task RequestRemoteRateWhenNothingFoundLocally()
     {
-        var rate = await provider.GetRate(new ExchangeRateRequest("EUR", "USD", DateTime.Parse("2021-11-13")), CancellationToken.None);
+        var rate = await provider.GetRate(("EUR", "USD", DateTime.Parse("2021-11-13")), CancellationToken.None);
 
         rate.Should().Be(remoteRate);
         remoteMock.Verify(
@@ -87,7 +87,7 @@ public class ExchangeRatesProviderShould
     [Fact] [UnitTest]
     public async Task SaveRemoteRateToLocalStorage()
     {
-        var rate = await provider.GetRate(new ExchangeRateRequest("EUR", "USD", DateTime.Parse("2021-11-13")), CancellationToken.None);
+        var rate = await provider.GetRate(("EUR", "USD", DateTime.Parse("2021-11-13")), CancellationToken.None);
         await Task.Delay(300);
 
         rate.Should().Be(remoteRate);

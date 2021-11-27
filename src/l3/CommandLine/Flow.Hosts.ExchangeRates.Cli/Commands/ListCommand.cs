@@ -21,7 +21,7 @@ internal class ListCommand : CommandBase
 
     public async Task<int> Execute(RequestArgs args, CancellationToken ct)
     { 
-        var request = new ExchangeRateRequest(args.From ?? string.Empty, args.To ?? string.Empty, args.Date);
+        var request = (args.From ?? string.Empty, args.To ?? string.Empty, args.Date);
         var rate = await manager.Request(request, ct);
 
         if (rate != null)
