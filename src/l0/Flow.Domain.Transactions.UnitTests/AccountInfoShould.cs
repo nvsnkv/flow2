@@ -6,7 +6,7 @@ namespace Flow.Domain.Transactions.UnitTests
 {
     public class AccountInfoShould
     {
-        [Fact] [UnitTest]
+        [Fact, UnitTest]
         public void BeEqualToAccountWithSameNameAndBank()
         {
             var account = new AccountInfo("The name", "The bank");
@@ -15,7 +15,7 @@ namespace Flow.Domain.Transactions.UnitTests
             other.Should().Be(account);
         }
     
-        [Theory] [UnitTest]
+        [Theory, UnitTest]
         [InlineData("", "")]
         [InlineData("The name", "Another Bank")]
         [InlineData("Another name", "The bank")]

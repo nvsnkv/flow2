@@ -6,7 +6,7 @@ namespace Flow.Domain.Patterns.UnitTests;
 
 public class PatternBuilderShould
 {
-    [Theory] [UnitTest]
+    [Theory, UnitTest]
     [InlineData(3, true)]
     [InlineData(null, false)]
     public void BuildSimpleExpressions(object? value, bool expected)
@@ -18,7 +18,7 @@ public class PatternBuilderShould
         actual.Should().Be(expected);
     }
 
-    [Theory] [UnitTest]
+    [Theory, UnitTest]
     [InlineData(5, 5, "", true)]
     [InlineData(5, 5, "Another text", true)]
     [InlineData(5, 3, "Another text", false)]
@@ -30,7 +30,7 @@ public class PatternBuilderShould
         actual.Should().Be(expected);
     }
 
-    [Fact] [UnitTest]
+    [Fact, UnitTest]
     public void BuildExpressionsWithMultipleConditions()
     {
         var pattern = new PatternBuilder<TestData?>()
@@ -43,8 +43,7 @@ public class PatternBuilderShould
         pattern.Compile()(new TestData(5, "Best string ever")).Should().BeTrue();
     }
 
-    [Fact]
-    [UnitTest]
+    [Fact, UnitTest]
     public void BuildExpressionsWithMultipleConditionsOnBaseTypes()
     {
         var pattern = new PatternBuilder<object>()

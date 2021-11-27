@@ -10,7 +10,7 @@ namespace Flow.Domain.Transactions.UnitTests
         private readonly Transaction transaction = new Transaction(DateTime.UtcNow, -100, "RUB", null, "Transfer", new AccountInfo("name", "bank"));
         private readonly Transaction other = new Transaction(DateTime.UtcNow, - 10, "RUB", null, "Transfer", new AccountInfo("name", "bank"));
 
-        [Fact] [UnitTest]
+        [Fact, UnitTest]
         public void IgnoreTransactionDetailsInComparison()
         { 
             var rec = new RecordedTransaction(1, transaction);
@@ -21,7 +21,7 @@ namespace Flow.Domain.Transactions.UnitTests
             another.Should().Be(rec);
         }
 
-        [Fact] [UnitTest]
+        [Fact, UnitTest]
         public void IgnoreOverridesInComparison()
         { 
             var rec = new RecordedTransaction(1, transaction) {
@@ -37,7 +37,7 @@ namespace Flow.Domain.Transactions.UnitTests
             another.Should().Be(rec);
         }
 
-        [Fact] [UnitTest]
+        [Fact, UnitTest]
         public void NotBeEqualToRecordedTransactionWithDifferentKey() 
         {
             var rec = new RecordedTransaction(1, transaction);
@@ -46,7 +46,7 @@ namespace Flow.Domain.Transactions.UnitTests
             oth.Should().NotBe(rec);
         }
 
-        [Fact] [UnitTest]
+        [Fact, UnitTest]
         public void BeEqualWithTransactionWithSameTransactionDetails() 
         {
             var rec = new RecordedTransaction(1, transaction);

@@ -12,7 +12,7 @@ namespace Flow.Infrastructure.IO.UnitTests;
 
 public class TransactionCriteriaParserShould : TestDataCarrier
 {
-    [Theory] [UnitTest]
+    [Theory, UnitTest]
     [MemberData(nameof(TransactionParameters))]
     public void CreateTransactionCriteria(string cultureCode, string textInput, Func<Transaction, bool> expectedSelector)
     {
@@ -27,8 +27,7 @@ public class TransactionCriteriaParserShould : TestDataCarrier
         items.Should().BeEquivalentTo(Transactions.Where(expectedSelector).ToList());
     }
 
-    [Theory]
-    [UnitTest]
+    [Theory, UnitTest]
     [MemberData(nameof(RecordedTransactionParameters))]
     public void CreateRecordedTransactionCriteria(string cultureCode, string textInput, Func<RecordedTransaction, bool> expectedSelector)
     {

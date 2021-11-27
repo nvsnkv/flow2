@@ -7,7 +7,7 @@ namespace Flow.Domain.Transactions.UnitTests
 {
     public class TransactionShould 
     {
-        [Fact] [UnitTest]
+        [Fact, UnitTest]
         public void BeEqualToAnotherTransactionWithSameAttributes()
         {
             var now = DateTime.UtcNow;
@@ -17,7 +17,7 @@ namespace Flow.Domain.Transactions.UnitTests
             other.Should().Be(transaction);
         }
 
-        [Theory] [UnitTest]
+        [Theory, UnitTest]
         [InlineData("2021-11-06", -100, "RUB", null, "Transfer")]
         [InlineData("2021-11-05", -100, "RUB", null, "Not a Transfer")]
         [InlineData("2021-11-05", -100, "RUB", "Category", "Transfer")]
@@ -32,7 +32,7 @@ namespace Flow.Domain.Transactions.UnitTests
             other.Should().NotBe(transaction);
         }
 
-        [Fact] [UnitTest]
+        [Fact, UnitTest]
         public void NotBeEqualToTransactionWithDifferentAccount() 
         {
             var now = DateTime.UtcNow;

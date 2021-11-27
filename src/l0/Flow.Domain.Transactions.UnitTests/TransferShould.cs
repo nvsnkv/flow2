@@ -16,7 +16,7 @@ public class TransferShould
     private readonly RecordedTransaction sinkWithFee = new(3, DateTime.UtcNow, 90, "RUR", null, "Transfer", Account);
     private readonly RecordedTransaction sinkWithDifferentCurrency = new(4, DateTime.UtcNow, 90, "EUR", null, "Transfer", Account);
 
-    [Fact] [UnitTest]
+    [Fact, UnitTest]
     public void ThrowArgumentExceptionIfSourceAndSinkAreTheSame()
     {
         Action a = () =>
@@ -27,7 +27,7 @@ public class TransferShould
         a.Should().Throw<ArgumentException>().Where(e => e.ParamName == "sink");
     }
 
-    [Fact] [UnitTest]
+    [Fact, UnitTest]
     public void ThrowArgumentExceptionIfTransactionsAreInDifferentCurrencies()
     {
         Action a = () =>
@@ -38,7 +38,7 @@ public class TransferShould
         a.Should().Throw<ArgumentException>().Where(e => e.ParamName == "sink");
     }
 
-    [Fact] [UnitTest]
+    [Fact, UnitTest]
     public void ThrowArgumentExceptionIfTransactionsIfSourceHasPositiveAmount()
     {
         Action a = () =>
@@ -49,7 +49,7 @@ public class TransferShould
         a.Should().Throw<ArgumentException>().Where(e => e.ParamName == "source");
     }
 
-    [Fact] [UnitTest]
+    [Fact, UnitTest]
     public void ThrowArgumentExceptionIfTransactionsIfSinkHasNegativeAmount()
     {
         Action a = () =>
@@ -60,7 +60,7 @@ public class TransferShould
         a.Should().Throw<ArgumentException>().Where(e => e.ParamName == "sink");
     }
 
-    [Fact] [UnitTest]
+    [Fact, UnitTest]
     public void CalculateFeeAsDifferenceBetweenSourceAndSink()
     {
         var transfer = new Transfer(source, sinkWithFee);
@@ -68,7 +68,7 @@ public class TransferShould
         transfer.Currency.Should().Be(source.Currency);
     }
 
-    [Fact] [UnitTest]
+    [Fact, UnitTest]
     public void PopulateSourceAndSinkProperly()
     {
         var transfer = new Transfer(source, sink);
@@ -76,7 +76,7 @@ public class TransferShould
         transfer.Sink.Should().Be(sink.Key);
     }
 
-    [Theory] [UnitTest]
+    [Theory, UnitTest]
     [InlineData(1, 2, 100, 100, "RUR", "RUR")]
     [InlineData(1, 2, 100, 200, "RUR", "RUR")]
     [InlineData(1, 2, 100, 100, "EUR", "RUR")]
@@ -90,7 +90,7 @@ public class TransferShould
         left.Should().Be(right);
     }
 
-    [Fact] [UnitTest]
+    [Fact, UnitTest]
     public void HaveHashKeyDefinedByTransferKey()
     {
         var transfer = new Transfer(100, 400, 0, "RUR");
@@ -99,7 +99,7 @@ public class TransferShould
         key.GetHashCode().Should().Be(transfer.GetHashCode());
     }
 
-    [Theory] [UnitTest]
+    [Theory, UnitTest]
     [InlineData(1, 2, 1, 3, 100, 100, "RUR", "RUR")]
     [InlineData(1, 2, 2, 1, 100, 200, "RUR", "RUR")]
     [InlineData(1, 2, 3, 4, 100, 100, "EUR", "RUR")]

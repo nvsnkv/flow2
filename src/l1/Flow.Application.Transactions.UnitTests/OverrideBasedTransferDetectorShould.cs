@@ -25,14 +25,14 @@ public class OverrideBasedTransferDetectorShould :TestDataCarrier
         storage.Setup(s => s.GetOverrides(It.IsAny<CancellationToken>())).Returns(Task.FromResult(Enforced));
     }
 
-    [Fact] [UnitTest]
+    [Fact, UnitTest]
     public async Task DetectEnforcedTransfers()
     {
         var detector = await OverridesBasedTransferDetector.Create(storage.Object, ratesProvider.Object, CancellationToken.None);
         detector.CheckIsTransfer(Transactions[1], Transactions[2]).Should().BeTrue();
     }
 
-    [Fact] [UnitTest]
+    [Fact, UnitTest]
     public async Task CreateEnforcedTransfers()
     {
         var expectedTransfer = new Transfer(Transactions[400], Transactions[344]) {Comment = "User defined transfer" };
@@ -43,14 +43,14 @@ public class OverrideBasedTransferDetectorShould :TestDataCarrier
         transfer.Comment.Should().Be(expectedTransfer.Comment);
     }
 
-    [Fact] [UnitTest]
+    [Fact, UnitTest]
     public async Task IgnoreNotEnforcedTransfers()
     {
         var detector = await OverridesBasedTransferDetector.Create(storage.Object, ratesProvider.Object, CancellationToken.None);
         detector.CheckIsTransfer(Transactions[5], Transactions[4]).Should().BeFalse();
     }
 
-    [Fact] [UnitTest]
+    [Fact, UnitTest]
     public async Task ApplyConversionRatesWhenCurrenciesDiffer()
     {
         const decimal rate = 0.034M;

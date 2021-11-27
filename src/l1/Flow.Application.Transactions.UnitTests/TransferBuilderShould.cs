@@ -13,7 +13,7 @@ namespace Flow.Application.Transactions.UnitTests;
 
 public class TransferBuilderShould : TestDataCarrier
 {
-    [Fact] [UnitTest]
+    [Fact, UnitTest]
     public async Task BuildTransfersIfDetectorsDetectThem()
     {
         var detector = new Mock<ITransferDetector>();
@@ -25,7 +25,7 @@ public class TransferBuilderShould : TestDataCarrier
         result.Should().BeEquivalentTo(new[] { expectedTransfer });
     }
 
-    [Fact] [UnitTest]
+    [Fact, UnitTest]
     public async Task UseAllDetectorsProvided()
     {
         var detector1 = new Mock<ITransferDetector>();
@@ -45,7 +45,7 @@ public class TransferBuilderShould : TestDataCarrier
         result.Should().BeEquivalentTo(expectedTransfers);
     }
 
-    [Fact] [UnitTest]
+    [Fact, UnitTest]
     public async Task NotHaveDuplicatesInSources()
     {
         var detector = new Mock<ITransferDetector>();
@@ -61,7 +61,7 @@ public class TransferBuilderShould : TestDataCarrier
         result.Should().HaveCount(1);
     }
 
-    [Fact] [UnitTest]
+    [Fact, UnitTest]
     public async Task NotHaveDuplicatesInSinks()
     {
         var detector = new Mock<ITransferDetector>();

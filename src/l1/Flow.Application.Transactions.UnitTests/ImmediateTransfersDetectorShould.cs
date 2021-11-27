@@ -13,7 +13,7 @@ public class ImmediateTransfersDetectorShould
 {
     private readonly Mock<IExchangeRatesProvider> ratesProvider = new();
 
-    [Theory] [UnitTest]
+    [Theory, UnitTest]
     [InlineData(null)]
     [InlineData("")]
     [InlineData("Category")]
@@ -26,7 +26,7 @@ public class ImmediateTransfersDetectorShould
         new ImmediateTransfersDetector(ratesProvider.Object).CheckIsTransfer(source, sink).Should().BeTrue();
     }
 
-    [Fact] [UnitTest]
+    [Fact, UnitTest]
     public void CreateImmediateTransferFromTransaction()
     {
         var now = DateTime.UtcNow;
@@ -36,7 +36,7 @@ public class ImmediateTransfersDetectorShould
         new ImmediateTransfersDetector(ratesProvider.Object).CheckIsTransfer(source, sink).Should().BeTrue();
     }
 
-    [Theory] [UnitTest]
+    [Theory, UnitTest]
     [InlineData(null, 0, null, null, "A")]
     [InlineData(null, 0, null, "A", null)]
     [InlineData(null, 0, "A", null, null)]
@@ -68,7 +68,7 @@ public class ImmediateTransfersDetectorShould
         new ImmediateTransfersDetector(ratesProvider.Object).CheckIsTransfer(source, sink).Should().BeFalse();
     }
 
-    [Fact] [UnitTest]
+    [Fact, UnitTest]
     public void IgnoreTransactionsThatHasFromAccount()
     {
         var now = DateTime.UtcNow;

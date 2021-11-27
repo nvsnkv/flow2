@@ -9,7 +9,7 @@ namespace Flow.Domain.Patterns.UnitTests;
 
 public class AndOperatorShould
 {
-    [Theory] [UnitTest]
+    [Theory, UnitTest]
     [InlineData(true, true, true)]
     [InlineData(true, false, false)]
     [InlineData(false, true, false)]
@@ -25,7 +25,7 @@ public class AndOperatorShould
         actual.Should().Be(expected);
     }
 
-    [Fact] [UnitTest]
+    [Fact, UnitTest]
     public void ChainSeveralExpressions()
     {
         Expression<Func<object, bool>> a = s => true;

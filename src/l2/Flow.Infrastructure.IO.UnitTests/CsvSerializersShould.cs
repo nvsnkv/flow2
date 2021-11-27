@@ -16,7 +16,7 @@ namespace Flow.Infrastructure.IO.UnitTests;
 
 public class CsvSerializersShould : TestDataCarrier
 {
-    [Theory] [UnitTest]
+    [Theory, UnitTest]
     [InlineData("ru-RU")]
     [InlineData("en-US")]
     public async Task SerializeAndDeserializeTransactionsProperly(string cultureCode)
@@ -37,7 +37,7 @@ public class CsvSerializersShould : TestDataCarrier
         result.ToList().Should().BeEquivalentTo(Transactions);
     }
 
-    [Theory] [UnitTest]
+    [Theory, UnitTest]
     [InlineData("ru-RU")]
     [InlineData("en-US")]
     public async Task SerializeAndDeserializeRecordedTransactionsProperly(string cultureCode)
@@ -58,7 +58,7 @@ public class CsvSerializersShould : TestDataCarrier
         result.ToList().Should().BeEquivalentTo(RecordedTransactions);
     }
 
-    [Theory] [UnitTest]
+    [Theory, UnitTest]
     [InlineData("ru-RU")]
     [InlineData("en-US")]
     public async Task SerializeAndDeserializeTransferKeysProperly(string cultureCode)
@@ -79,7 +79,7 @@ public class CsvSerializersShould : TestDataCarrier
         result.ToList().Should().BeEquivalentTo(TransferKeys);
     }
 
-    [Theory] [UnitTest]
+    [Theory, UnitTest]
     [InlineData("ru-RU")]
     [InlineData("en-US")]
     public async Task SerializeAndDeserializeExchangeRatesProperly(string cultureCode)

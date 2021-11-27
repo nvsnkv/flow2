@@ -16,7 +16,7 @@ public class TransactionsWithDateRangeShould
         new(DateTime.Parse("2021-11-11"), 100, "RUB", null, "Title", new AccountInfo("name", "bank"))
     };
 
-    [Fact] [UnitTest]
+    [Fact, UnitTest]
     public void ThrowInvalidOperationExceptionIfCollectionWasNotEnumerated()
     {
         var stats = new TransactionsWithDateRange<Transaction>(transactions);
@@ -28,7 +28,7 @@ public class TransactionsWithDateRangeShould
         max.Should().Throw<InvalidOperationException>();
     }
     
-    [Fact] [UnitTest]
+    [Fact, UnitTest]
     public void CountMinMaxTimestampValues()
     {
         var stats = new TransactionsWithDateRange<Transaction>(transactions);

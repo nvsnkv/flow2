@@ -10,15 +10,14 @@ public class EnumerableWithCountsShould
 {
     private readonly int[] collection = { 1, 2, 4 };
 
-    [Fact] [UnitTest]
+    [Fact, UnitTest]
     public void IndicateThatCollectionWasNotEnumerated()
     {
         var stats = new EnumerableWithCount<int>(collection);
         stats.Enumerated.Should().BeFalse();
     }
 
-    [Fact]
-    [UnitTest]
+    [Fact, UnitTest]
     public void IndicateThatCollectionWasEnumerated()
     {
         var stats = new EnumerableWithCount<int>(collection);
@@ -29,8 +28,7 @@ public class EnumerableWithCountsShould
         stats.Enumerated.Should().BeTrue();
     }
 
-    [Fact]
-    [UnitTest]
+    [Fact, UnitTest]
     public void ThrowInvalidOperationExceptionIfCountRequestedBeforeCollectionWasEnumerated()
     {
         var stats = new EnumerableWithCount<int>(collection);
@@ -39,8 +37,7 @@ public class EnumerableWithCountsShould
         f.Should().Throw<InvalidOperationException>();
     }
 
-    [Fact]
-    [UnitTest]
+    [Fact, UnitTest]
     public void CountCollectionProperly()
     {
         var stats = new EnumerableWithCount<int>(collection);

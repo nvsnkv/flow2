@@ -7,13 +7,13 @@ namespace Flow.Domain.Transactions.UnitTests;
 
 public class AccountInfoValidationRulesShould
 {
-    [Fact] [UnitTest]
+    [Fact, UnitTest]
     public void AcceptValidAccounts()
     {
         AccountInfoValidationRules.Check(new AccountInfo("name", "bank")).Should().BeTrue();
     }
 
-    [Theory] [UnitTest]
+    [Theory, UnitTest]
     [InlineData(null, "bank")]
     [InlineData(null, null)]
     [InlineData("account", null)]

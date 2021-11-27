@@ -7,8 +7,7 @@ namespace Flow.Domain.ExchangeRates.UnitTests;
 
 public class ExchangeRateShould
 {
-    [Fact]
-    [UnitTest]
+    [Fact, UnitTest]
     public void BeEqualWithSameRates()
     {
         var now = DateTime.UtcNow;
@@ -18,8 +17,7 @@ public class ExchangeRateShould
         actual.Should().Be(expected);
     }
 
-    [Theory]
-    [UnitTest]
+    [Theory, UnitTest]
     [InlineData("BLR", "ZWL", "2021-11-13", 4.5)]
     [InlineData("RUB", "EUR", "2021-11-13", 4.5)]
     [InlineData("RUB", "ZWL", "2021-11-11", 4.5)]

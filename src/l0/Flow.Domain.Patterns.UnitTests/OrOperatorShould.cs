@@ -7,8 +7,7 @@ namespace Flow.Domain.Patterns.UnitTests;
 
 public class OrOperatorShould
 {
-    [Theory]
-    [UnitTest]
+    [Theory, UnitTest]
     [InlineData(true, true, true)]
     [InlineData(true, false, true)]
     [InlineData(false, true, true)]
