@@ -26,7 +26,7 @@ public class TransactionValidationRulesShould
     [InlineData("2021-11-05", -10, "EUR", null, "")]
     public void RejectInvalidTransactionWhenTransactionRecordIsInvalid(string? timestamp, decimal amount, string currency, string? category, string title)
     {
-        var ts = timestamp == null ? default(DateTime) : DateTime.Parse(timestamp);
+        var ts = timestamp == null ? default : DateTime.Parse(timestamp);
         TransactionValidationRules.CheckTransaction(new Transaction(ts, -amount, currency, category, title, new AccountInfo("name", "bank"))).Should().BeFalse();
     }
 

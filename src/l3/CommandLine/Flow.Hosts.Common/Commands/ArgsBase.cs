@@ -4,7 +4,7 @@ namespace Flow.Hosts.Common.Commands;
 
 public class ArgsBase
 {
-    protected SupportedFormat? GuessFormatFromPath(string? input)
+    protected static SupportedFormat? GuessFormatFromPath(string? input)
     {
         var ext = Path.GetExtension(input)?.ToLower();
         return ext switch

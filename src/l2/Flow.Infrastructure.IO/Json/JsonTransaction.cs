@@ -28,6 +28,6 @@ internal class JsonTransaction
     public static explicit operator Transaction(JsonTransaction js)
     {
         var acc = new AccountInfo(js.Account?.Name ?? string.Empty, js.Account?.Bank ?? string.Empty);
-        return new Transaction(js.Timestamp ?? default(DateTime), js.Amount ?? default(decimal), js.Currency ?? string.Empty, js.Category, js.Title ?? string.Empty, acc);
+        return new Transaction(js.Timestamp ?? default, js.Amount ?? default, js.Currency ?? string.Empty, js.Category, js.Title ?? string.Empty, acc);
     }
 }

@@ -69,7 +69,7 @@ internal class ExchangeRatesManager : IExchangeRatesManager
         return valResult.IsValid;
     }
 
-    private bool Exists(ExchangeRate rate, List<ExchangeRate> existing, List<RejectedRate> rejections)
+    private static bool Exists(ExchangeRate rate, List<ExchangeRate> existing, List<RejectedRate> rejections)
     {
         var result = existing.Contains(rate);
         if (!result)

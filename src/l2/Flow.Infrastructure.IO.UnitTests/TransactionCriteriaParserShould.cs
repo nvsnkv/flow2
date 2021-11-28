@@ -43,7 +43,7 @@ public class TransactionCriteriaParserShould : TestDataCarrier
     }
 
 
-    public static IEnumerable<object[]> TransactionParameters = new []
+    public static IEnumerable<object[]> TransactionParameters => new []
     {
         new object[] {"a<=-150", (Func<Transaction, bool>)(a => a.Amount <= -150) },
         new object[] {"a<=-150", (Func<Transaction, bool>)(a => a.Amount <= -150) },
@@ -56,8 +56,8 @@ public class TransactionCriteriaParserShould : TestDataCarrier
         new object[] {"ts(2021-11-05:2021-11-06]", (Func<Transaction, bool>)(a => new DateTime(2021, 11, 05).ToUniversalTime() < a.Timestamp &&  a.Timestamp <= new DateTime(2021, 11, 06).ToUniversalTime()) },
         new object[] {"ts[2021-11-05:2021-11-06]", (Func<Transaction, bool>)(a => new DateTime(2021, 11, 05).ToUniversalTime() <= a.Timestamp &&  a.Timestamp <= new DateTime(2021, 11, 06).ToUniversalTime()) },
 
-        new object[] {"c(RUB,EUR) t%s", (Func<Transaction, bool>)(a => new [] {"RUB", "EUR" }.Contains(a.Currency) && a.Title.Contains("s")), },
-        new object[] {"c(RUB,EUR) t%s", (Func<Transaction, bool>)(a => new [] {"RUB", "EUR" }.Contains(a.Currency) && a.Title.Contains("s")), }
+        new object[] {"c(RUB,EUR) t%s", (Func<Transaction, bool>)(a => new [] {"RUB", "EUR" }.Contains(a.Currency) && a.Title.Contains('s')), },
+        new object[] {"c(RUB,EUR) t%s", (Func<Transaction, bool>)(a => new [] {"RUB", "EUR" }.Contains(a.Currency) && a.Title.Contains('s')), }
     }.Join(
         new[]{ "ru-RU", "en-US" }, 
         _ => true, _ => true, 
@@ -72,7 +72,7 @@ public class TransactionCriteriaParserShould : TestDataCarrier
             new object[] { "en-US", "a<=-150.5", (Func<Transaction, bool>)(a => a.Amount <= -150.5M) },
         });
 
-    public static IEnumerable<object[]> RecordedTransactionParameters = new[]
+    public static IEnumerable<object[]> RecordedTransactionParameters => new[]
     {
         new object[] {"a<=-150", (Func<RecordedTransaction, bool>)(a => a.Amount <= -150) },
         new object[] {"a<=-150", (Func<RecordedTransaction, bool>)(a => a.Amount <= -150) },
@@ -80,7 +80,7 @@ public class TransactionCriteriaParserShould : TestDataCarrier
 
         new object[] {"ts[2021-11-05:2021-11-06)", (Func<RecordedTransaction, bool>)(a => new DateTime(2021, 11, 05).ToUniversalTime() <= a.Timestamp &&  a.Timestamp < new DateTime(2021, 11, 06).ToUniversalTime()) },
         
-        new object[] {"c(RUB,EUR) t%s", (Func<RecordedTransaction, bool>)(a => new [] {"RUB", "EUR" }.Contains(a.Currency) && a.Title.Contains("s")), }
+        new object[] {"c(RUB,EUR) t%s", (Func<RecordedTransaction, bool>)(a => new [] {"RUB", "EUR" }.Contains(a.Currency) && a.Title.Contains('s')), }
     }.Join(
         new[] { "ru-RU", "en-US" },
         _ => true, _ => true,
@@ -89,6 +89,6 @@ public class TransactionCriteriaParserShould : TestDataCarrier
         .Concat(new[]
         {
             new object[] {"ru-RU", "k(3,5)", (Func<RecordedTransaction, bool>)(a => new long[]{ 3, 5 }.Contains(a.Key)) },
-            new object[] {"ru-RU", "ocom=noway ocat%2 ot%1", (Func<RecordedTransaction, bool>)(a => a.Overrides?.Comment == "noway" && (a.Overrides?.Category?.Contains("2") ?? false) && (a.Overrides?.Title?.Contains("1") ?? false)), }
+            new object[] {"ru-RU", "ocom=noway ocat%2 ot%1", (Func<RecordedTransaction, bool>)(a => a.Overrides?.Comment == "noway" && (a.Overrides?.Category?.Contains('2') ?? false) && (a.Overrides?.Title?.Contains('2') ?? false)), }
         });
 }

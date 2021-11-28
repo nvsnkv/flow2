@@ -22,7 +22,7 @@ internal class JsonRecordedTransaction : JsonTransaction
     public static explicit operator RecordedTransaction(JsonRecordedTransaction js)
     {
         var transaction = (Transaction)(JsonTransaction)js;
-        var result = new RecordedTransaction(js.Key ?? default(long), transaction);
+        var result = new RecordedTransaction(js.Key ?? default, transaction);
 
         if (!string.IsNullOrEmpty(js.Overrides?.Comment) ||
             !string.IsNullOrEmpty(js.Overrides?.Category) ||

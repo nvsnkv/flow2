@@ -62,7 +62,7 @@ public abstract class CommandBase
         return new StreamReader(stream, input != null ? Encoding.UTF8 : Encoding.GetEncoding(culture.TextInfo.OEMCodePage));
     }
 
-    private string GeneratePath(SupportedFormat format, string command, string slug)
+    private static string GeneratePath(SupportedFormat format, string command, string slug)
     {
         return $"{command}.{DateTime.Now:s}.{slug}.{format.ToString().ToLower()}".Replace(":", "_");
     }

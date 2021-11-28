@@ -131,7 +131,7 @@ internal class TransactionCriteriaParser : ITransactionCriteriaParser
         return result;
     }
 
-    private ConditionParseResult<T,TProp> ParsePropertyCondition<T, TProp>(Expression<Func<T, TProp>> selector, ParsingResult<TProp> parseResult) where T : Transaction
+    private static ConditionParseResult<T,TProp> ParsePropertyCondition<T, TProp>(Expression<Func<T, TProp>> selector, ParsingResult<TProp> parseResult) where T : Transaction
     {
         return parseResult.Successful 
             ? new ConditionParseResult<T, TProp>(selector, parseResult.Condition) 
@@ -194,16 +194,16 @@ internal class TransactionCriteriaParser : ITransactionCriteriaParser
         return result;
     }
 
-    private Expression<Func<T, bool>> BuildMinMaxExpression<T>(string opStart, string opEnd, T min, T max, ParameterExpression param)
+    private static Expression<Func<T, bool>> BuildMinMaxExpression<T>(string opStart, string opEnd, T min, T max, ParameterExpression param)
     {
         return Expression.Lambda<Func<T, bool>>(
             Expression.And(
-                BuildMinExpression(opStart, min, param), 
+                BuildMinExpression(opStart, min, param),
                 BuildMaxExpression(opEnd, max, param)), 
             param);
     }
 
-    private Expression BuildMaxExpression<T>(string opEnd, T max, ParameterExpression param)
+    private static Expression BuildMaxExpression<T>(string opEnd, T max, ParameterExpression param)
     {
         return opEnd switch
         {
@@ -213,7 +213,7 @@ internal class TransactionCriteriaParser : ITransactionCriteriaParser
         };
     }
 
-    private Expression BuildMinExpression<T>(string opStart, T min, ParameterExpression param)
+    private static Expression BuildMinExpression<T>(string opStart, T min, ParameterExpression param)
     {
         return opStart switch
         {
@@ -223,13 +223,13 @@ internal class TransactionCriteriaParser : ITransactionCriteriaParser
         };
     }
 
-    private Expression<Func<T, bool>> BuildContainsExpression<T>(ParameterExpression param, string? part)
+    private static Expression<Func<T, bool>> BuildContainsExpression<T>(ParameterExpression param, string? part)
     {
         var partAccess = Expression.Constant(part ?? string.Empty);
         return Expression.Lambda<Func<T, bool>>(Expression.Call(param, "Contains", null, partAccess), param);
     }
 
-    private Expression<Func<T, bool>> BuildContainsExpression<T>(ParameterExpression param, List<T> collection)
+    private static Expression<Func<T, bool>> BuildContainsExpression<T>(ParameterExpression param, List<T> collection)
     {
         var collectionAccess = Expression.Constant(collection);
         return Expression.Lambda<Func<T, bool>>(Expression.Call(collectionAccess, "Contains", null, param), param);
