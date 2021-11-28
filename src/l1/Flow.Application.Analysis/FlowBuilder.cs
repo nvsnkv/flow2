@@ -9,7 +9,7 @@ namespace Flow.Application.Analysis;
 internal class FlowBuilder
 {
     private readonly IEnumerable<RecordedTransaction> transactions;
-    private IEnumerable<Transfer>? transfers;
+    private IAsyncEnumerable<Transfer>? transfers;
 
     private string? targetCurrency;
     private IExchangeRatesProvider? ratesProvider;
@@ -19,7 +19,7 @@ internal class FlowBuilder
         this.transactions = transactions;
     }
 
-    public FlowBuilder WithTransfers(IEnumerable<Transfer> transfers)
+    public FlowBuilder WithTransfers(IAsyncEnumerable<Transfer> transfers)
     {
         this.transfers = transfers;
         return this;
@@ -36,7 +36,7 @@ internal class FlowBuilder
 
     public async IAsyncEnumerable<FlowItem> Build([EnumeratorCancellation] CancellationToken ct)
     {
-        var sources = (transfers ?? Enumerable.Empty<Transfer>()).ToDictionary(s => s.Source);
+        var sources = await (transfers ?? AsyncEnumerable.Empty<Transfer>()).ToDictionaryAsync(s => s.Source, ct);
         var sinks = sources.Values.Select(t => t.Sink).ToHashSet();
 
         // meaningful transactions: transactions that changes amount of money within the system.

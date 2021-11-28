@@ -22,7 +22,7 @@ internal class Analyst : IAnalyst
     public async IAsyncEnumerable<FlowItem> GetFlow(Expression<Func<RecordedTransaction, bool>> conditions, string? targetCurrency, [EnumeratorCancellation] CancellationToken ct)
     {
         var transactions = await accountant.GetTransactions(conditions, ct);
-        var transfers = await accountant.GetTransfers(conditions, ct).ToListAsync(ct);
+        var transfers = accountant.GetTransfers(conditions, ct);
 
         var builder = new FlowBuilder(transactions).WithTransfers(transfers);
         if (targetCurrency != null)

@@ -52,7 +52,7 @@ public class FlowBuilderShould
         var transfersWithZeroFee = Transfers.Where(t => t.Fee == 0).ToList();
         var transferKeys = transfersWithZeroFee.Select(t => t.Source).Union(transfersWithZeroFee.Select(t => t.Sink)).ToHashSet();
 
-        var builder = new FlowBuilder(Expenses.Concat(Incomes)).WithTransfers(transfersWithZeroFee);
+        var builder = new FlowBuilder(Expenses.Concat(Incomes)).WithTransfers(transfersWithZeroFee.ToAsyncEnumerable());
 
 
         var flow = await builder.Build(CancellationToken.None).ToListAsync();
