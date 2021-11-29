@@ -1,12 +1,12 @@
 ﻿using System.Runtime.CompilerServices;
 using Flow.Application.ExchangeRates.Contract;
-using Flow.Domain.Analysis;
 using Flow.Domain.ExchangeRates;
 using Flow.Domain.Transactions;
 using Flow.Domain.Transactions.Transfers;
 
 namespace Flow.Application.Analysis;
-internal class FlowBuilder
+
+public class FlowBuilder
 {
     private readonly IEnumerable<RecordedTransaction> transactions;
     private IAsyncEnumerable<Transfer>? transfers;
@@ -34,7 +34,7 @@ internal class FlowBuilder
     }
 
 
-    public async IAsyncEnumerable<FlowItem> Build([EnumeratorCancellation] CancellationToken ct)
+    public async IAsyncEnumerable<RecordedTransaction> Build([EnumeratorCancellation] CancellationToken ct)
     {
         var sources = await (transfers ?? AsyncEnumerable.Empty<Transfer>()).ToDictionaryAsync(s => s.Source, ct);
         var sinks = sources.Values.Select(t => t.Sink).ToHashSet();
@@ -54,7 +54,7 @@ internal class FlowBuilder
                 item = await ConvertCurrency(t, ct);
             }
 
-            yield return item.Amount > 0 ? new Income(item) : new Expense(item);
+            yield return item;
         }
     }
 

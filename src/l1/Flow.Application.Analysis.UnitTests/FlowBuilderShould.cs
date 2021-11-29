@@ -1,5 +1,4 @@
 ﻿using Flow.Application.ExchangeRates.Contract;
-using Flow.Domain.Analysis;
 using Flow.Domain.ExchangeRates;
 using Flow.Domain.Transactions;
 using Flow.Domain.Transactions.Transfers;
@@ -36,14 +35,13 @@ public class FlowBuilderShould
     };
 
     [Fact, UnitTest]
-    public async Task GenerateExpensesAndIncomes()
+    public async Task GenerateEquivalentReport()
     {
         var builder = new FlowBuilder(Expenses.Concat(Incomes));
         var flow = await builder.Build(CancellationToken.None).ToListAsync();
 
         flow.Should().HaveCount(Expenses.Length + Incomes.Length);
-        flow.Where(f => f is Income).Should().BeEquivalentTo(Incomes.Select(i => new Income(i)));
-        flow.Where(f => f is Expense).Should().BeEquivalentTo(Expenses.Select(i => new Expense(i)));
+        flow.Should().BeEquivalentTo( Expenses.Concat(Incomes));
     }
 
     [Fact, UnitTest]
