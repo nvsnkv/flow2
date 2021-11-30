@@ -42,7 +42,7 @@ internal class CalendarBuilder
     public async Task<(Calendar, IEnumerable<RejectedTransaction>)> Build(CancellationToken ct)
     {
         var ranges = GetRanges().ToList().AsReadOnly();
-        var rows = new Dictionary<Vector, List<decimal>>();
+        var rows = new Dictionary<Vector, List<decimal?>>();
 
         await foreach (var transaction in transactions.WithCancellation(ct))
         {
@@ -51,18 +51,19 @@ internal class CalendarBuilder
             {
                 if (!rows.ContainsKey(vector))
                 {
-                    rows.Add(vector, new List<decimal>(ranges.Count));
+                    rows.Add(vector, new List<decimal?>(ranges.Count));
                 }
 
                 var index = GetIndex(transaction, ranges);
                 if (index >= 0)
                 {
-                    rows[vector][index] += transaction.Amount; ;
+                    var amount = rows[vector][index] ?? 0;
+                    rows[vector][index] = amount + transaction.Amount;
                 }
             }
         }
 
-        var values = new ReadOnlyDictionary<Vector, IReadOnlyList<decimal>>(rows.ToDictionary(r => r.Key, r => (IReadOnlyList<decimal>)r.Value.AsReadOnly()));
+        var values = new ReadOnlyDictionary<Vector, IReadOnlyList<decimal?>>(rows.ToDictionary(r => r.Key, r => (IReadOnlyList<decimal?>)r.Value.AsReadOnly()));
         return (new Calendar(ranges, new Vector(dimensions.Select(d => d.Name)), values), rejections);
     }
 
