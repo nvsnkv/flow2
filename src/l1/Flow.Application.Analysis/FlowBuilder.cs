@@ -6,13 +6,15 @@ using Flow.Domain.Transactions.Transfers;
 
 namespace Flow.Application.Analysis;
 
-public class FlowBuilder
+internal class FlowBuilder
 {
     private readonly IEnumerable<RecordedTransaction> transactions;
     private IAsyncEnumerable<Transfer>? transfers;
 
     private string? targetCurrency;
     private IExchangeRatesProvider? ratesProvider;
+
+    private Action<RejectedTransaction>? rejectionsHandler;
 
     public FlowBuilder(IEnumerable<RecordedTransaction> transactions)
     {
@@ -33,6 +35,12 @@ public class FlowBuilder
         return this;
     }
 
+    public FlowBuilder WithRejectionsHandler(Action<RejectedTransaction> handler)
+    {
+        rejectionsHandler = handler;
+        return this;
+    }
+
 
     public async IAsyncEnumerable<RecordedTransaction> Build([EnumeratorCancellation] CancellationToken ct)
     {
@@ -41,11 +49,36 @@ public class FlowBuilder
 
         // meaningful transactions: transactions that changes amount of money within the system.
         var meaningfulTransactions = transactions
-            .Where(t => !sinks.Contains(t.Key))
+            .Where(t => { 
+                if (sinks.Contains(t.Key))
+                {
+                    if (rejectionsHandler != null)
+                    {
+                        rejectionsHandler(new RejectedTransaction(t, "Given transaction is a transfer sink!"));
+                    }
+
+                    return false;
+                }
+
+                return true;
+            })
             .Select(t => sources.ContainsKey(t.Key)
                 ? new RecordedTransaction(t.Key, t.Timestamp, sources[t.Key].Fee, sources[t.Key].Currency, $"TRANSFER: {sources[t.Key].Comment}", $"{t.Category}: {t.Title}", t.Account)
                 : t)
-            .Where(t => t.Amount != 0);
+            .Where(t =>
+            {
+                if (t.Amount == 0)
+                {
+                    if (rejectionsHandler != null)
+                    {
+                        rejectionsHandler(new RejectedTransaction(t, "Given transaction has zero amount!"));
+                    }
+
+                    return false;
+                }
+
+                return true;
+            });
         foreach (var t in meaningfulTransactions)
         {
             var item = t;
@@ -54,20 +87,25 @@ public class FlowBuilder
                 item = await ConvertCurrency(t, ct);
             }
 
-            yield return item;
+            if (item != null)
+            {
+                yield return item;
+            }
         }
     }
 
-    private async Task<RecordedTransaction> ConvertCurrency(RecordedTransaction t, CancellationToken ct)
+    private async Task<RecordedTransaction?> ConvertCurrency(RecordedTransaction t, CancellationToken ct)
     {
         ExchangeRateRequest request = (t.Currency, targetCurrency!, t.Timestamp);
         var rate = await ratesProvider!.GetRate(request, ct);
         if (rate == null)
         {
-            throw new InvalidOperationException("No exchange rate found!")
+            if (rejectionsHandler != null)
             {
-                Data = { { "Request", request } }
-            };
+                rejectionsHandler(new RejectedTransaction(t, "Unable to get exchange rate for given transaction!"));
+            }
+
+            return null;
         }
 
         return new RecordedTransaction(t.Key, t.Timestamp, t.Amount * rate.Rate, targetCurrency!, t.Category, t.Title,

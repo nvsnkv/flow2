@@ -11,11 +11,11 @@ internal class CalendarBuilder
 {
     private readonly List<Dimension> dimensions = new();
     private readonly IAsyncEnumerable<RecordedTransaction> transactions;
-    private readonly List<RejectedTransaction> rejections = new();
     private readonly DateTime from;
     private readonly DateTime till;
 
     private Offset offset = new MonthlyOffset();
+    private Action<RejectedTransaction>? rejectionsHandler;
     
     public CalendarBuilder(IAsyncEnumerable<RecordedTransaction> transactions, DateTime from, DateTime till)
     {
@@ -38,8 +38,14 @@ internal class CalendarBuilder
         return this;
     }
 
+    public CalendarBuilder WithRejectionsHandler(Action<RejectedTransaction> handler)
+    {
+        rejectionsHandler = handler;
+        return this;
+    }
 
-    public async Task<(Calendar, IEnumerable<RejectedTransaction>)> Build(CancellationToken ct)
+
+    public async Task<Calendar> Build(CancellationToken ct)
     {
         var ranges = GetRanges().ToList().AsReadOnly();
         var rows = new Dictionary<Vector, List<decimal?>>();
@@ -64,7 +70,7 @@ internal class CalendarBuilder
         }
 
         var values = new ReadOnlyDictionary<Vector, IReadOnlyList<decimal?>>(rows.ToDictionary(r => r.Key, r => (IReadOnlyList<decimal?>)r.Value.AsReadOnly()));
-        return (new Calendar(ranges, new Vector(dimensions.Select(d => d.Name)), values), rejections);
+        return new Calendar(ranges, new Vector(dimensions.Select(d => d.Name)), values);
     }
 
     private int GetIndex(Transaction transaction, IReadOnlyList<Range> ranges)
@@ -79,7 +85,11 @@ internal class CalendarBuilder
             }
         }
 
-        rejections.Add(new RejectedTransaction(transaction, "Given transaction does not belong to any date range!"));
+        if (rejectionsHandler != null)
+        {
+            rejectionsHandler(new RejectedTransaction(transaction, "Given transaction does not belong to any date range!"));
+        }
+
         return -1;
     }
 
@@ -91,14 +101,20 @@ internal class CalendarBuilder
             var dimensionValues = dimension.Rules.Where(r => r.Value(transaction)).Select(r => r.Key).ToList();
             if (!dimensionValues.Any())
             {
-                rejections.Add(new RejectedTransaction(transaction, $"Given transaction does not match to any value from dimension {dimension.Name}"));
+                if (rejectionsHandler != null)
+                {
+                    rejectionsHandler(new RejectedTransaction(transaction, $"Given transaction does not match to any value from dimension {dimension.Name}"));
+                }
                 return null;
             }
 
             if (dimensionValues.Count > 1)
             {
                 var matched = string.Join(", ", dimensionValues);
-                rejections.Add(new RejectedTransaction(transaction, $"Given transaction matches with more than one value from dimension {dimension.Name}: ({matched}). Only first value will be used!"));
+                if (rejectionsHandler != null)
+                {
+                    rejectionsHandler(new RejectedTransaction(transaction, $"Given transaction matches with more than one value from dimension {dimension.Name}: ({matched}). Only first value will be used!"));
+                }
             }
 
             values.Add(dimensionValues.First());
