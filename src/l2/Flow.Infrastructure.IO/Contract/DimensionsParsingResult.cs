@@ -4,10 +4,10 @@ namespace Flow.Infrastructure.IO.Contract;
 
 public class DimensionsParsingResult
 {
-    public DimensionsParsingResult(IEnumerable<Dimension>? dimensions, IEnumerable<string> errors)
+    public DimensionsParsingResult(IEnumerable<Dimension>? dimensions, IEnumerable<string>? errors)
     {
         Dimensions = dimensions;
-        Errors = errors;
+        Errors = errors ?? Enumerable.Empty<string>();
     }
 
     public IEnumerable<Dimension>? Dimensions { get; }

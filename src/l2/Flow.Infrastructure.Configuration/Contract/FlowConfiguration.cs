@@ -1,7 +1,7 @@
 ﻿using Autofac;
 using Microsoft.Extensions.Configuration;
 
-namespace Flow.Infrastructure.Configuration;
+namespace Flow.Infrastructure.Configuration.Contract;
 
 public sealed class FlowConfiguration : Module
 {

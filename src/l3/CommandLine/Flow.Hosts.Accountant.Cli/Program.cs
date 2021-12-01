@@ -4,11 +4,10 @@ using Flow.Application.ExchangeRates.Contract;
 using Flow.Application.Transactions.Contract;
 using Flow.Hosts.Accountant.Cli.Commands;
 using Flow.Hosts.Common;
-using Flow.Infrastructure.Configuration;
 using Flow.Infrastructure.Configuration.Contract;
-using Flow.Infrastructure.IO;
+using Flow.Infrastructure.IO.Contract;
 using Flow.Infrastructure.Rates.CBRF.Contract;
-using Flow.Infrastructure.Storage;
+using Flow.Infrastructure.Storage.Contract;
 
 var builder = new ContainerBuilder();
 

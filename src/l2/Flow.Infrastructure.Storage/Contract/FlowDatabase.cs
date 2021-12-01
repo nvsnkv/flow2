@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 [assembly:InternalsVisibleTo("Flow.Infrastructure.Storage.Migrations")]
 [assembly: InternalsVisibleTo("DynamicProxyGenAssembly2")]
 
-namespace Flow.Infrastructure.Storage;
+namespace Flow.Infrastructure.Storage.Contract;
 
 public class FlowDatabase : Module
 {

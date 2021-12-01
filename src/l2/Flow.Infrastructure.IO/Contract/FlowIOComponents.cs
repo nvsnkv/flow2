@@ -5,13 +5,14 @@ using CsvHelper.Configuration;
 using Flow.Infrastructure.Configuration.Contract;
 using Flow.Infrastructure.IO.Criteria;
 using Flow.Infrastructure.IO.Csv;
+using Flow.Infrastructure.IO.Dimensions;
 using Flow.Infrastructure.IO.Json;
 using Newtonsoft.Json;
 using JsonSerializer = Flow.Infrastructure.IO.Json.JsonSerializer;
 
 [assembly: InternalsVisibleTo("Flow.Infrastructure.IO.UnitTests")]
 
-namespace Flow.Infrastructure.IO;
+namespace Flow.Infrastructure.IO.Contract;
 
 public class FlowIOComponents : Module
 {
@@ -87,6 +88,8 @@ public class FlowIOComponents : Module
 
             return new TransactionCriteriaParser(new GenericParser(culture, dateStyle, numberStyle));
         }).InstancePerLifetimeScope().AsImplementedInterfaces();
+
+        builder.RegisterType<DimensionsParser>().InstancePerLifetimeScope().AsImplementedInterfaces();
 
         base.Load(builder);
     }
