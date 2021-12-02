@@ -9,7 +9,7 @@ public class Aggregation : Module
 {
     protected override void Load(ContainerBuilder builder)
     {
-        builder.RegisterType<Aggregation>().AsImplementedInterfaces();
+        builder.RegisterType<Aggregator>().AsImplementedInterfaces();
 
         base.Load(builder);
     }

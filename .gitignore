@@ -6,3 +6,4 @@ obj
 /src/.env
 /.vs
 /src/l3/CommandLine/Flow.Hosts.Accountant.Cli/Flow.Hosts.Accountant.Cli.csproj.user
+/src/l3/CommandLine/Flow.Hosts.Analysis.Cli/Properties/launchSettings.json
