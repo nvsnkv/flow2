@@ -4,13 +4,16 @@ namespace Flow.Infrastructure.IO.Contract;
 
 public class DimensionsParsingResult
 {
-    public DimensionsParsingResult(IEnumerable<Dimension>? dimensions, IEnumerable<string>? errors)
+    public DimensionsParsingResult(Vector? header, IEnumerable<AggregationRule>? dimensions, IEnumerable<string>? errors)
     {
+        Header = header ?? Vector.Empty;
         Dimensions = dimensions;
         Errors = errors ?? Enumerable.Empty<string>();
     }
 
-    public IEnumerable<Dimension>? Dimensions { get; }
+    public Vector Header { get; }
+
+    public IEnumerable<AggregationRule>? Dimensions { get; }
 
     public bool Successful => Dimensions != null;
 

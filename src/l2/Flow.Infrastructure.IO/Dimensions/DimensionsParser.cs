@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using System.Net.Http.Headers;
 using Flow.Domain.Analysis;
 using Flow.Domain.Patterns;
 using Flow.Domain.Patterns.Logical;
@@ -24,9 +25,29 @@ internal class DimensionsParser : IDimensionsParser
     public async Task<DimensionsParsingResult> ParseFromStream(StreamReader reader, CancellationToken ct)
     {
         var errors = new List<string>();
-        var rules = new List<DimensionRule>();
+        var rules = new List<AggregationRuleRow>();
+       
 
         var index = 0;
+
+        if (reader.EndOfStream)
+        {
+            errors.Add("!: Empty input!");
+            return new DimensionsParsingResult(null, null, errors);
+        }
+
+        var headerLine = await reader.ReadLineAsync();
+        index++;
+
+        var header = new Vector(headerLine?.Split(';'));
+        if (header.Length < 1)
+        {
+            errors.Add($"{index}: No header defined!");
+            return new DimensionsParsingResult(null, null, errors);
+        }
+
+        var dimensionality = header.Length;
+
         while (!reader.EndOfStream || ct.IsCancellationRequested)
         {
             var line = await reader.ReadLineAsync();
@@ -38,22 +59,24 @@ internal class DimensionsParser : IDimensionsParser
             else
             {
                 var split = line.Split(";");
-                if (split.Length != 3)
+
+                if (split.Length != dimensionality + 1)
                 {
-                    errors.Add($"{index}: Failed to identify dimension name, value and rule. Please check if they properly separated by ;");
+                    errors.Add($"{index}: Failed to parse aggregation rule! Rule must contain have same amount of dimensions as defined in header and must ends with transaction criteria!");
                 }
 
-                var dimension = split[0];
-                var value = split[1];
+                var dimensions = new Vector(split.Take(split.Length - 1).ToList());
+                var value = split.Last();
 
-                var criteriaResult = criteriaParser.ParseRecordedTransactionCriteria(split[2].Split(' '));
+                var criteriaResult = criteriaParser.ParseRecordedTransactionCriteria(value.Split(' '));
                 if (!criteriaResult.Successful)
                 {
-                    errors.Add($"{index}: Failed to parse criteria for {dimension}={value}: {Environment.NewLine}  {string.Join(", ", criteriaResult.Errors)}");
+                    errors.Add($"{index}: Failed to parse criteria for [{string.Join(", ", dimensions)}]: {Environment.NewLine}  {string.Join(", ", criteriaResult.Errors)}");
                 }
                 else
                 {
-                    rules.Add(new DimensionRule(dimension, value, criteriaResult.Conditions!));
+                    if (dimensions.Length > dimensionality) { dimensionality = dimensions.Length; }
+                    rules.Add(new AggregationRuleRow(dimensions, criteriaResult.Conditions!));
                 }
             }
         }
@@ -65,24 +88,21 @@ internal class DimensionsParser : IDimensionsParser
 
         if (errors.Any())
         {
-            return new DimensionsParsingResult(null, errors);
+            return new DimensionsParsingResult(null, null, errors);
         }
 
         var result = rules
-            .GroupBy(r => r.Name)
-            .Select(g => new Dimension(
-                g.Key, new ReadOnlyDictionary<string, Func<RecordedTransaction, bool>>(
-                    g.GroupBy(r => r.Value)
-                        .ToDictionary(
-                            gv => gv.Key,
-                            gv => gv.Select(r => r.Rule)
-                                .Aggregate(Constants<RecordedTransaction>.Falsity, (s, r) => s.Or(r))
-                                .Compile()
-                        )
+            .GroupBy(r => r.Dimensions)
+            .Select(g => 
+                new AggregationRule(
+                    g.Key,
+                    g.Select(r => r.Rule)
+                          .Aggregate(Constants<RecordedTransaction>.Falsity, (s, r) => s.Or(r))
+                          .Compile()
                     )
                 )
-            );
+            .Append(new AggregationRule(new Vector(Enumerable.Repeat(string.Empty, dimensionality)), Constants<RecordedTransaction>.Truth.Compile()));
 
-        return new DimensionsParsingResult(result, null);
+        return new DimensionsParsingResult(header, result, null);
     }
 }

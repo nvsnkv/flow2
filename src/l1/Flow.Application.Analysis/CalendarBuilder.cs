@@ -9,14 +9,15 @@ namespace Flow.Application.Analysis;
 
 internal class CalendarBuilder
 {
-    private readonly List<Dimension> dimensions = new();
+    private readonly List<AggregationRule> rules = new();
     private readonly IAsyncEnumerable<RecordedTransaction> transactions;
     private readonly DateTime from;
     private readonly DateTime till;
 
     private Offset offset = new MonthlyOffset();
     private Action<RejectedTransaction>? rejectionsHandler;
-    
+    private Vector? header;
+
     public CalendarBuilder(IAsyncEnumerable<RecordedTransaction> transactions, DateTime from, DateTime till)
     {
         this.transactions = transactions;
@@ -24,10 +25,16 @@ internal class CalendarBuilder
         this.from = from;
     }
 
-    public CalendarBuilder WithDimension(Dimension dimension)
+    public CalendarBuilder WithHeader(Vector header)
     {
-        if (dimensions.Any(d => d.Name.Equals(dimension.Name))) { throw new ArgumentException("Dimension with the same name was already added!"); }
-        dimensions.Add(dimension);
+        this.header = header;
+        return this;
+    }
+
+    public CalendarBuilder WithAggregationRules(AggregationRule aggregationRule)
+    {
+        if (rules.Any(d => d.Dimensions.Equals(aggregationRule.Dimensions))) { throw new ArgumentException("Dimension with the same name was already added!"); }
+        rules.Add(aggregationRule);
 
         return this;
     }
@@ -70,7 +77,7 @@ internal class CalendarBuilder
         }
 
         var values = new ReadOnlyDictionary<Vector, IReadOnlyList<decimal?>>(rows.ToDictionary(r => r.Key, r => (IReadOnlyList<decimal?>)r.Value.AsReadOnly()));
-        return new Calendar(ranges, new Vector(dimensions.Select(d => d.Name)), values);
+        return new Calendar(ranges, header ?? Vector.Empty, values);
     }
 
     private int GetIndex(Transaction transaction, IReadOnlyList<Range> ranges)
@@ -95,32 +102,28 @@ internal class CalendarBuilder
 
     private Vector? GetVector(RecordedTransaction transaction)
     {
-        var values = new List<string>();
-        foreach (var dimension in dimensions)
+        var matchedDimensions = rules.Where(r => r.Rule(transaction)).ToList();
+
+        if(!matchedDimensions.Any())
         {
-            var dimensionValues = dimension.Rules.Where(r => r.Value(transaction)).Select(r => r.Key).ToList();
-            if (!dimensionValues.Any())
+            if (rejectionsHandler != null)
             {
-                if (rejectionsHandler != null)
-                {
-                    rejectionsHandler(new RejectedTransaction(transaction, $"Given transaction does not match to any value from dimension {dimension.Name}"));
-                }
-                return null;
+                rejectionsHandler(new RejectedTransaction(transaction, $"Given transaction does not match to any aggregation rule!"));
             }
-
-            if (dimensionValues.Count > 1)
-            {
-                var matched = string.Join(", ", dimensionValues);
-                if (rejectionsHandler != null)
-                {
-                    rejectionsHandler(new RejectedTransaction(transaction, $"Given transaction matches with more than one value from dimension {dimension.Name}: ({matched}). Only first value will be used!"));
-                }
-            }
-
-            values.Add(dimensionValues.First());
+            return null;
         }
 
-        return new Vector(values);
+        if (matchedDimensions.Count > 1)
+        {
+            var matched = string.Join(", ", matchedDimensions.Select(r => $"[{string.Join(", ", r.Dimensions)}]"));
+            if (rejectionsHandler != null)
+            {
+                rejectionsHandler(new RejectedTransaction(transaction, $"Given transaction matches with more than one aggregation rule ({matched}). Only first value will be used!"));
+            }
+        }
+
+        return matchedDimensions.First().Dimensions;
+
     }
 
     private IEnumerable<Range> GetRanges()

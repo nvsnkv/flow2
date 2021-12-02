@@ -4,11 +4,13 @@ namespace Flow.Domain.Analysis;
 
 public class Vector : IEnumerable<string>
 {
-    private readonly List<string> values;
+    public static Vector Empty { get; } = new(Enumerable.Empty<string>());
 
-    public Vector(IEnumerable<string> values)
+    private readonly List<string> values;
+    
+    public Vector(IEnumerable<string>? values)
     {
-        this.values = values.ToList();
+        this.values = values?.ToList() ?? Empty.values;
     }
 
     public int Length => values.Count;

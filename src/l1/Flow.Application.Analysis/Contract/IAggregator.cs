@@ -5,5 +5,5 @@ namespace Flow.Application.Analysis.Contract;
 
 public interface IAggregator
 {
-    Task<(Calendar, IReadOnlyCollection<RejectedTransaction>)> GetCalendar(DateTime from, DateTime till, string currency, IEnumerable<Dimension> dimensions, CancellationToken ct);
+    Task<(Calendar, IReadOnlyCollection<RejectedTransaction>)> GetCalendar(DateTime from, DateTime till, string currency, Vector header, IEnumerable<AggregationRule> dimensions, CancellationToken ct);
 }

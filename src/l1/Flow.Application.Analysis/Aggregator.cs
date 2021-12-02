@@ -18,7 +18,7 @@ internal class Aggregator : IAggregator
         this.ratesProvider = ratesProvider;
     }
 
-    public async Task<(Calendar, IReadOnlyCollection<RejectedTransaction>)> GetCalendar(DateTime from, DateTime till, string currency, IEnumerable<Dimension> dimensions, CancellationToken ct)
+    public async Task<(Calendar, IReadOnlyCollection<RejectedTransaction>)> GetCalendar(DateTime from, DateTime till, string currency, Vector header, IEnumerable<AggregationRule> dimensions, CancellationToken ct)
     {
         Expression<Func<RecordedTransaction, bool>> dateRange = t => from >= t.Timestamp && t.Timestamp < till;
         var transactions = await accountant.GetTransactions(dateRange, ct);
@@ -33,9 +33,10 @@ internal class Aggregator : IAggregator
 
         var calendarBuilder = new CalendarBuilder(flow, @from, till)
             .WithOffset(new MonthlyOffset())
-            .WithRejectionsHandler(r => rejected.Add(r));
+            .WithRejectionsHandler(r => rejected.Add(r))
+            .WithHeader(header);
 
-        calendarBuilder = dimensions.Aggregate(calendarBuilder, (b, d) => b.WithDimension(d));
+        calendarBuilder = dimensions.Aggregate(calendarBuilder, (b, d) => b.WithAggregationRules(d));
 
         var calendar = await calendarBuilder.Build(ct);
         return (calendar, rejected.AsReadOnly());
