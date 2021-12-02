@@ -6,4 +6,9 @@ public class MonthlyOffset : Offset
     {
         return time.AddMonths(1);
     }
+
+    public override string GetAliasFor(Range range)
+    {
+        return range.Start.ToString("MMM");
+    }
 }

@@ -89,6 +89,22 @@ public class FlowIOComponents : Module
             return new TransactionCriteriaParser(new GenericParser(culture, dateStyle, numberStyle));
         }).InstancePerLifetimeScope().AsImplementedInterfaces();
 
+
+        builder.Register(c =>
+        {
+            var config = c.Resolve<IFlowConfiguration>();
+
+            var culture = CultureInfo
+                              .GetCultures(CultureTypes.AllCultures)
+                              .FirstOrDefault(ci => ci.Name == config.CultureCode)
+                          ?? CultureInfo.CurrentCulture;
+
+            var csv = new CsvCalendarWriter(new CsvConfiguration(culture) { LeaveOpen = true, HeaderValidated = null });
+            var json = new JsonCalendarWriter(new JsonSerializerSettings() { Culture = culture });
+
+            return new CalendarWriter(csv, json);
+        }).InstancePerLifetimeScope().AsImplementedInterfaces();
+
         builder.RegisterType<DimensionsParser>().InstancePerLifetimeScope().AsImplementedInterfaces();
 
         base.Load(builder);

@@ -1,6 +1,8 @@
-﻿namespace Flow.Domain.Analysis;
+﻿using System.Collections;
 
-public class Vector
+namespace Flow.Domain.Analysis;
+
+public class Vector : IEnumerable<string>
 {
     private readonly List<string> values;
 
@@ -31,6 +33,11 @@ public class Vector
         return true;
     }
 
+    public IEnumerator<string> GetEnumerator()
+    {
+        return values.GetEnumerator();
+    }
+
     public override bool Equals(object? obj)
     {
         if (obj is null) return false;
@@ -40,6 +47,10 @@ public class Vector
     }
 
     public override int GetHashCode() => values.Aggregate(0, (s, i) => HashCode.Combine(s, i.GetHashCode()));
+    IEnumerator IEnumerable.GetEnumerator()
+    {
+        return GetEnumerator();
+    }
 
     public static bool operator ==(Vector? left, Vector? right)
     {

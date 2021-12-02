@@ -6,6 +6,7 @@ public class Range
     {
         End = end;
         Start = start;
+        Alias = string.Empty;
     }
 
     public DateTime Start { get; }

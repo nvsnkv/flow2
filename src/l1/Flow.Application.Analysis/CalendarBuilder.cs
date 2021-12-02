@@ -131,7 +131,9 @@ internal class CalendarBuilder
         {
             var start = end;
             end = offset.ApplyTo(start);
-            yield return new Range(start, till <= end ? till : end);
+            var range = new Range(start, till <= end ? till : end);
+            range.Alias = offset.GetAliasFor(range);
+            yield return range;
         } while (till > end);
 
     }
