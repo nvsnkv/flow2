@@ -4,7 +4,7 @@ using Xunit.Categories;
 
 namespace Flow.Domain.Patterns.UnitTests;
 
-public class PatternBuilderShould
+public class AndPatternBuilderShould
 {
     [Theory, UnitTest]
     [InlineData(3, true)]
@@ -12,7 +12,7 @@ public class PatternBuilderShould
     public void BuildSimpleExpressions(object? value, bool expected)
     {
         
-        var pattern = new PatternBuilder<object?>().With(o => o != null).Build();
+        var pattern = new AndPatternBuilder<object?>().With(o => o != null).Build();
         var actual = pattern.Compile()(value);
 
         actual.Should().Be(expected);
@@ -24,7 +24,7 @@ public class PatternBuilderShould
     [InlineData(5, 3, "Another text", false)]
     public void BuildExpressionsWithComplexConditions(int expectedA, int a, string b, bool expected)
     {
-        var pattern = new PatternBuilder<TestData>().With(t => t.A, ta => ta == expectedA).Build();
+        var pattern = new AndPatternBuilder<TestData>().With(t => t.A, ta => ta == expectedA).Build();
         var actual = pattern.Compile()(new TestData(a, b));
 
         actual.Should().Be(expected);
@@ -33,7 +33,7 @@ public class PatternBuilderShould
     [Fact, UnitTest]
     public void BuildExpressionsWithMultipleConditions()
     {
-        var pattern = new PatternBuilder<TestData?>()
+        var pattern = new AndPatternBuilder<TestData?>()
             .With(t => t != null)
             .With(t => t == null? 0 : t.A, ta => ta == 5)
             .With(t => t == null? "" : t.B, tb => !string.IsNullOrEmpty(tb))
@@ -46,7 +46,7 @@ public class PatternBuilderShould
     [Fact, UnitTest]
     public void BuildExpressionsWithMultipleConditionsOnBaseTypes()
     {
-        var pattern = new PatternBuilder<object>()
+        var pattern = new AndPatternBuilder<object>()
             .With(t => t != new object())
             .With(t => t.ToString(), ta => ta!.Length > 0)
             .With(t => t.ToString(), ta => ta!.Length < 1000)

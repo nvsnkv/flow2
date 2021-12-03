@@ -26,15 +26,19 @@ internal class BuildCalendarCommand :CommandBase
 
     public async Task<int> Execute(BuildCalendarArgs arg, CancellationToken ct)
     {
-        var parsingResult = await parser.ParseFromStream(CreateReader(arg.DimensionsSetup), ct);
-        if (!parsingResult.Successful)
+        DimensionsParsingResult parsingResult;
+        using (var streamReader = CreateReader(arg.DimensionsSetup))
         {
-            foreach (var error in parsingResult.Errors)
+            parsingResult = await parser.ParseFromStream(streamReader, ct);
+            if (!parsingResult.Successful)
             {
-                await Console.Error.WriteLineAsync(error);
-            }
+                foreach (var error in parsingResult.Errors)
+                {
+                    await Console.Error.WriteLineAsync(error);
+                }
 
-            return 1;
+                return 1;
+            }
         }
 
         var (calendar, rejections) = await aggregator.GetCalendar(arg.From, arg.Till, arg.Currency, parsingResult.Header, parsingResult.Dimensions!, ct);

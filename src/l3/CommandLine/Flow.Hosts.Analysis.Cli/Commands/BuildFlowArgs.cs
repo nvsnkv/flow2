@@ -5,7 +5,7 @@ using JetBrains.Annotations;
 
 namespace Flow.Hosts.Analysis.Cli.Commands;
 
-[Verb("list", true, HelpText = "Builds the list of meaningful transactions that changes amount of money within the system.")]
+[Verb("list", HelpText = "Builds the list of meaningful transactions that changes amount of money within the system.")]
 internal class BuildFlowArgs : ArgsBase
 {
     private string? output;

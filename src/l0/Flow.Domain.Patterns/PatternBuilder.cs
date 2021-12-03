@@ -6,14 +6,22 @@ namespace Flow.Domain.Patterns
 {
     public class PatternBuilder<T>
     {
-        private Expression<Func<T, bool>> result = Constants<T>.Truth;
+        private readonly Func<Expression, Expression, BinaryExpression> combineFunc;
+
+        private Expression<Func<T, bool>> result;
         private ParameterExpression? param;
-        
+
+        public PatternBuilder(Expression<Func<T, bool>> seed, Func<Expression, Expression, BinaryExpression> combineFunc)
+        {
+            result = seed;
+            this.combineFunc = combineFunc;
+        }
+
         public PatternBuilder<T> With(Expression<Func<T, bool>> predicate)
         {
             param ??= predicate.Parameters.Single();
 
-            var body = Expression.AndAlso(result.Body, Expression.Invoke(predicate, param));
+            var body = combineFunc(result.Body, Expression.Invoke(predicate, param));
             result = Expression.Lambda<Func<T, bool>>(body, param);
             return this;
         }
@@ -21,9 +29,9 @@ namespace Flow.Domain.Patterns
         public PatternBuilder<T> With<TProp>(Expression<Func<T, TProp>> selector, Expression<Func<TProp, bool>> predicate)
         {
             param ??= selector.Parameters.Single();
-            
+
             var expr = Expression.Invoke(predicate, Expression.Invoke(selector, param));
-            var body = Expression.AndAlso(result.Body, expr);
+            var body = combineFunc(result.Body, expr);
             result = Expression.Lambda<Func<T, bool>>(body, param);
 
             return this;

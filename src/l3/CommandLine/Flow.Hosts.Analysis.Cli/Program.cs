@@ -29,9 +29,9 @@ var config = container.Resolve<IFlowConfiguration>();
 
 var parser = ParserHelper.Create(config);
 
-var arguments = parser.ParseArguments<BuildFlowArgs, BuildCalendarArgs>(args);
+var arguments = parser.ParseArguments<BuildCalendarArgs, BuildFlowArgs>(args);
 
 return await arguments.MapResult(
-    async (BuildFlowArgs arg) => await container.Resolve<BuildFlowCommand>().Execute(arg, CancellationToken.None),
     async (BuildCalendarArgs arg) => await container.Resolve<BuildCalendarCommand>().Execute(arg, CancellationToken.None),
+    async (BuildFlowArgs arg) => await container.Resolve<BuildFlowCommand>().Execute(arg, CancellationToken.None),
     async errs => await ParserHelper.HandleUnparsed(errs, arguments));

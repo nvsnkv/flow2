@@ -12,7 +12,7 @@ public class TransactionValidationRules
     public static readonly Expression<Func<Transaction, bool>> TitleIsNotEmpty = t => !string.IsNullOrEmpty(t.Title);
         
 
-    public static readonly Func<Transaction, bool> CheckTransaction = new PatternBuilder<Transaction>()
+    public static readonly Func<Transaction, bool> CheckTransaction = new AndPatternBuilder<Transaction>()
         .With(TimestampIsNotEmpty)
         .With(AmountIsNotZero)
         .With(CurrencyIsNotEmpty)

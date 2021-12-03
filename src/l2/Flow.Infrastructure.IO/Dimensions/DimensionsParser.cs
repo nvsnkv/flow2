@@ -1,8 +1,5 @@
-﻿using System.Collections.ObjectModel;
-using System.Net.Http.Headers;
-using Flow.Domain.Analysis;
+﻿using Flow.Domain.Analysis;
 using Flow.Domain.Patterns;
-using Flow.Domain.Patterns.Logical;
 using Flow.Domain.Transactions;
 using Flow.Infrastructure.IO.Contract;
 
@@ -97,11 +94,12 @@ internal class DimensionsParser : IDimensionsParser
                 new AggregationRule(
                     g.Key,
                     g.Select(r => r.Rule)
-                          .Aggregate(Constants<RecordedTransaction>.Falsity, (s, r) => s.Or(r))
+                          .Aggregate((PatternBuilder<RecordedTransaction>)new OrPatternBuilder<RecordedTransaction>(), (b, r) => b.With(r))
+                          .Build()
                           .Compile()
                     )
                 )
-            .Append(new AggregationRule(new Vector(Enumerable.Repeat(string.Empty, dimensionality)), Constants<RecordedTransaction>.Truth.Compile()));
+            .Append(new AggregationRule(new Vector(Enumerable.Repeat(string.Empty, dimensionality)), _ => true));
 
         return new DimensionsParsingResult(header, result, null);
     }

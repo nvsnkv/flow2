@@ -41,7 +41,7 @@ internal class TransactionCriteriaParser : ITransactionCriteriaParser
 
     public CriteriaParserResult<RecordedTransaction> ParseRecordedTransactionCriteria(IEnumerable<string> parts)
     {
-        var builder = new PatternBuilder<RecordedTransaction>();
+        var builder = new AndPatternBuilder<RecordedTransaction>();
         var errors = new List<string>();
 
         foreach (var part in parts)
@@ -56,7 +56,7 @@ internal class TransactionCriteriaParser : ITransactionCriteriaParser
         return new CriteriaParserResult<RecordedTransaction>(builder.Build(), errors);
     }
 
-    private ParsingResult ParseCondition(string part, PatternBuilder<RecordedTransaction> builder)
+    private ParsingResult ParseCondition(string part, AndPatternBuilder<RecordedTransaction> builder)
     {
         var match = criterionPattern.Match(part);
         if (!match.Success)
@@ -87,7 +87,7 @@ internal class TransactionCriteriaParser : ITransactionCriteriaParser
         };
     }
 
-    private ParsingResult HandleDateTime<T>(Expression<Func<T, DateTime>> selector, PatternBuilder<T> builder, Group opStart, Group arg, Group opEnd, Group neg) where T : Transaction
+    private ParsingResult HandleDateTime<T>(Expression<Func<T, DateTime>> selector, AndPatternBuilder<T> builder, Group opStart, Group arg, Group opEnd, Group neg) where T : Transaction
     {
         var result = ParsePropertyCondition(selector, ParseAttributeConditions<DateTime>(opStart, arg, opEnd, neg));
         if (result.Successful)
@@ -98,7 +98,7 @@ internal class TransactionCriteriaParser : ITransactionCriteriaParser
         return result;
     }
 
-    private ParsingResult HandleDecimal<T>(Expression<Func<T, decimal>> selector, PatternBuilder<T> builder, Group opStart, Group arg, Group opEnd, Group neg) where T : Transaction
+    private ParsingResult HandleDecimal<T>(Expression<Func<T, decimal>> selector, AndPatternBuilder<T> builder, Group opStart, Group arg, Group opEnd, Group neg) where T : Transaction
     {
         var result = ParsePropertyCondition(selector, ParseAttributeConditions<decimal>(opStart, arg, opEnd, neg));
         if (result.Successful)
@@ -109,7 +109,7 @@ internal class TransactionCriteriaParser : ITransactionCriteriaParser
         return result;
     }
     
-    private ParsingResult HandleLong<T>(Expression<Func<T, long>> selector, PatternBuilder<T> builder, Group opStart, Group arg, Group opEnd, Group neg) where T : Transaction
+    private ParsingResult HandleLong<T>(Expression<Func<T, long>> selector, AndPatternBuilder<T> builder, Group opStart, Group arg, Group opEnd, Group neg) where T : Transaction
     {
         var result = ParsePropertyCondition(selector, ParseAttributeConditions<long>(opStart, arg, opEnd, neg));
         if (result.Successful)
@@ -120,7 +120,7 @@ internal class TransactionCriteriaParser : ITransactionCriteriaParser
         return result;
     }
 
-    private ParsingResult HandleString<T>(Expression<Func<T, string?>> selector, PatternBuilder<T> builder, Group opStart, Group arg, Group opEnd, Group neg) where T : Transaction
+    private ParsingResult HandleString<T>(Expression<Func<T, string?>> selector, AndPatternBuilder<T> builder, Group opStart, Group arg, Group opEnd, Group neg) where T : Transaction
     {
         var result = ParsePropertyCondition(selector, ParseAttributeConditions<string?>(opStart, arg, opEnd, neg));
         if (result.Successful)
