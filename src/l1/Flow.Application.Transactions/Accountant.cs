@@ -72,7 +72,7 @@ internal class Accountant : IAccountant
         await foreach (var t in builder.Build(ct))
         {
             yield return t;
-        };
+        }
     }
 
     public async Task<IEnumerable<RejectedTransferKey>> EnforceTransfers(IEnumerable<TransferKey> keys, CancellationToken ct)

@@ -1,6 +1,4 @@
 ﻿using System.Collections.ObjectModel;
-using System.Dynamic;
-using System.Text;
 using Flow.Domain.Analysis;
 using Flow.Domain.Transactions;
 using Range = Flow.Domain.Analysis.Range;
