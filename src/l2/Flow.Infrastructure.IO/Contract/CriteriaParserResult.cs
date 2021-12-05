@@ -5,9 +5,14 @@ namespace Flow.Infrastructure.IO.Contract;
 
 public class CriteriaParserResult<T> where T: Transaction
 {
-    public CriteriaParserResult(Expression<Func<T, bool>>? conditions, IEnumerable<string> errors)
+    public CriteriaParserResult(Expression<Func<T, bool>>? conditions)
     {
         Conditions = conditions;
+        Errors = Enumerable.Empty<string>();
+    }
+
+    public CriteriaParserResult(IEnumerable<string> errors)
+    {
         Errors = errors;
     }
 

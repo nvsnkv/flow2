@@ -62,7 +62,7 @@ internal class CalendarBuilder
             {
                 if (!rows.ContainsKey(vector))
                 {
-                    rows.Add(vector, new List<decimal?>(ranges.Count));
+                    rows.Add(vector, new List<decimal?>(Enumerable.Repeat((decimal?)null, ranges.Count)));
                 }
 
                 var index = GetIndex(transaction, ranges);
@@ -88,6 +88,8 @@ internal class CalendarBuilder
             {
                 return result;
             }
+
+            result++;
         }
 
         if (rejectionsHandler != null)

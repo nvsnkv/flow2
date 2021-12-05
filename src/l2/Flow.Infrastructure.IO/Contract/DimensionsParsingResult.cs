@@ -2,6 +2,7 @@
 
 namespace Flow.Infrastructure.IO.Contract;
 
+[Obsolete("Use AggregationSetupParsingResult instead")]
 public class DimensionsParsingResult
 {
     public DimensionsParsingResult(Vector? header, IEnumerable<AggregationRule>? dimensions, IEnumerable<string>? errors)

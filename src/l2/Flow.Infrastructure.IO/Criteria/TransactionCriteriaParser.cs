@@ -53,7 +53,9 @@ internal class TransactionCriteriaParser : ITransactionCriteriaParser
             }
         }
 
-        return new CriteriaParserResult<RecordedTransaction>(builder.Build(), errors);
+        return errors.Any() 
+            ? new  CriteriaParserResult<RecordedTransaction>(errors)
+            : new CriteriaParserResult<RecordedTransaction>(builder.Build());
     }
 
     private ParsingResult ParseCondition(string part, AndPatternBuilder<RecordedTransaction> builder)
