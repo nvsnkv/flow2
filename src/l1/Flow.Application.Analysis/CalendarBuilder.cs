@@ -7,7 +7,7 @@ namespace Flow.Application.Analysis;
 
 internal class CalendarBuilder
 {
-    private readonly List<AggregationRule> rules = new();
+    private readonly List<AggregationGroup> groups = new();
     private readonly IAsyncEnumerable<RecordedTransaction> transactions;
     private readonly DateTime from;
     private readonly DateTime till;
@@ -29,10 +29,10 @@ internal class CalendarBuilder
         return this;
     }
 
-    public CalendarBuilder WithAggregationRules(AggregationRule aggregationRule)
+    public CalendarBuilder WithAggregationGroup(AggregationGroup group)
     {
-        if (rules.Any(d => d.Dimensions.Equals(aggregationRule.Dimensions))) { throw new ArgumentException("Dimension with the same name was already added!"); }
-        rules.Add(aggregationRule);
+        if (groups.Any(g => g.Name == group.Name)) { throw new ArgumentException("Group with this name already added!"); }
+        groups.Add(group);
 
         return this;
     }
@@ -57,8 +57,8 @@ internal class CalendarBuilder
 
         await foreach (var transaction in transactions.WithCancellation(ct))
         {
-            var vector = GetVector(transaction);
-            if (vector != null)
+            var vectors = GetVectors(transaction);
+            foreach (var vector in vectors)
             {
                 if (!rows.ContainsKey(vector))
                 {
@@ -100,17 +100,28 @@ internal class CalendarBuilder
         return -1;
     }
 
-    private Vector? GetVector(RecordedTransaction transaction)
+    private IEnumerable<Vector> GetVectors(RecordedTransaction transaction)
     {
-        var matchedDimensions = rules.Where(r => r.Rule(transaction)).ToList();
+        return groups.Select(group => GetMatchedVector(transaction, group)).Where(v => v != null)!;
+    }
 
-        if(!matchedDimensions.Any())
+    private Vector? GetMatchedVector(RecordedTransaction transaction, AggregationGroup group)
+    {
+        var matchedDimensions = group.Rules.Where(r => r.Rule(transaction)).ToList();
+
+        if (!matchedDimensions.Any())
         {
-            if (rejectionsHandler != null)
+            if (group.Subgroup == null)
             {
-                rejectionsHandler(new RejectedTransaction(transaction, $"Given transaction does not match to any aggregation rule!"));
+                if (rejectionsHandler != null)
+                {
+                    rejectionsHandler(new RejectedTransaction(transaction, $"Given transaction does not match to any aggregation rule!"));
+                }
+
+                return null;
             }
-            return null;
+
+            return GetMatchedVector(transaction, group.Subgroup);
         }
 
         if (matchedDimensions.Count > 1)
@@ -123,7 +134,6 @@ internal class CalendarBuilder
         }
 
         return matchedDimensions.First().Dimensions;
-
     }
 
     private IEnumerable<Range> GetRanges()

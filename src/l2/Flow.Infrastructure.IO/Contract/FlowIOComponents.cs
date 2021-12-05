@@ -105,7 +105,11 @@ public class FlowIOComponents : Module
             return new CalendarWriter(csv, json);
         }).InstancePerLifetimeScope().AsImplementedInterfaces();
 
-        builder.RegisterType<DimensionsParser>().InstancePerLifetimeScope().AsImplementedInterfaces();
+        builder.Register(c =>
+        {
+            var criteriaParser = c.Resolve<ITransactionCriteriaParser>();
+            return new AggregationSetupParser(';', criteriaParser);
+        }).InstancePerLifetimeScope().AsImplementedInterfaces();
 
         base.Load(builder);
     }

@@ -2,7 +2,7 @@
 
 namespace Flow.Infrastructure.IO.Dimensions;
 
-internal class AggregationSetupParser
+internal class AggregationSetupParser : IAggregationSetupParser
 {
     private readonly ITransactionCriteriaParser criteriaParser;
     private readonly char separator;
