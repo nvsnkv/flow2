@@ -4,7 +4,6 @@ using Flow.Domain.Analysis;
 using Flow.Domain.Patterns;
 using Flow.Domain.Transactions;
 using Flow.Infrastructure.IO.Contract;
-using JetBrains.Annotations;
 
 namespace Flow.Infrastructure.IO.Dimensions;
 

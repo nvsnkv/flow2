@@ -80,7 +80,7 @@ public class AggregationSetupParserShould
         result.Successful.Should().BeFalse();
         result.Setup.Should().BeNull();
 
-        var expectedErrors = new string[]
+        var expectedErrors = new[]
         {
             "2: Failed to parse aggregation rule! Rule must contain have same amount of dimensions as defined in header and must ends with transaction criteria!",
             "3: Failed to parse aggregation rule! Rule must contain have same amount of dimensions as defined in header and must ends with transaction criteria!",
