@@ -34,6 +34,15 @@ public class AggregationSetupParserShould
                                                    group 1; t=1
                                                    group 2; a>=5";
 
+    private readonly string cascading = @"Dimension
+                                          group: totals
+                                          total;k>=0
+                                          group: A
+                                          As;ttl~A
+                                          subgroup: b
+                                          Bs;ttl~b
+                                          Cs;ttl~c";
+
     private readonly AggregationSetupParser parser;
 
     public AggregationSetupParserShould()
@@ -123,5 +132,37 @@ public class AggregationSetupParserShould
         group2.Rule(negativeGroup1).Should().BeFalse();
         group2.Rule(titleGroup1).Should().BeFalse();
         group2.Rule(amountGroup2).Should().BeTrue();
+    }
+
+    [Fact, IntegrationTest]
+    public async Task BuildCascadedRules() 
+    {
+        await using var memoryStream = new MemoryStream(Encoding.UTF8.GetBytes(cascading));
+        using var reader = new StreamReader(memoryStream);
+        var result = await parser.ParseFromStream(reader, CancellationToken.None);
+
+        result.Successful.Should().BeTrue();
+        result.Setup.Should().NotBeNull();
+
+        var groups = result.Setup!.Groups;
+        groups.Should().HaveCount(2);
+
+        var t = groups[0];
+        t.Name.Should().Be("totals");
+        t.Rules.Should().HaveCount(1);
+        t.Rules.Single().Dimensions.Should().BeEquivalentTo("total");
+
+        var a = groups[1];
+        a.Name.Should().Be("A");
+        a.Rules.Should().HaveCount(1);
+        a.Rules.Single().Dimensions.Should().BeEquivalentTo("As");
+        a.Subgroup.Should().NotBeNull();
+        
+        var b = a.Subgroup!;
+        b.Name.Should().Be("b");
+        b.Rules.Should().HaveCount(2);
+        b.Rules[0].Dimensions.Should().BeEquivalentTo("Bs");
+        b.Rules[1].Dimensions.Should().BeEquivalentTo("Cs");
+        b.Subgroup.Should().BeNull();
     }
 }
