@@ -29,6 +29,11 @@ public class AggregationSetupParserShould
                                              
                                              Valid; But ignored;a=0";
 
+    private readonly string multipleConditions = @"Dminesion 1
+                                                   group 1; a<0
+                                                   group 1; t=1
+                                                   group 2; a>=5";
+
     private readonly AggregationSetupParser parser;
 
     public AggregationSetupParserShould()
@@ -89,6 +94,34 @@ public class AggregationSetupParserShould
         };
 
         result.Errors.Should().BeEquivalentTo(expectedErrors);
+    }
 
+    [Fact, IntegrationTest]
+    public async Task CombineDiffererntRules() 
+    {
+        await using var memoryStream = new MemoryStream(Encoding.UTF8.GetBytes(multipleConditions));
+        using var reader = new StreamReader(memoryStream);
+        var result = await parser.ParseFromStream(reader, CancellationToken.None);
+
+        result.Successful.Should().BeTrue();
+        result.Setup.Should().NotBeNull();
+        result.Setup!.Groups.Should().HaveCount(1);
+        var group = result.Setup.Groups.Single();
+
+        group.Rules.Should().HaveCount(2);
+        var group1 = group.Rules[0];
+        var group2 = group.Rules[1];
+
+        var negativeGroup1 = new RecordedTransaction(0, DateTime.UtcNow, -1, "RUR", null, "title", accountInfo);
+        var titleGroup1 = new RecordedTransaction(0, DateTime.UtcNow, 2, "RUR", null, "1", accountInfo);
+        var amountGroup2 = new RecordedTransaction(0, DateTime.UtcNow, 15, "RUR", null, "title", accountInfo);   
+
+        group1.Rule(negativeGroup1).Should().BeTrue();
+        group1.Rule(titleGroup1).Should().BeTrue();
+        group1.Rule(amountGroup2).Should().BeFalse();
+
+        group2.Rule(negativeGroup1).Should().BeFalse();
+        group2.Rule(titleGroup1).Should().BeFalse();
+        group2.Rule(amountGroup2).Should().BeTrue();
     }
 }
