@@ -17,14 +17,25 @@ internal class CsvCalendarWriter
     {
         await using var csvWriter = new CsvWriter(writer, config);
         var headerRow = GetRow(calendar.Dimensions, calendar.Ranges, r => r.Alias);
-        await csvWriter.WriteRecordsAsync(headerRow, ct);
+        foreach (var o in headerRow)
+        {
+            if (ct.IsCancellationRequested) { return; }
+            csvWriter.WriteField(o);
+        }
+        await csvWriter.NextRecordAsync();
 
         foreach (var value in calendar.Values)
         {
             if (ct.IsCancellationRequested) { return; }
 
-            var row = GetRow(value.Key, value.Value);
-            await csvWriter.WriteRecordsAsync(row, ct);
+            var row = GetRow(value.Key, value.Value).ToList();
+            foreach (var o in row)
+            {
+                if (ct.IsCancellationRequested) { return; }
+                csvWriter.WriteField(o);
+            }
+
+            await csvWriter.NextRecordAsync();
         }
     }
     

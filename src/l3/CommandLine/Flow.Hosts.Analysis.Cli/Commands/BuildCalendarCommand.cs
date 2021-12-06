@@ -44,20 +44,22 @@ internal class BuildCalendarCommand :CommandBase
         var (calendar, rejections) = await aggregator.GetCalendar(arg.From, arg.Till, arg.Currency, parsingResult.Setup!, ct);
 
         var rejectionsWithCount = new EnumerableWithCount<RejectedTransaction>(rejections);
-
-        await using (var rejWriter = CreateWriter(arg.RejectedPath))
+        
+        var rejectedPath = arg.RejectedPath ?? GetFallbackOutputPath(SupportedFormat.CSV, "flow", "rejected");
+        await using (var rejWriter = CreateWriter(rejectedPath))
         {
             await rejectionsWriter.WriteRejections(rejWriter, rejectionsWithCount, arg.Format, ct);
             if (rejectionsWithCount.Count > 0)
             {
-                await TryStartEditor(arg.RejectedPath, arg.Format, false);
+                await TryStartEditor(rejectedPath, arg.Format, false);
             }
         }
 
-        await using var writer = CreateWriter(arg.OutputPath);
+        var outputPath = arg.OutputPath ?? GetFallbackOutputPath(SupportedFormat.CSV, "flow", "calendar");
+        await using var writer = CreateWriter(outputPath);
         await calendarWriter.WriteCalendar(writer, calendar, arg.Format, ct);
 
-        await TryStartEditor(arg.OutputPath, arg.Format, false);
+        await TryStartEditor(outputPath, arg.Format, false);
         return 0;
     }
 }
