@@ -1,4 +1,6 @@
 ﻿using System.Linq.Expressions;
+using System.Net.NetworkInformation;
+using System.Text;
 using System.Text.RegularExpressions;
 using Flow.Domain.Patterns;
 using Flow.Domain.Transactions;
@@ -37,6 +39,44 @@ internal class TransactionCriteriaParser : ITransactionCriteriaParser
     public TransactionCriteriaParser(GenericParser parser)
     {
         this.parser = parser;
+    }
+
+    public CriteriaParserResult<RecordedTransaction> ParseRecordedTransactionCriteria(string input)
+    {
+        return ParseRecordedTransactionCriteria(GetParts(input));
+    }
+
+    private static IEnumerable<string> GetParts(string part)
+    {
+        var builder = new StringBuilder();
+        var i = 0;
+        var quotes = false;
+
+        while (i < part.Length)
+        {
+            if (part[i] == '"')
+            {
+                quotes = !quotes;
+            }
+            else if (part[i] == ' ' && !quotes)
+            {
+                var result = builder.ToString();
+                builder.Clear();
+
+                if (!string.IsNullOrEmpty(result))
+                {
+                    yield return result;
+                }
+            }
+            else
+            {
+                builder.Append(part[i]);
+            }
+
+            i++;
+        }
+
+        yield return builder.ToString();
     }
 
     public CriteriaParserResult<RecordedTransaction> ParseRecordedTransactionCriteria(IEnumerable<string> parts)

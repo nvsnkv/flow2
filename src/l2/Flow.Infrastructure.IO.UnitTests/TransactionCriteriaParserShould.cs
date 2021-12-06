@@ -17,8 +17,7 @@ public class TransactionCriteriaParserShould : TestDataCarrier
     public void CreateTransactionCriteria(string cultureCode, string textInput, Func<Transaction, bool> expectedSelector)
     {
         var culture = CultureInfo.GetCultureInfo(cultureCode);
-        var input = textInput.Split(' ');
-        var result = new TransactionCriteriaParser(new GenericParser(culture, DateTimeStyles.AssumeLocal, NumberStyles.Any)).ParseRecordedTransactionCriteria(input);
+        var result = new TransactionCriteriaParser(new GenericParser(culture, DateTimeStyles.AssumeLocal, NumberStyles.Any)).ParseRecordedTransactionCriteria(textInput);
         result.Successful.Should().BeTrue();
         result.Errors.Should().BeEmpty();
 
@@ -32,8 +31,7 @@ public class TransactionCriteriaParserShould : TestDataCarrier
     public void CreateRecordedTransactionCriteria(string cultureCode, string textInput, Func<RecordedTransaction, bool> expectedSelector)
     {
         var culture = CultureInfo.GetCultureInfo(cultureCode);
-        var input = textInput.Split(' ');
-        var result = new TransactionCriteriaParser(new GenericParser(culture, DateTimeStyles.AssumeLocal, NumberStyles.Any)).ParseRecordedTransactionCriteria(input);
+        var result = new TransactionCriteriaParser(new GenericParser(culture, DateTimeStyles.AssumeLocal, NumberStyles.Any)).ParseRecordedTransactionCriteria(textInput);
         result.Successful.Should().BeTrue();
         result.Errors.Should().BeEmpty();
 
@@ -80,7 +78,8 @@ public class TransactionCriteriaParserShould : TestDataCarrier
 
         new object[] {"ts[2021-11-05:2021-11-06)", (Func<RecordedTransaction, bool>)(a => new DateTime(2021, 11, 05).ToUniversalTime() <= a.Timestamp &&  a.Timestamp < new DateTime(2021, 11, 06).ToUniversalTime()) },
         
-        new object[] {"c(RUB,EUR) t%s", (Func<RecordedTransaction, bool>)(a => new [] {"RUB", "EUR" }.Contains(a.Currency) && a.Title.Contains('s')), }
+        new object[] {"c(RUB,EUR) t%s", (Func<RecordedTransaction, bool>)(a => new [] {"RUB", "EUR" }.Contains(a.Currency) && a.Title.Contains('s')), },
+        new object[] { "cat=\"Special symbols\"", (Func<RecordedTransaction, bool>)(a => a.Category == "Special symbols") }
     }.Join(
         new[] { "ru-RU", "en-US" },
         _ => true, _ => true,
