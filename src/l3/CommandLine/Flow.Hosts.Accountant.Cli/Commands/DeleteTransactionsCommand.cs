@@ -1,4 +1,5 @@
-﻿using Flow.Application.Transactions.Contract;
+﻿using System.Text;
+using Flow.Application.Transactions.Contract;
 using Flow.Hosts.Common.Commands;
 using Flow.Infrastructure.Configuration.Contract;
 using Flow.Infrastructure.IO.Contract;
@@ -18,7 +19,7 @@ internal class DeleteTransactionsCommand : CommandBase
 
     public async Task<int> Execute(DeleteTransactionsArgs args, CancellationToken ct)
     {
-        var criteria = parser.ParseRecordedTransactionCriteria(args.Criteria ?? Enumerable.Empty<string>());
+        var criteria = parser.ParseRecordedTransactionCriteria((args.Criteria ?? Enumerable.Empty<string>()).Aggregate(new StringBuilder(), (s, v) => s.Append(v)).ToString());
         if (!criteria.Successful)
         {
             foreach (var error in criteria.Errors)

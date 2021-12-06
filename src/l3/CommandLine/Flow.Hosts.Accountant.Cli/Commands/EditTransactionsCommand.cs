@@ -3,6 +3,7 @@ using Flow.Domain.Transactions.Collections;
 using Flow.Infrastructure.Configuration.Contract;
 using Flow.Infrastructure.IO.Contract;
 using System.Linq.Expressions;
+using System.Text;
 using Flow.Application.Transactions.Contract;
 using Flow.Domain.Common.Collections;
 using Flow.Hosts.Common.Commands;
@@ -68,7 +69,7 @@ internal class EditTransactionsCommand : CommandBase
         var interim = GetFallbackOutputPath(args.Format, "list", "transactions");
         var errors = GetFallbackOutputPath(args.Format, "edit", "rejected-transactions");
 
-        var parserResult = criteriaParser.ParseRecordedTransactionCriteria(args.Criteria ?? Enumerable.Empty<string>());
+        var parserResult = criteriaParser.ParseRecordedTransactionCriteria((args.Criteria ?? Enumerable.Empty<string>()).Aggregate(new StringBuilder(), (s, v) => s.Append(v)).ToString());
         if (!parserResult.Successful)
         {
             foreach(var error in parserResult.Errors)

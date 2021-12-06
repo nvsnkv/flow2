@@ -1,5 +1,4 @@
 ﻿using System.Linq.Expressions;
-using System.Net.NetworkInformation;
 using System.Text;
 using System.Text.RegularExpressions;
 using Flow.Domain.Patterns;
@@ -79,7 +78,7 @@ internal class TransactionCriteriaParser : ITransactionCriteriaParser
         yield return builder.ToString();
     }
 
-    public CriteriaParserResult<RecordedTransaction> ParseRecordedTransactionCriteria(IEnumerable<string> parts)
+    private CriteriaParserResult<RecordedTransaction> ParseRecordedTransactionCriteria(IEnumerable<string> parts)
     {
         var builder = new AndPatternBuilder<RecordedTransaction>();
         var errors = new List<string>();

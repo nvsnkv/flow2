@@ -113,7 +113,7 @@ internal class AggregationSetupParserResultBuilder
             var dimensions = split.Take(dimensionality);
             var ruleString = split.Last();
 
-            var parseResult = criteriaParser.ParseRecordedTransactionCriteria(ruleString.Split(' '));
+            var parseResult = criteriaParser.ParseRecordedTransactionCriteria(ruleString);
             if (!parseResult.Successful)
             {
                 errorHandler($"{line}: Failed to parse criteria for [{string.Join(", ", dimensions)}]: {Environment.NewLine}  {string.Join(", ", parseResult.Errors)}");
