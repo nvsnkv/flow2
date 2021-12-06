@@ -18,7 +18,7 @@ internal class AggregationSetupParserResultBuilder
 
     private int line;
     private int groupsFound;
-
+    private string? text;
 
     public AggregationSetupParserResultBuilder(char separator, StreamReader reader, ITransactionCriteriaParser criteriaParser, CancellationToken ct)
     {
@@ -54,10 +54,10 @@ internal class AggregationSetupParserResultBuilder
 
     private async IAsyncEnumerable<AggregationGroup?> ParseGroups(int dimensionality, Action<string> errorHandler, [EnumeratorCancellation] CancellationToken ct)
     {
-        var text = await ReadLine();
+        text = await ReadLine();
         while (!ct.IsCancellationRequested && !reader.EndOfStream)
         {
-            var group = await ParseGroup(text, dimensionality, errorHandler);
+            var group = await ParseGroup(dimensionality, errorHandler);
             if (group != null)
             {
                 yield return group;
@@ -71,7 +71,7 @@ internal class AggregationSetupParserResultBuilder
 
     }
 
-    private async Task<AggregationGroup?> ParseGroup(string? text, int dimensionality, Action<string> errorHandler)
+    private async Task<AggregationGroup?> ParseGroup(int dimensionality, Action<string> errorHandler)
     {
         if (text == null)
         {
@@ -140,7 +140,7 @@ internal class AggregationSetupParserResultBuilder
         AggregationGroup? subgroup =  null;
         if (subGroupDetected)
         {
-            subgroup = await ParseGroup(text, dimensionality, errorHandler);
+            subgroup = await ParseGroup(dimensionality, errorHandler);
         }
 
         groupsFound++;
@@ -160,7 +160,7 @@ internal class AggregationSetupParserResultBuilder
 
     private async Task<Vector?> ParseHeader()
     {
-        var text = await ReadLine();
+        text = await ReadLine();
         if (text == null) { return null; }
 
         var chunks = text.Split(separator, StringSplitOptions.TrimEntries);

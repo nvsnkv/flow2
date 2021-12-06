@@ -38,10 +38,10 @@ public class AggregationSetupParserShould
                                           group: totals
                                           total;k>=0
                                           group: A
-                                          As;ttl~A
+                                          As;t%A
                                           subgroup: b
-                                          Bs;ttl~b
-                                          Cs;ttl~c";
+                                          Bs;t%b
+                                          Cs;t%c";
 
     private readonly AggregationSetupParser parser;
 
