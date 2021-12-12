@@ -23,7 +23,7 @@ internal class TransactionRow
 
     public static explicit operator Transaction(TransactionRow row)
     {
-        return new Transaction(row.TIMESTAMP ?? default, row.AMOUNT ?? default, row.CURRENCY ?? string.Empty, row.CATEGORY, row.TITLE ?? string.Empty, new AccountInfo(row.ACCOUNT ?? string.Empty, row.BANK ?? string.Empty));
+        return new Transaction((row.TIMESTAMP ?? default).ToUniversalTime(), row.AMOUNT ?? default, row.CURRENCY ?? string.Empty, row.CATEGORY, row.TITLE ?? string.Empty, new AccountInfo(row.ACCOUNT ?? string.Empty, row.BANK ?? string.Empty));
     }
 
     public static explicit operator TransactionRow(Transaction t)

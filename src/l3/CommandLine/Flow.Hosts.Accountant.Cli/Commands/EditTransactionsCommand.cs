@@ -58,7 +58,7 @@ internal class EditTransactionsCommand : CommandBase
             Expression<Func<RecordedTransaction, bool>> conditions = t => initial.Min <= t.Timestamp && t.Timestamp <= initial.Max;
             var interim = GetFallbackOutputPath(format, "add", "edit-appended");
 
-            return await Edit(conditions, format, ct, errsPath, interim, rejected);
+            return await Edit(conditions, format, ct, interim, rejected.Count > 0 ? null : errsPath, rejected);
         }
 
         return 0;
