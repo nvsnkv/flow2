@@ -28,7 +28,7 @@ public class FlowIOComponents : Module
                           ?? CultureInfo.CurrentCulture;
 
             var csv = new CsvSerializer(new CsvConfiguration(culture) { LeaveOpen = true, HeaderValidated = null });
-            var json = new JsonSerializer(new JsonSerializerSettings { Culture = culture });
+            var json = new JsonSerializer(new JsonSerializerSettings { Culture = culture, Formatting = Formatting.Indented });
             return new TransactionsIOFacade(csv, json);
         }).InstancePerLifetimeScope().AsImplementedInterfaces();
         
@@ -42,7 +42,7 @@ public class FlowIOComponents : Module
                           ?? CultureInfo.CurrentCulture;
 
             var csv = new CsvRejectionsWriter(new CsvConfiguration(culture) { LeaveOpen = true, HeaderValidated = null });
-            var json = new JsonRejectionsWriter(new JsonSerializerSettings { Culture = culture });
+            var json = new JsonRejectionsWriter(new JsonSerializerSettings { Culture = culture, Formatting = Formatting.Indented });
             return new RejectionsWriter(csv, json);
         }).InstancePerLifetimeScope().AsImplementedInterfaces();
         
@@ -56,7 +56,7 @@ public class FlowIOComponents : Module
                           ?? CultureInfo.CurrentCulture;
 
             var csv = new CsvSerializer(new CsvConfiguration(culture) { LeaveOpen = true, HeaderValidated = null });
-            var json = new JsonSerializer(new JsonSerializerSettings { Culture = culture });
+            var json = new JsonSerializer(new JsonSerializerSettings { Culture = culture, Formatting = Formatting.Indented });
             return new TransfersIOFacade(csv, json);
         }).InstancePerLifetimeScope().AsImplementedInterfaces();
         
@@ -70,7 +70,7 @@ public class FlowIOComponents : Module
                           ?? CultureInfo.CurrentCulture;
 
             var csv = new CsvSerializer(new CsvConfiguration(culture) { LeaveOpen = true, HeaderValidated = null });
-            var json = new JsonSerializer(new JsonSerializerSettings { Culture = culture });
+            var json = new JsonSerializer(new JsonSerializerSettings { Culture = culture, Formatting = Formatting.Indented });
             return new ExchangeRatesSerializer(csv, json);
         }).InstancePerLifetimeScope().AsImplementedInterfaces();
 
@@ -100,7 +100,7 @@ public class FlowIOComponents : Module
                           ?? CultureInfo.CurrentCulture;
 
             var csv = new CsvCalendarWriter(new CsvConfiguration(culture) { LeaveOpen = true, HeaderValidated = null });
-            var json = new JsonCalendarWriter(new JsonSerializerSettings() { Culture = culture });
+            var json = new JsonCalendarWriter(new JsonSerializerSettings() { Culture = culture, Formatting = Formatting.Indented });
 
             return new CalendarWriter(csv, json);
         }).InstancePerLifetimeScope().AsImplementedInterfaces();

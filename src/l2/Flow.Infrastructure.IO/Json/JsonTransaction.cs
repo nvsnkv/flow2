@@ -30,4 +30,22 @@ internal class JsonTransaction
         var acc = new AccountInfo(js.Account?.Name ?? string.Empty, js.Account?.Bank ?? string.Empty);
         return new Transaction(js.Timestamp ?? default, js.Amount ?? default, js.Currency ?? string.Empty, js.Category, js.Title ?? string.Empty, acc);
     }
+
+    public static explicit operator JsonTransaction(Transaction t)
+    {
+        return new JsonTransaction
+        {
+            Account = new JsonAccountInfo
+            {
+                Name = t.Account.Name,
+                Bank = t.Account.Bank
+            },
+
+            Amount = t.Amount,
+            Category = t.Category,
+            Currency = t.Currency,
+            Title = t.Title,
+            Timestamp = t.Timestamp
+        };
+    }
 }

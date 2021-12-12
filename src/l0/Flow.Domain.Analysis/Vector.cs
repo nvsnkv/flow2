@@ -54,6 +54,11 @@ public class Vector : IEnumerable<string>
         return GetEnumerator();
     }
 
+    public override string ToString()
+    {
+        return string.Join(", ", values);
+    }
+
     public static bool operator ==(Vector? left, Vector? right)
     {
         return Equals(left, right);

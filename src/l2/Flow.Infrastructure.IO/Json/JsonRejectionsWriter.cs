@@ -13,7 +13,7 @@ internal class JsonRejectionsWriter : JsonSerializer
 
     public async Task WriteRejections(StreamWriter writer, IEnumerable<RejectedTransaction> rejections, CancellationToken ct)
     {
-        await Write(writer, rejections, ct);
+        await Write(writer, rejections.Select(t => new RejectedTransaction((Transaction)(JsonTransaction)t.Transaction, t.Reasons)), ct);
     }
 
     public async Task WriteRejections(StreamWriter writer, IEnumerable<RejectedTransferKey> rejections, CancellationToken ct)

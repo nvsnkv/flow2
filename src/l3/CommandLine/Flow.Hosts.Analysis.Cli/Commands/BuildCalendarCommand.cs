@@ -45,7 +45,7 @@ internal class BuildCalendarCommand :CommandBase
 
         var rejectionsWithCount = new EnumerableWithCount<RejectedTransaction>(rejections);
         
-        var rejectedPath = arg.RejectedPath ?? GetFallbackOutputPath(SupportedFormat.CSV, "flow", "rejected");
+        var rejectedPath = arg.RejectedPath ?? GetFallbackOutputPath(arg.Format, "flow", "rejected");
         await using (var rejWriter = CreateWriter(rejectedPath))
         {
             await rejectionsWriter.WriteRejections(rejWriter, rejectionsWithCount, arg.Format, ct);
@@ -55,7 +55,7 @@ internal class BuildCalendarCommand :CommandBase
             }
         }
 
-        var outputPath = arg.OutputPath ?? GetFallbackOutputPath(SupportedFormat.CSV, "flow", "calendar");
+        var outputPath = arg.OutputPath ?? GetFallbackOutputPath(arg.Format, "flow", "calendar");
         await using var writer = CreateWriter(outputPath);
         await calendarWriter.WriteCalendar(writer, calendar, arg.Format, ct);
 
