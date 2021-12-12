@@ -13,7 +13,7 @@ public class Range
 
     public DateTime End { get; }
 
-    public string Alias { get; set; }
+    public string? Alias { get; set; }
 
     protected bool Equals(Range other)
     {

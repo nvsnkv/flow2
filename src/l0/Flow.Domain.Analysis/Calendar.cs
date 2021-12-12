@@ -2,7 +2,7 @@
 
 public class Calendar
 {
-    public Calendar(IReadOnlyList<Range> ranges, Vector dimensions, IReadOnlyDictionary<Vector, IReadOnlyList<decimal?>> values)
+    public Calendar(IReadOnlyList<Range> ranges, Vector dimensions, IReadOnlyDictionary<Vector, IReadOnlyList<Aggregate>> values)
     {
         Ranges = ranges;
         Dimensions = dimensions;
@@ -13,5 +13,5 @@ public class Calendar
 
     public Vector Dimensions { get; }
 
-    public IReadOnlyDictionary<Vector, IReadOnlyList<decimal?>> Values { get; }
+    public IReadOnlyDictionary<Vector, IReadOnlyList<Aggregate>> Values { get; }
 }

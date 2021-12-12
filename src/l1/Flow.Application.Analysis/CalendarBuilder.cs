@@ -53,7 +53,7 @@ internal class CalendarBuilder
     public async Task<Calendar> Build(CancellationToken ct)
     {
         var ranges = GetRanges().ToList().AsReadOnly();
-        var rows = new Dictionary<Vector, List<decimal?>>();
+        var rows = new Dictionary<Vector, List<AggregateBuilder>>();
 
         await foreach (var transaction in transactions.WithCancellation(ct))
         {
@@ -62,19 +62,32 @@ internal class CalendarBuilder
             {
                 if (!rows.ContainsKey(vector))
                 {
-                    rows.Add(vector, new List<decimal?>(Enumerable.Repeat((decimal?)null, ranges.Count)));
+                    var rowValues = new List<AggregateBuilder>();
+                    while(rowValues.Count < ranges.Count)
+                    {
+                        rowValues.Add(new AggregateBuilder());
+                    }
+                    rows.Add(vector,rowValues);
                 }
 
                 var index = GetIndex(transaction, ranges);
                 if (index >= 0)
                 {
-                    var amount = rows[vector][index] ?? 0;
-                    rows[vector][index] = amount + transaction.Amount;
+                    rows[vector][index].Append(transaction);
                 }
             }
         }
 
-        var values = new ReadOnlyDictionary<Vector, IReadOnlyList<decimal?>>(rows.ToDictionary(r => r.Key, r => (IReadOnlyList<decimal?>)r.Value.AsReadOnly()));
+        var values = new ReadOnlyDictionary<Vector, IReadOnlyList<Aggregate>>(
+            rows.ToDictionary(
+                r => r.Key, 
+                r => (IReadOnlyList<Aggregate>)r.Value
+                    .Select(b => b.Build())
+                    .ToList()
+                    .AsReadOnly()
+                )
+            );
+
         return new Calendar(ranges, header ?? Vector.Empty, values);
     }
 
