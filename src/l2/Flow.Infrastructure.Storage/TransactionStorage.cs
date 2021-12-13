@@ -14,7 +14,7 @@ internal class TransactionStorage : ITransactionsStorage
         this.factory = factory;
     }
 
-    public async Task<IEnumerable<RejectedTransaction>> Create(IEnumerable<Transaction> transactions, CancellationToken ct)
+    public async Task<IEnumerable<RejectedTransaction>> Create(IEnumerable<(Transaction, Overrides?)> transactions, CancellationToken ct)
     {
         await using var context = await factory.CreateDbContextAsync(ct);
         foreach (var t in transactions)
@@ -67,7 +67,7 @@ internal class TransactionStorage : ITransactionsStorage
                     target.DbAccount.Transactions.Remove(target);
                     if (target.DbAccount != upd.Account)
                     {
-                        await AddTransaction(upd, context, ct);
+                        await AddTransaction((upd, upd.Overrides), context, ct);
                     }
                     else
                     {
@@ -96,8 +96,9 @@ internal class TransactionStorage : ITransactionsStorage
         return await context.SaveChangesAsync(ct);
     }
 
-    private static async Task AddTransaction(Transaction t, FlowDbContext context, CancellationToken ct)
+    private static async Task AddTransaction((Transaction, Overrides?) pair, FlowDbContext context, CancellationToken ct)
     {
+        var (t, o) = pair;
         var account = await GetAccount(context, t.Account, ct);
         if (account == null)
         {
@@ -111,7 +112,13 @@ internal class TransactionStorage : ITransactionsStorage
             }
         }
 
-        account.Transactions.Add(new DbTransaction(t.Timestamp, t.Amount, t.Currency, t.Category, t.Title, account));
+        var dbTransaction = new DbTransaction(t.Timestamp, t.Amount, t.Currency, t.Category, t.Title, account);
+        if (o != null)
+        {
+            dbTransaction.Overrides = o;
+        }
+
+        account.Transactions.Add(dbTransaction);
     }
 
     private  static async Task<DbAccount?> GetAccount(FlowDbContext context, AccountInfo account, CancellationToken ct)

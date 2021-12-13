@@ -21,6 +21,23 @@ internal class TransactionRow
 
     public string? BANK { get; init; }
 
+    public string? COMMENT { get; init; }
+
+    public string? CATEGORY_OVERRIDE { get; init; }
+
+    public string? TITLE_OVERRIDE { get; init; }
+
+    public void Deconstruct(out Transaction t, out Overrides? overrides)
+    {
+        t = (Transaction)this;
+        overrides = null;
+
+        if (!string.IsNullOrEmpty(COMMENT) || !string.IsNullOrEmpty(CATEGORY_OVERRIDE) || !string.IsNullOrEmpty(TITLE_OVERRIDE))
+        {
+            overrides = new Overrides(CATEGORY_OVERRIDE, TITLE_OVERRIDE, COMMENT);
+        }
+    }
+
     public static explicit operator Transaction(TransactionRow row)
     {
         return new Transaction((row.TIMESTAMP ?? default).ToUniversalTime(), row.AMOUNT ?? default, row.CURRENCY ?? string.Empty, row.CATEGORY, row.TITLE ?? string.Empty, new AccountInfo(row.ACCOUNT ?? string.Empty, row.BANK ?? string.Empty));

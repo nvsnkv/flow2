@@ -5,7 +5,7 @@ namespace Flow.Application.Transactions.Infrastructure;
 
 public interface ITransactionsStorage
 {
-    public Task<IEnumerable<RejectedTransaction>> Create(IEnumerable<Transaction> transactions, CancellationToken ct);
+    public Task<IEnumerable<RejectedTransaction>> Create(IEnumerable<(Transaction, Overrides?)> transactions, CancellationToken ct);
 
     public Task<IEnumerable<RecordedTransaction>> Read(Expression<Func<RecordedTransaction, bool>> conditions, CancellationToken ct);
 

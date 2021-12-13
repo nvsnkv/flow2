@@ -29,12 +29,12 @@ internal class EditTransactionsCommand : CommandBase
 
     public async Task<int> Execute(AddTransactionsArgs args, CancellationToken ct)
     {
-        TransactionsWithDateRange<Transaction> initial;
+        ItemsWithDateRange<(Transaction, Overrides?)> initial;
         EnumerableWithCount<RejectedTransaction> rejected;
 
         using (var streamReader = CreateReader(args.Input))
         {
-            initial = new TransactionsWithDateRange<Transaction>(await reader.ReadTransactions(streamReader, args.Format, ct));
+            initial = new ItemsWithDateRange<(Transaction, Overrides?)>(await reader.ReadTransactions(streamReader, args.Format, ct), x => x.Item1.Timestamp);
             rejected = new EnumerableWithCount<RejectedTransaction>(await accountant.CreateTransactions(initial, ct));
         }
 

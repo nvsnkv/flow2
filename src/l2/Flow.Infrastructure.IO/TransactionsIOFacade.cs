@@ -17,12 +17,16 @@ internal class TransactionsIOFacade : ITransactionsReader, ITransactionsWriter
         this.json = json;
     }
 
-    public async Task<IEnumerable<Transaction>> ReadTransactions(StreamReader reader, SupportedFormat format, CancellationToken ct)
+    public async Task<IEnumerable<(Transaction, Overrides?)>> ReadTransactions(StreamReader reader, SupportedFormat format, CancellationToken ct)
     {
         return format switch
         {
-            SupportedFormat.CSV => await csv.Read(reader, (TransactionRow r) => (Transaction)r, ct),
-            SupportedFormat.JSON => await json.Read(reader, (JsonTransaction j) => (Transaction)j),
+            SupportedFormat.CSV => await csv.Read(reader, (TransactionRow r) =>
+            {
+                var (transaction, overrides) = r;
+                return (transaction, overrides);
+            }, ct),
+            SupportedFormat.JSON => await json.Read(reader, (JsonTransaction j) => ((Transaction)j, (Overrides?)null)),
             _ => throw new NotSupportedException($"Format {format} is not supported!")
         };
     }

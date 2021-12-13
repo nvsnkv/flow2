@@ -41,10 +41,10 @@ internal class Accountant : IAccountant
         return await storage.Read(conditions, ct);
     }
 
-    public async Task<IEnumerable<RejectedTransaction>> CreateTransactions(IEnumerable<Transaction> transactions, CancellationToken ct)
+    public async Task<IEnumerable<RejectedTransaction>> CreateTransactions(IEnumerable<(Transaction, Overrides?)> transactions, CancellationToken ct)
     {
         var rejected = new List<RejectedTransaction>();
-        var valid = transactions.Where(t => Validate(t, rejected));
+        var valid = transactions.Where(t => Validate(t.Item1, rejected));
         
         return (await storage.Create(valid, ct)).Concat(rejected);
     }

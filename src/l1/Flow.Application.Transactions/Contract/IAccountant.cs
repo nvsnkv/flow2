@@ -8,7 +8,7 @@ public interface IAccountant
 {
     Task<IEnumerable<RecordedTransaction>> GetTransactions(Expression<Func<RecordedTransaction, bool>>? conditions, CancellationToken ct);
 
-    Task<IEnumerable<RejectedTransaction>> CreateTransactions(IEnumerable<Transaction> transactions, CancellationToken ct);
+    Task<IEnumerable<RejectedTransaction>> CreateTransactions(IEnumerable<(Transaction, Overrides?)> transactions, CancellationToken ct);
 
     Task<IEnumerable<RejectedTransaction>> UpdateTransactions(IEnumerable<RecordedTransaction> transactions, CancellationToken ct);
 

@@ -9,28 +9,18 @@ internal class RecordedTransactionRow : TransactionRow
 {
     public long? KEY { get; init; }
 
-    public string? COMMENT { get; init; }
-
-    public string? CATEGORY_OVERRIDE { get; init; }
-
-    public string? TITLE_OVERRIDE { get; init; }
-
     public static explicit operator RecordedTransaction(RecordedTransactionRow row)
     {
-        var transaction = (Transaction)(TransactionRow)row;
-        var result = new RecordedTransaction(row.KEY ?? default, transaction);
-
-        if (!string.IsNullOrEmpty(row.COMMENT) || !string.IsNullOrEmpty(row.CATEGORY_OVERRIDE) || !string.IsNullOrEmpty(row.TITLE_OVERRIDE))
+        var (transaction, overrides) = row;
+        return new RecordedTransaction(row.KEY ?? default, transaction)
         {
-            result.Overrides = new Overrides(row.CATEGORY_OVERRIDE, row.TITLE_OVERRIDE, row.COMMENT);
-        }
-
-        return result;
+            Overrides = overrides
+        };
     }
 
     public static explicit operator RecordedTransactionRow(RecordedTransaction t)
     {
-        return new RecordedTransactionRow()
+        return new RecordedTransactionRow
         {
             TIMESTAMP = t.Timestamp,
             AMOUNT = t.Amount,
