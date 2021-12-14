@@ -9,16 +9,22 @@ public static class ParserHelper
 {
     public static Parser Create(IFlowConfiguration flowConfiguration)
     {
-        return new Parser(settings => {
+        var culture = CultureInfo.GetCultures(CultureTypes.AllCultures)
+                          .FirstOrDefault(c => c.Name == flowConfiguration.CultureCode)
+                      ?? CultureInfo.CurrentCulture;
+
+        return Create(culture);
+    }
+
+    public static Parser Create(CultureInfo culture)
+    {
+        return new Parser(settings =>
+        {
             settings.AutoHelp = true;
             settings.AutoVersion = true;
             settings.CaseInsensitiveEnumValues = true;
             settings.IgnoreUnknownArguments = true;
-            settings.ParsingCulture =
-                CultureInfo.GetCultures(CultureTypes.AllCultures)
-                    .FirstOrDefault(c => c.Name == flowConfiguration.CultureCode)
-                ?? CultureInfo.CurrentCulture;
-
+            settings.ParsingCulture = culture;
             settings.EnableDashDash = true;
         });
     }

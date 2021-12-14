@@ -9,3 +9,4 @@ obj
 /src/l3/CommandLine/Flow.Hosts.Analysis.Cli/Properties/launchSettings.json
 /docs/samples/aggregation_rules.csv
 /src/l3/CommandLine/Flow.Hosts.Analysis.Cli/Flow.Hosts.Analysis.Cli.csproj.user
+/build

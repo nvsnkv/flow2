@@ -15,16 +15,19 @@ public sealed class FlowConfiguration : Module
     public FlowConfiguration()
     {
         var builder = new ConfigurationBuilder();
+
+        builder
+            .AddJsonFile("appsettings.json", true)
+            .AddJsonFile($"appsettings.Development.json", true);
+
         if (!string.IsNullOrEmpty(ConfigurationFile))
         {
             builder.AddJsonFile(ConfigurationFile, true);
         }
 
-        config = builder
-            .AddJsonFile( "appsettings.json", true)
-            .AddJsonFile($"appsettings.Development.json", true)
-            .AddEnvironmentVariables()
-            .Build();
+        builder.AddEnvironmentVariables();
+
+        config = builder.Build();
     }
 
     protected override void Load(ContainerBuilder builder)

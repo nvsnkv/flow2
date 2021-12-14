@@ -70,6 +70,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Flow.Application.Analysis.U
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Flow.Hosts.Analysis.Cli", "l3\CommandLine\Flow.Hosts.Analysis.Cli\Flow.Hosts.Analysis.Cli.csproj", "{81F7EAE2-4B23-4050-99D7-B7601C364ECD}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommandLine.Bundle", "l3\CommandLine\CommandLine.Bundle\CommandLine.Bundle.csproj", "{5FACD097-8A71-41D7-8CAD-7E8E3FDCF605}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -180,6 +182,10 @@ Global
 		{81F7EAE2-4B23-4050-99D7-B7601C364ECD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{81F7EAE2-4B23-4050-99D7-B7601C364ECD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{81F7EAE2-4B23-4050-99D7-B7601C364ECD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5FACD097-8A71-41D7-8CAD-7E8E3FDCF605}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5FACD097-8A71-41D7-8CAD-7E8E3FDCF605}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5FACD097-8A71-41D7-8CAD-7E8E3FDCF605}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5FACD097-8A71-41D7-8CAD-7E8E3FDCF605}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -212,6 +218,7 @@ Global
 		{8288C5FE-9DC3-4E6C-83E7-5368B2C3CD55} = {BF31D4DF-B59D-44E8-9EA4-D1EAC24CC3ED}
 		{19A8D219-062D-4D88-82C2-1BD160006B29} = {BF31D4DF-B59D-44E8-9EA4-D1EAC24CC3ED}
 		{81F7EAE2-4B23-4050-99D7-B7601C364ECD} = {128C34A4-0A1B-44B2-AD90-F3B76381F851}
+		{5FACD097-8A71-41D7-8CAD-7E8E3FDCF605} = {128C34A4-0A1B-44B2-AD90-F3B76381F851}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BD863072-1B8D-417A-BFF4-C60D20CE1D31}
