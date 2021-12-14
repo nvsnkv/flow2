@@ -1,5 +1,4 @@
-﻿using System.Text.Json.Nodes;
-using Flow.Domain.Transactions;
+﻿using Flow.Domain.Transactions;
 using JetBrains.Annotations;
 
 namespace Flow.Infrastructure.IO.Json;

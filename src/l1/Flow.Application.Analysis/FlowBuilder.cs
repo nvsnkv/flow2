@@ -65,6 +65,9 @@ internal class FlowBuilder
             .Select(t => sources.ContainsKey(t.Key)
                 ? new RecordedTransaction(t.Key, t.Timestamp, sources[t.Key].Fee, sources[t.Key].Currency, $"TRANSFER: {sources[t.Key].Comment}", $"{t.Category}: {t.Title}", t.Account)
                 : t)
+            .Select(t => !string.IsNullOrEmpty(t.Overrides?.Category) || !string.IsNullOrEmpty(t.Overrides?.Title)
+                    ? new RecordedTransaction(t.Key, t.Timestamp, t.Amount, t.Currency, t.Overrides?.Category ?? t.Category, t.Overrides?.Title ?? t.Title, t.Account) { Overrides = t.Overrides }
+                    : t)
             .Where(t =>
             {
                 if (t.Amount == 0)
@@ -79,6 +82,7 @@ internal class FlowBuilder
 
                 return true;
             });
+
         foreach (var t in meaningfulTransactions)
         {
             var item = t;
