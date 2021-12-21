@@ -8,6 +8,17 @@ Once tools are installed, please use `dotnet ef database update -- %CONNECTION_S
 
 __Flow__ works best together with file editors, but they are optional. Apps can always record output to file or print it to STDOUT so you can examine the results of the command without any editor.
 
+## Installation
+1. Clone repository
+2. Navigate to `src` folder
+3. Build solution using `dotnet build` or Visual Studio
+4. Navigate to `src\l3\CommandLine\CommandLine.Bundle`
+5. Publish bundle to preferrable ouptut directory (ex. `dotnet publish -c Release -o ..\..\..\..\build\cli-bundle`)
+6. Navigate to target folder with the bundle
+7. run `flow-bundle` to add folder with bundle to path and set appsettings.json as a global config file for all flow apps
+
+Now you can use all CLI tools in any folder.
+
 ## Configuration
 CLI tools uses [.NET Configuration](https://docs.microsoft.com/en-us/dotnet/core/extensions/configuration) with [json](https://docs.microsoft.com/en-us/dotnet/core/extensions/configuration-providers#json-configuration-provider) and [Environment Variables](https://docs.microsoft.com/en-us/dotnet/core/extensions/configuration-providers#environment-variable-configuration-provider) providers available. 
 You can write settings to _appsettings.json_ file in the working directory, specify a separate file location in `FLOW_CONFIG_FILE` environment variable or set environment variables to override anyting what's already in settings file.
@@ -18,51 +29,11 @@ There are quite a few settings to provide, and most of them optional:
 * `flow:Editor:JSON` - a path to external editor for JSON files. Empty by default;
 * `flow:Editor:CSV` - a path to external editor for CSV files. Empty by default;
 
-## Expences tracking
-`accountant.exe` is the tool that helps to manage information about accounts and transactions.
-### Transactions management
-Flow allows to capturee following information about transactions: Timestamp, Amount, Currency, Category, Title, Account Name, Bank Name.
-Once stored, every transaction receives a unique Key value and user receives an opportunity to provide a Note, and overrides for Title and Category.
-Overrides will replace original values on flow lists.
+## Documentation
+All CLI tools have `help command` that briefly explains supported commands and its options. More detailed guides can be found below:
+* [Expenses Tracking](docs/expenses_tracking.md)
+* [Flow Analysis](docs/flow_analysis.md)
 
-All information can be exported or imported in one of 2 supported formats: CSV or JSON.
-
-`accountant list` is the command accountant executes by default. It exports recorded transactions that meets input criteria. The criteria allows to filter by 
-* `k` - Key
-* `ts` - Timestamp
-* `a` - Amount
-* `c` - Currency
-* `cat` - Category
-* `t` - Title
-* `acc` - Account name
-* `bnk` - Bank
-* `ocomm` - Comment 
-* `ocat` - Category override
-* `ottl` - Title override
-
-Following operation are supported:
-* equality: `=`
-* likeness: `~`
-* comparison: `<`, `>` , `>=`, `<=`
-* in-range: `[]`, `[)`, `(]` `()`
-* within: `(1, 2, 14)`
-
-For example, `accountant list ts[2021-01-01:2021-10-01)` will return transactions with start date greater or equal to 2021-01-01 and strictly less than 2021-10-01. Another example, `k>200 a<0` will return all transaction with Key > 200 and negative Amount.
-
-Transactions can be inserted using `accountant add` command, edited using `accountant update` and deleted by `accountant delete` command. Please refer to help screens for each of the commands for additional details.
-
-### Transfers
-Flow automatically detects various occurences of money transfers between accounts. That allows to exclude them from list of really valuable transactions and simplify analysis.
-
-To check correctness of transfer detection algorythms you can use `transfers list` command. Like `accountant list`, it accepts the search criteria for the set of transactions in which app will try to find transfers.
-For each transfer tool returns Source (a Key of source transaction), Sink (a Key of sink transaction), Fee (difference between source and sink), Currency in which Fee was calculated and a Comment that explains why tool believe it's a transfer.
-
-If necessary user can enforse a particular transfer by providing a pair of Source and Sink to `transfers enforce` command. Previously enforsed transfers can be abandoned using `transfers abandon` command.
-
-### Exchange Rates
-Where needed, _flow_ automatically requests exchange rates to perform conversion. Rates that were successfully received from the Central Bank ofr the Russian Federation are getting cached in local storage to speed up subsequent calculations.
-
-You can use `rates list` command to check which rates were already captured.
 
 ## Flow analysis
 ### Aggregation concepts
