@@ -8,7 +8,7 @@ public sealed class FlowConfiguration : Module
     // ReSharper disable once InconsistentNaming
     public const string ENV_FLOW_CONFIG = "FLOW_CONFIG_FILE";
 
-    public static readonly string? ConfigurationFile = Environment.GetEnvironmentVariable(ENV_FLOW_CONFIG);
+    public static readonly string? ConfigurationFile = Environment.GetEnvironmentVariable(ENV_FLOW_CONFIG, EnvironmentVariableTarget.User);
 
     private readonly IConfiguration config;
 

@@ -22,7 +22,7 @@ internal class CBRFRemoteRatesProvider : IRemoteExchangeRatesProvider
     {
         if (IsHomelandCurrency(request.From) && IsHomelandCurrency(request.To)) throw new ArgumentException("Unable to get exchange rate for conversions that does not involve RUB!", nameof(request));
 
-        var foreignCurrency = request.From == HomelandCurrency ? request.To : request.From;
+        var foreignCurrency = IsHomelandCurrency(request.From) ? request.To : request.From;
 
         var rate = await GetRate(foreignCurrency, request.Date, ct);
 

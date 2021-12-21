@@ -17,7 +17,7 @@ public class ItemsWithDateRange<T> : EnumerableWithCount<T>
             var time = getTime(i);
             
             if (min == null || min > time) min = time;
-            if (max == null || max > time) max = time;
+            if (max == null || max < time) max = time;
 
             return i;
         });
