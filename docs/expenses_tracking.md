@@ -31,6 +31,8 @@ For example, `accountant list ts[2021-01-01:2021-10-01)` will return transaction
 
 Transactions can be inserted using `accountant add` command, edited using `accountant update` and deleted by `accountant delete` command. Please refer to help screens for each of the commands for additional details.
 
+`accountant edit` would be useful if you need to retrive the data from database and update it in one pass. Basically it's a combination of `list` and `update` commands.
+
 ### Transfers
 Flow automatically detects various occurences of money transfers between accounts. That allows to exclude them from list of really valuable transactions and simplify analysis.
 
