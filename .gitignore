@@ -11,3 +11,5 @@ obj
 /src/l3/CommandLine/Flow.Hosts.Analysis.Cli/Flow.Hosts.Analysis.Cli.csproj.user
 /build
 /src/l3/CommandLine/CommandLine.Bundle/Properties/PublishProfiles/build-cli-bundle-win64.pubxml.user
+launchSettings.json
+appsettings.Development.json
