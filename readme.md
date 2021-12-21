@@ -29,14 +29,15 @@ There are quite a few settings to provide, and most of them optional:
 * `flow:Editor:JSON` - a path to external editor for JSON files. Empty by default;
 * `flow:Editor:CSV` - a path to external editor for CSV files. Empty by default;
 
-## Documentation
-All CLI tools have `help command` that briefly explains supported commands and its options. More detailed guides can be found below:
+## Running tools
+Once registered and configured, CLI bundle is ready to work. You can use it on  your own or add tools into batch scripts as any other regular CLI application.
+All tools have `help command` that briefly explains supported commands and its options. More detailed guides can be found below:
 * [Expenses Tracking](docs/expenses_tracking.md)
 * [Flow Analysis](docs/flow_analysis.md)
 
 
 # Development notes
-Please refer to [Architecture Decision Records](adr/)
+Please refer to [Architecture Decision Records](docs/adr/)
 
 # License
 MIT
