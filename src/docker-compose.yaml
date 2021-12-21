@@ -1,6 +1,6 @@
 version: "3.8"
 services:
-  flow-db:
+  flow-dev-db:
     image: postgres
     restart: always
     volumes:
@@ -13,4 +13,4 @@ services:
       - "${DEV_DB_PORT}:5432"
        
 volumes:
-  flow-data:
+  flow-dev-data:
