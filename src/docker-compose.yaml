@@ -1,16 +1,44 @@
 version: "3.8"
 services:
-  flow-dev-db:
+  flow-db:
     image: postgres
     restart: always
     volumes:
-       - flow-dev-data:/var/lib/postgresql/data
+       - flow-data:/var/lib/postgresql/data
     environment:
       - POSTGRES_DB=flow
-      - "POSTGRES_USER=${DEV_DB_USER}"
-      - "POSTGRES_PASSWORD=${DEV_DB_PWD}"
+      - "POSTGRES_USER=${FLOW_DB_USER}"
+      - "POSTGRES_PASSWORD=${FLOW_DB_PWD}"
     ports:
-      - "${DEV_DB_PORT}:5432"
-       
+      - "${FLOW_DB_PORT}:5432"
+
+  pgbackups:
+    image: prodrigestivill/postgres-backup-local
+    restart: always
+    user: postgres:postgres # Optional: see below
+    volumes:
+      - flow-backups:/backups
+    links:
+      - flow-db
+    depends_on:
+      - flow-db
+    environment:
+      - POSTGRES_HOST=flow-db
+      - POSTGRES_DB=flow
+      - "POSTGRES_USER=${FLOW_DB_USER}"
+      - "POSTGRES_PASSWORD=${FLOW_DB_PWD}"
+      - POSTGRES_EXTRA_OPTS=-Z6 --schema=public --blobs
+      - SCHEDULE=@daily
+      - BACKUP_KEEP_DAYS=7
+      - BACKUP_KEEP_WEEKS=4
+      - BACKUP_KEEP_MONTHS=6
+      - HEALTHCHECK_PORT=8080
+ 
 volumes:
-  flow-dev-data:
+  flow-data:
+  flow-backups:
+    driver: local
+    driver_opts:
+      o: bind
+      type: none
+      device: "${FLOW_BACKUPS_FOLDER}"
