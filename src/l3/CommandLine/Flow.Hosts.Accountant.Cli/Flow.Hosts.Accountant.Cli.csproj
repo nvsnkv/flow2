@@ -18,9 +18,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Include="..\Flow.Hosts.Common\appsettings.Development.json" Link="appsettings.Development.json">
+    <None Include="..\Flow.Hosts.Common\appsettings.Development.json" Link="appsettings.Development.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
+	  <CopyToPublishDirectory>Never</CopyToPublishDirectory>
+    </None>
     <Content Include="..\Flow.Hosts.Common\appsettings.json" Link="appsettings.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -40,13 +41,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="appsettings.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-
-  <ItemGroup>
     <Folder Include="Properties\" />
-  </ItemGroup>
+  </ItemGroup>  
 
 </Project>
