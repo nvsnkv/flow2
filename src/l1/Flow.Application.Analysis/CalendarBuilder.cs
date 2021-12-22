@@ -8,6 +8,7 @@ namespace Flow.Application.Analysis;
 internal class CalendarBuilder
 {
     private readonly List<AggregationGroup> groups = new();
+    private readonly List<Vector> dimensions = new();
     private readonly IAsyncEnumerable<RecordedTransaction> transactions;
     private readonly DateTime from;
     private readonly DateTime till;
@@ -15,6 +16,7 @@ internal class CalendarBuilder
     private Offset offset = new MonthlyOffset();
     private Action<RejectedTransaction>? rejectionsHandler;
     private Vector? header;
+    private Substitutor? substitutor;
 
     public CalendarBuilder(IAsyncEnumerable<RecordedTransaction> transactions, DateTime from, DateTime till)
     {
@@ -29,12 +31,28 @@ internal class CalendarBuilder
         return this;
     }
 
+    public CalendarBuilder WithSubstitutor(Substitutor substitutor)
+    {
+        this.substitutor = substitutor;
+        return this;
+    }
+    
     public CalendarBuilder WithAggregationGroup(AggregationGroup group)
     {
         if (groups.Any(g => g.Name == group.Name)) { throw new ArgumentException("Group with this name already added!"); }
         groups.Add(group);
+        
+        AddMeasures(group);
 
         return this;
+    }
+
+    private void AddMeasures(AggregationGroup? group)
+    {
+        while (group != null) {
+            dimensions.AddRange(group.Rules.Select(r => r.Dimensions));
+            group = group.Subgroup;
+        }
     }
 
     public CalendarBuilder WithOffset(Offset offset)
@@ -78,8 +96,10 @@ internal class CalendarBuilder
             }
         }
 
+        substitutor?.SortSubstitutions();
+
         var values = new ReadOnlyDictionary<Vector, IReadOnlyList<Aggregate>>(
-            rows.ToDictionary(
+            rows.OrderBy(r => GetOrder(r.Key)).ToDictionary(
                 r => r.Key, 
                 r => (IReadOnlyList<Aggregate>)r.Value
                     .Select(b => b.Build())
@@ -89,6 +109,38 @@ internal class CalendarBuilder
             );
 
         return new Calendar(ranges, header ?? Vector.Empty, values);
+    }
+
+    private long GetOrder(Vector dimension)
+    {
+        if (!substitutor?.SubstitutionsSorted ?? false)
+        {
+            substitutor?.SortSubstitutions();
+        }
+
+        int idx = 0;
+
+        while (idx < dimensions.Count)
+        {
+            var main= dimensions[idx];
+            if (main == dimension)
+            {
+                return (long)idx << 32;
+            }
+
+            if (substitutor?.SubstitutionsMade.ContainsKey(main) ?? false)
+            {
+                var secIdx = substitutor.SubstitutionsMade[main].IndexOf(dimension);
+                if (secIdx != -1)
+                {
+                    return ((long)idx << 32) + secIdx;
+                }
+            }
+
+            idx++;
+        }
+
+        return -1;
     }
 
     private int GetIndex(Transaction transaction, IReadOnlyList<Range> ranges)
@@ -146,8 +198,16 @@ internal class CalendarBuilder
             }
         }
 
-        return matchedDimensions.First().Dimensions;
+        var dimension = matchedDimensions.First().Dimensions;
+
+        if (substitutor?.IsSubstitutionNeeded(dimension) ?? false)
+        {
+            dimension = substitutor.Substitute(dimension, transaction);
+        }
+        
+        return dimension;
     }
+
 
     private IEnumerable<Range> GetRanges()
     {

@@ -29,7 +29,10 @@ internal abstract class TransferDetectorBase : ITransferDetector
             var rate = await ratesProvider.GetRate((left.Currency, right.Currency, left.Timestamp), ct);
             if (rate == null) { throw new ArgumentException("Failed to get exchange rate for transfer!"); }
 
-            return new Transfer(left.Key, right.Key, left.Amount + right.Amount * rate.Rate, left.Currency);
+            return new Transfer(left.Key, right.Key, left.Amount + right.Amount * rate.Rate, left.Currency)
+            {
+                Comment = comment + " (converted)"
+            };
         }
 
         return new Transfer(left, right)

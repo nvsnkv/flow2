@@ -25,8 +25,14 @@ internal class CBRFRemoteRatesProvider : IRemoteExchangeRatesProvider
         var foreignCurrency = IsHomelandCurrency(request.From) ? request.To : request.From;
 
         var rate = await GetRate(foreignCurrency, request.Date, ct);
+        if (!rate.HasValue) return null;
 
-        return rate.HasValue ? new ExchangeRate(request.From, request.To, request.Date, rate.Value) : null;
+        if (IsHomelandCurrency(request.To))
+        {
+            rate = 1 / rate;
+        }
+
+        return new ExchangeRate(request.From, request.To, request.Date, rate.Value);
     }
 
     private static async Task<decimal?> GetRate(string foreignCurrency, DateTime requestDate, CancellationToken ct)

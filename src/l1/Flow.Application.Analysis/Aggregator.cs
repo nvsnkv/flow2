@@ -11,11 +11,13 @@ internal class Aggregator : IAggregator
 {
     private readonly IAccountant accountant;
     private readonly IExchangeRatesProvider ratesProvider;
+    private readonly Substitutor substitutor;
 
-    public Aggregator(IAccountant accountant, IExchangeRatesProvider ratesProvider)
+    public Aggregator(IAccountant accountant, IExchangeRatesProvider ratesProvider, Substitutor substitutor)
     {
         this.accountant = accountant;
         this.ratesProvider = ratesProvider;
+        this.substitutor = substitutor;
     }
 
     public async Task<(Calendar, IReadOnlyCollection<RejectedTransaction>)> GetCalendar(DateTime from, DateTime till, string currency, AggregationSetup setup, CancellationToken ct)
@@ -26,7 +28,8 @@ internal class Aggregator : IAggregator
         var calendarBuilder = new CalendarBuilder(flow, @from, till)
             .WithOffset(new MonthlyOffset())
             .WithRejectionsHandler(r => rejected.Add(r))
-            .WithHeader(setup.Headers);
+            .WithHeader(setup.Headers)
+            .WithSubstitutor(substitutor);
 
         calendarBuilder = setup.Groups.Aggregate(calendarBuilder, (b, g) => b.WithAggregationGroup(g));
 
