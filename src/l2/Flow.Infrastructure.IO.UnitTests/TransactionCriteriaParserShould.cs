@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Linq.Expressions;
 using Flow.Domain.Transactions;
 using Flow.Infrastructure.IO.Criteria;
 using FluentAssertions;
@@ -38,6 +39,23 @@ public class TransactionCriteriaParserShould : TestDataCarrier
         var items = RecordedTransactions.Where(result.Conditions!.Compile()).ToList();
 
         items.Should().BeEquivalentTo(RecordedTransactions.Where(expectedSelector).ToList());
+    }
+
+    [Fact, UnitTest]
+    public void ProduceSameExpressions()
+    {
+        var result =
+            new TransactionCriteriaParser(new GenericParser(CultureInfo.CurrentCulture, DateTimeStyles.AssumeLocal,
+                NumberStyles.Any)).ParseRecordedTransactionCriteria("t%\"к/с \" cat=Кыс");
+
+        Expression<Func<RecordedTransaction, bool>> reference = (t) =>
+           true &&  t.Title.Contains("к/с ") && t.Category == "Кыс";
+
+        var expectedString = reference.ToString();
+
+        result.Successful.Should().BeTrue();
+
+        result.Conditions!.ToString().Should().Be(expectedString);
     }
 
 

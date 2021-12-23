@@ -39,7 +39,14 @@ namespace Flow.Domain.Patterns
 
         public Expression<Func<T, bool>> Build()
         {
-            return result;
+            if (result.CanReduce)
+            {
+                if (result.Reduce() is Expression<Func<T, bool>> reduced)
+                {
+                    result = reduced;
+                }
+            }
+            return result.InlineInvokes();
         }
     }
 }
