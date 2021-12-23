@@ -1,4 +1,5 @@
-﻿using Autofac;
+﻿using System.Globalization;
+using Autofac;
 using CommandLine;
 using Flow.Application.Analysis.Contract;
 using Flow.Application.ExchangeRates.Contract;
@@ -11,23 +12,28 @@ using Flow.Infrastructure.Rates.CBRF.Contract;
 using Flow.Infrastructure.Storage.Contract;
 
 var builder = new ContainerBuilder();
+builder.RegisterModule(new FlowConfiguration());
+var configContainer = builder.Build();
 
-builder.RegisterModule(new FlowConfiguration())
+var config = configContainer.Resolve<IFlowConfiguration>();
+var culture = CultureInfo.GetCultures(CultureTypes.AllCultures).FirstOrDefault(c => c.Name == config.CultureCode) ?? CultureInfo.CurrentCulture;
+
+builder = new ContainerBuilder();
+builder
+    .RegisterModule(new FlowConfiguration())
     .RegisterModule(new FlowDatabase())
     .RegisterModule(new FlowIOComponents())
     .RegisterModule(new CBRFData())
     .RegisterModule(new MoneyExchange())
     .RegisterModule(new TransactionsManagement())
-    .RegisterModule(new Aggregation());
+    .RegisterModule(new Aggregation(culture));
 
 builder.RegisterType<BuildFlowCommand>();
 builder.RegisterType<BuildCalendarCommand>();
 
 var container = builder.Build();
 
-var config = container.Resolve<IFlowConfiguration>();
-
-var parser = ParserHelper.Create(config);
+var parser = ParserHelper.Create(culture);
 
 var arguments = parser.ParseArguments<BuildCalendarArgs, BuildFlowArgs>(args);
 
