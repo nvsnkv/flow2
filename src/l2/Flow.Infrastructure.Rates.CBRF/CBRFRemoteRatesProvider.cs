@@ -27,7 +27,7 @@ internal class CBRFRemoteRatesProvider : IRemoteExchangeRatesProvider
         var rate = await GetRate(foreignCurrency, request.Date, ct);
         if (!rate.HasValue) return null;
 
-        if (IsHomelandCurrency(request.To))
+        if (!IsHomelandCurrency(request.To))
         {
             rate = 1 / rate;
         }
