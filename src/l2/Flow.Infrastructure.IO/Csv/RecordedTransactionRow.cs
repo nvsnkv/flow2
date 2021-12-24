@@ -22,7 +22,7 @@ internal class RecordedTransactionRow : TransactionRow
     {
         return new RecordedTransactionRow
         {
-            TIMESTAMP = t.Timestamp,
+            TIMESTAMP = t.Timestamp.ToLocalTime(),
             AMOUNT = t.Amount,
             CURRENCY = t.Currency,
             CATEGORY = t.Category,

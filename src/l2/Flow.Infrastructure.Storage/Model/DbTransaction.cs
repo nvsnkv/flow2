@@ -13,7 +13,7 @@ internal class DbTransaction : RecordedTransaction
     {
     }
 
-    public DbTransaction(long key, DateTime timestamp, decimal amount, string currency, string? category, string title, DbAccount account) : base(key, timestamp, amount, currency, category, title, account)
+    public DbTransaction(long key, DateTime timestamp, decimal amount, string currency, string? category, string title, DbAccount account) : base(key, DateTime.SpecifyKind(timestamp, DateTimeKind.Utc), amount, currency, category, title, account)
     {
     }
 

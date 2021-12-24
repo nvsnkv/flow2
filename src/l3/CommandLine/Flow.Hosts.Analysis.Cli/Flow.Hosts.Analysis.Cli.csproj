@@ -29,4 +29,8 @@
     <ProjectReference Include="..\Flow.Hosts.Common\Flow.Hosts.Common.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Properties\" />
+  </ItemGroup>
+
 </Project>

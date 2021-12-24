@@ -9,6 +9,6 @@ public class MonthlyOffset : Offset
 
     public override string GetAliasFor(Range range)
     {
-        return range.Start.ToString("MMM");
+        return range.Start.ToLocalTime().ToString("MMM");
     }
 }

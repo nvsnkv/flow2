@@ -34,11 +34,7 @@ public class CsvSerializersShould : TestDataCarrier
 
         var result = await serializer.Read(reader, (TransactionRow r) => (Transaction)r, CancellationToken.None);
 
-        result
-            .Select(t => new Transaction(t.Timestamp.ToLocalTime(), t.Amount, t.Currency, t.Category, t.Title, t.Account)).
-            ToList()
-            .Should()
-            .BeEquivalentTo(Transactions);
+        result.ToList().Should().BeEquivalentTo(Transactions);
     }
 
     [Theory, UnitTest]

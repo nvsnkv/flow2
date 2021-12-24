@@ -24,7 +24,7 @@ internal class BuildFlowCommand : CommandBase
     public async Task<int> Execute(BuildFlowArgs arg, CancellationToken ct)
     {
 
-        var (flow, rejections) = await aggregator.GetFlow(arg.From, arg.Till, arg.Currency, ct);
+        var (flow, rejections) = await aggregator.GetFlow(arg.From.ToUniversalTime(), arg.Till.ToUniversalTime(), arg.Currency, ct);
 
         var outputPath = arg.OutputPath ?? GetFallbackOutputPath(SupportedFormat.CSV, "flow", "list");
         await using (var writer = CreateWriter(outputPath))
