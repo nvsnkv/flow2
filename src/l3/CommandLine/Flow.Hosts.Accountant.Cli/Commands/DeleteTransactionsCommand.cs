@@ -19,7 +19,7 @@ internal class DeleteTransactionsCommand : CommandBase
 
     public async Task<int> Execute(DeleteTransactionsArgs args, CancellationToken ct)
     {
-        var criteria = parser.ParseRecordedTransactionCriteria((args.Criteria ?? Enumerable.Empty<string>()).Aggregate(new StringBuilder(), (s, v) => s.Append(v)).ToString());
+        var criteria = parser.ParseRecordedTransactionCriteria(args.Criteria ?? Enumerable.Empty<string>());
         if (!criteria.Successful)
         {
             foreach (var error in criteria.Errors)

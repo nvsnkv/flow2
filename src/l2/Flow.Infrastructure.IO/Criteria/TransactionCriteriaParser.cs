@@ -34,6 +34,7 @@ internal class TransactionCriteriaParser : ITransactionCriteriaParser
 {
     private readonly GenericParser parser;
     private readonly Regex criterionPattern = new(@"^(?<neg>!?)(?<prop>ts?|a|cat|acc|c|bnk|ocom|ocat|ot|k)(?<opStart>\=|\%|\<=?|\>=?|\[|\()(?<arg>.*?)(?<opEnd>\]?|\)?)$");
+    private readonly CriteriaInputHandler inputHandler = new();
     
     public TransactionCriteriaParser(GenericParser parser)
     {
@@ -42,48 +43,15 @@ internal class TransactionCriteriaParser : ITransactionCriteriaParser
 
     public CriteriaParserResult<RecordedTransaction> ParseRecordedTransactionCriteria(string input)
     {
-        return ParseRecordedTransactionCriteria(GetParts(input));
+        return ParseRecordedTransactionCriteria(Enumerable.Repeat(input, 1));
     }
 
-    private static IEnumerable<string> GetParts(string part)
-    {
-        var builder = new StringBuilder();
-        var i = 0;
-        var quotes = false;
-
-        while (i < part.Length)
-        {
-            if (part[i] == '"')
-            {
-                quotes = !quotes;
-            }
-            else if (part[i] == ' ' && !quotes)
-            {
-                var result = builder.ToString();
-                builder.Clear();
-
-                if (!string.IsNullOrEmpty(result))
-                {
-                    yield return result;
-                }
-            }
-            else
-            {
-                builder.Append(part[i]);
-            }
-
-            i++;
-        }
-
-        yield return builder.ToString();
-    }
-
-    private CriteriaParserResult<RecordedTransaction> ParseRecordedTransactionCriteria(IEnumerable<string> parts)
+    public CriteriaParserResult<RecordedTransaction> ParseRecordedTransactionCriteria(IEnumerable<string> parts)
     {
         var builder = new AndPatternBuilder<RecordedTransaction>();
         var errors = new List<string>();
 
-        foreach (var part in parts)
+        foreach (var part in inputHandler.SplitAndUnquote(parts))
         {
             var result = ParseCondition(part, builder);
             if (!result.Successful)

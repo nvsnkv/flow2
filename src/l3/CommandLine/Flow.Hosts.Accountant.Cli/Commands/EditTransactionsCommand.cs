@@ -69,7 +69,7 @@ internal class EditTransactionsCommand : CommandBase
         var interim = GetFallbackOutputPath(args.Format, "list", "transactions");
         var errors = GetFallbackOutputPath(args.Format, "edit", "rejected-transactions");
 
-        var parserResult = criteriaParser.ParseRecordedTransactionCriteria((args.Criteria ?? Enumerable.Empty<string>()).Aggregate(new StringBuilder(), (s, v) => s.Append(v)).ToString());
+        var parserResult = criteriaParser.ParseRecordedTransactionCriteria(args.Criteria ?? Enumerable.Empty<string>());
         if (!parserResult.Successful)
         {
             foreach(var error in parserResult.Errors)
