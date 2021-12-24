@@ -48,8 +48,8 @@ public class TransactionCriteriaParserShould : TestDataCarrier
             new TransactionCriteriaParser(new GenericParser(CultureInfo.CurrentCulture, DateTimeStyles.AssumeLocal,
                 NumberStyles.Any)).ParseRecordedTransactionCriteria("t%\"к/с \" cat=Кыс");
 
-        Expression<Func<RecordedTransaction, bool>> reference = (t) =>
-           true &&  t.Title.Contains("к/с ") && t.Category == "Кыс";
+        // ReSharper disable once RedundantLogicalConditionalExpressionOperand
+        Expression<Func<RecordedTransaction, bool>> reference = (t) => true &&  t.Title.Contains("к/с ") && t.Category == "Кыс";
 
         var expectedString = reference.ToString();
 

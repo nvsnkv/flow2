@@ -1,5 +1,4 @@
-﻿using System.Text;
-using Flow.Application.Transactions.Contract;
+﻿using Flow.Application.Transactions.Contract;
 using Flow.Hosts.Common.Commands;
 using Flow.Infrastructure.Configuration.Contract;
 using Flow.Infrastructure.IO.Contract;

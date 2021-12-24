@@ -43,12 +43,6 @@ public class Range
         return !Equals(left, right);
     }
 
-    public void Deconstruct(out DateTime start, out DateTime end)
-    {
-        start = Start;
-        end = End;
-    }
-
     public static implicit operator Range((DateTime, DateTime) range)
     {
         var (start, end) = range;
