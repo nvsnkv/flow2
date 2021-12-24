@@ -26,7 +26,6 @@ internal class Aggregator : IAggregator
         var rejected = rejectedItems.ToList();
 
         var calendarBuilder = new CalendarBuilder(flow, @from, till)
-            .WithOffset(new MonthlyOffset())
             .WithRejectionsHandler(r => rejected.Add(r))
             .WithHeader(setup.Headers)
             .WithSubstitutor(substitutor);

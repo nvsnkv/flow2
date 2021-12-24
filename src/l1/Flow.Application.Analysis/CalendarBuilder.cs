@@ -10,10 +10,7 @@ internal class CalendarBuilder
     private readonly List<AggregationGroup> groups = new();
     private readonly List<Vector> dimensions = new();
     private readonly IAsyncEnumerable<RecordedTransaction> transactions;
-    private readonly DateTime from;
-    private readonly DateTime till;
-
-    private Offset offset = new MonthlyOffset();
+    private readonly MonthlyRangesBuilder monthlyRangesBuilder;
     private Action<RejectedTransaction>? rejectionsHandler;
     private Vector? header;
     private Substitutor? substitutor;
@@ -21,8 +18,7 @@ internal class CalendarBuilder
     public CalendarBuilder(IAsyncEnumerable<RecordedTransaction> transactions, DateTime from, DateTime till)
     {
         this.transactions = transactions;
-        this.till = till;
-        this.from = from;
+        monthlyRangesBuilder = new MonthlyRangesBuilder(from, till);
     }
 
     public CalendarBuilder WithHeader(Vector header)
@@ -55,11 +51,6 @@ internal class CalendarBuilder
         }
     }
 
-    public CalendarBuilder WithOffset(Offset offset)
-    {
-        this.offset = offset;
-        return this;
-    }
 
     public CalendarBuilder WithRejectionsHandler(Action<RejectedTransaction> handler)
     {
@@ -70,7 +61,7 @@ internal class CalendarBuilder
 
     public async Task<Calendar> Build(CancellationToken ct)
     {
-        var ranges = GetRanges().ToList().AsReadOnly();
+        var ranges = monthlyRangesBuilder.GetRanges().ToList().AsReadOnly();
         var rows = new Dictionary<Vector, List<AggregateBuilder>>();
 
         await foreach (var transaction in transactions.WithCancellation(ct))
@@ -206,21 +197,5 @@ internal class CalendarBuilder
         }
         
         return dimension;
-    }
-
-
-    private IEnumerable<Range> GetRanges()
-    {
-        var end = from;
-
-        do
-        {
-            var start = end;
-            end = offset.ApplyTo(start);
-            var range = new Range(start, till <= end ? till : end);
-            range.Alias = offset.GetAliasFor(range);
-            yield return range;
-        } while (till > end);
-
     }
 }
