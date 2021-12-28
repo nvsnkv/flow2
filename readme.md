@@ -1,4 +1,5 @@
 # Flow - an expense tracking tools
+![Build and test](https://github.com/nvsnkv/flow2/actions/workflows/dotnet.yml/badge.svg?branch=master)
 __Flow__ is a set of command line tools designed to simplify expences tracking, analysis and forecast. Working in conjuction with your favorite editors for JSON and CSV files it helps to maintain your budget.
 
 # How to use it?
