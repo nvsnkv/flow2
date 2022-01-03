@@ -55,7 +55,7 @@ internal class TransactionStorage : ITransactionsStorage
             }
             else
             {
-                if (upd == target)
+                if (((Transaction)upd) == ((Transaction)target))
                 {
                     if (upd.Overrides != target.Overrides)
                     {
