@@ -13,4 +13,4 @@ services:
       - "${DEV_DB_PORT}:5432"
        
 volumes:
-  flow-data:
+  flow-dev-data:
