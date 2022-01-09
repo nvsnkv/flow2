@@ -20,7 +20,7 @@ public class RecordedTransaction: Transaction
 
     private bool Equals(RecordedTransaction other)
     {
-        return Key == other.Key;
+        return Key == other.Key && base.Equals(other);
     }
 
     public override bool Equals(object? obj)

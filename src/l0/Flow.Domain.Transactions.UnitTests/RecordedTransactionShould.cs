@@ -11,14 +11,13 @@ namespace Flow.Domain.Transactions.UnitTests
         private readonly Transaction other = new(DateTime.UtcNow, - 10, "RUB", null, "Transfer", new AccountInfo("name", "bank"));
 
         [Fact, UnitTest]
-        public void IgnoreTransactionDetailsInComparison()
+        public void NotIgnoreTransactionDetailsInComparison()
         { 
             var rec = new RecordedTransaction(1, transaction);
             var oth = new RecordedTransaction(1, other);
             var another = new RecordedTransaction(1, transaction);
 
-            oth.Should().Be(rec);
-            another.Should().Be(rec);
+            oth.Should().NotBe(rec);
         }
 
         [Fact, UnitTest]
