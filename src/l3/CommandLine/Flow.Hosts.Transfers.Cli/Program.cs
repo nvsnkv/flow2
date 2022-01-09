@@ -25,11 +25,12 @@ builder.RegisterType<EditTransfersCommand>();
 var container = builder.Build();
 var config = container.Resolve<IFlowConfiguration>();
 
+var cancellationHandler = new ConsoleCancellationHandler();
 var parser = ParserHelper.Create(config);
 
 var arguments = parser.ParseArguments<ListTransfersArgs, EnforceTransfersArgs, AbandonTransfersArgs>(args);
 return await arguments.MapResult(
-    async (ListTransfersArgs arg) => await container.Resolve<ListTransfersCommand>().Execute(arg, CancellationToken.None),
-    async (EnforceTransfersArgs arg) => await container.Resolve<EditTransfersCommand>().Execute(arg, CancellationToken.None),
-    async (AbandonTransfersArgs arg) => await container.Resolve<EditTransfersCommand>().Execute(arg, CancellationToken.None),
+    async (ListTransfersArgs arg) => await container.Resolve<ListTransfersCommand>().Execute(arg, cancellationHandler.Token),
+    async (EnforceTransfersArgs arg) => await container.Resolve<EditTransfersCommand>().Execute(arg, cancellationHandler.Token),
+    async (AbandonTransfersArgs arg) => await container.Resolve<EditTransfersCommand>().Execute(arg, cancellationHandler.Token),
     async errs => await ParserHelper.HandleUnparsed(errs, arguments));

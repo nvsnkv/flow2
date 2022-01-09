@@ -27,12 +27,13 @@ var container = builder.Build();
 var config = container.Resolve<IFlowConfiguration>();
 
 var parser = ParserHelper.Create(config);
+var cancellationHandler = new ConsoleCancellationHandler();
 
 var arguments = parser.ParseArguments<AddTransactionsArgs, ListTransactionsArgs, UpdateTransactionsArgs, EditTransactionsArgs, DeleteTransactionsArgs>(args);
 return await arguments.MapResult(
-    async (AddTransactionsArgs arg) => await container.Resolve<EditTransactionsCommand>().Execute(arg, CancellationToken.None),
-    async (ListTransactionsArgs arg) => await container.Resolve<ListTransactionsCommand>().Execute(arg, CancellationToken.None),
-    async (UpdateTransactionsArgs arg) => await container.Resolve<EditTransactionsCommand>().Execute(arg, CancellationToken.None),
-    async (EditTransactionsArgs arg) => await container.Resolve<EditTransactionsCommand>().Execute(arg, CancellationToken.None),
-    async (DeleteTransactionsArgs arg) => await container.Resolve<DeleteTransactionsCommand>().Execute(arg, CancellationToken.None),
+    async (AddTransactionsArgs arg) => await container.Resolve<EditTransactionsCommand>().Execute(arg, cancellationHandler.Token),
+    async (ListTransactionsArgs arg) => await container.Resolve<ListTransactionsCommand>().Execute(arg, cancellationHandler.Token),
+    async (UpdateTransactionsArgs arg) => await container.Resolve<EditTransactionsCommand>().Execute(arg, cancellationHandler.Token),
+    async (EditTransactionsArgs arg) => await container.Resolve<EditTransactionsCommand>().Execute(arg, cancellationHandler.Token),
+    async (DeleteTransactionsArgs arg) => await container.Resolve<DeleteTransactionsCommand>().Execute(arg, cancellationHandler.Token),
     async errs => await ParserHelper.HandleUnparsed(errs, arguments));

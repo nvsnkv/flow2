@@ -33,11 +33,12 @@ builder.RegisterType<BuildCalendarCommand>();
 
 var container = builder.Build();
 
+var cancellationHandler = new ConsoleCancellationHandler();
 var parser = ParserHelper.Create(culture);
 
 var arguments = parser.ParseArguments<BuildCalendarArgs, BuildFlowArgs>(args);
 
 return await arguments.MapResult(
-    async (BuildCalendarArgs arg) => await container.Resolve<BuildCalendarCommand>().Execute(arg, CancellationToken.None),
-    async (BuildFlowArgs arg) => await container.Resolve<BuildFlowCommand>().Execute(arg, CancellationToken.None),
+    async (BuildCalendarArgs arg) => await container.Resolve<BuildCalendarCommand>().Execute(arg, cancellationHandler.Token),
+    async (BuildFlowArgs arg) => await container.Resolve<BuildFlowCommand>().Execute(arg, cancellationHandler.Token),
     async errs => await ParserHelper.HandleUnparsed(errs, arguments));

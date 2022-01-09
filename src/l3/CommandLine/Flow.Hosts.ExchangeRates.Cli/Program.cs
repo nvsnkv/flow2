@@ -21,11 +21,12 @@ builder.RegisterType<ListCommand>();
 var container = builder.Build();
 var config = container.Resolve<IFlowConfiguration>();
 
+var cancellationHandler = new ConsoleCancellationHandler();
 var parser = ParserHelper.Create(config);
 
 var arguments = parser.ParseArguments<RequestArgs, ListArgs>(args);
 return await arguments.MapResult(
-    async (RequestArgs arg) => await container.Resolve<ListCommand>().Execute(arg, CancellationToken.None),
-    async (ListArgs arg) => await container.Resolve<ListCommand>().Execute(arg, CancellationToken.None),
+    async (RequestArgs arg) => await container.Resolve<ListCommand>().Execute(arg, cancellationHandler.Token),
+    async (ListArgs arg) => await container.Resolve<ListCommand>().Execute(arg, cancellationHandler.Token),
     async errs => await ParserHelper.HandleUnparsed(errs, arguments));
 
