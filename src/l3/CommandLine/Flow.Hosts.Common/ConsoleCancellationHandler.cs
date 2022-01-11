@@ -8,7 +8,7 @@ public class ConsoleCancellationHandler
 
     public ConsoleCancellationHandler()
     {
-        Console.CancelKeyPress += (_, e) =>
+        Console.CancelKeyPress += (_, _) =>
         {
             source.Cancel(true);
             Environment.Exit(2);

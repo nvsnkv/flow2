@@ -15,7 +15,6 @@ namespace Flow.Domain.Transactions.UnitTests
         { 
             var rec = new RecordedTransaction(1, transaction);
             var oth = new RecordedTransaction(1, other);
-            var another = new RecordedTransaction(1, transaction);
 
             oth.Should().NotBe(rec);
         }
