@@ -1,5 +1,4 @@
-﻿using Flow.Domain.Analysis;
-using Range = Flow.Domain.Analysis.Range;
+﻿using Range = Flow.Domain.Analysis.Range;
 
 namespace Flow.Application.Analysis;
 

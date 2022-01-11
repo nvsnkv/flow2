@@ -1,5 +1,4 @@
-﻿using Flow.Domain.Analysis;
-using FluentAssertions;
+﻿using FluentAssertions;
 using Xunit;
 using Xunit.Categories;
 using Range = Flow.Domain.Analysis.Range;
