@@ -25,7 +25,7 @@ namespace Flow.Domain.Patterns
             
             public Expression Inline(Expression expression)
             {
-                return Visit(expression)!;
+                return Visit(expression);
             }
 
             protected override Expression VisitInvocation(InvocationExpression e)
