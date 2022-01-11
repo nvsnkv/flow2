@@ -44,7 +44,7 @@ namespace Flow.Domain.Patterns
                 context.Push(currentMapping);
                 var result = Visit(callingLambda.Body);
                 context.Pop();
-                return result!;
+                return result;
             }
 
             protected override Expression VisitParameter(ParameterExpression e)
