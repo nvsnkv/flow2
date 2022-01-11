@@ -5,15 +5,10 @@
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <Version>0.0.2</Version>
-    <PackageId>accountant</PackageId>
-    <Authors>nvsnkv</Authors>
-    <Company />
-    <Product>flow:accountant</Product>
-    <Description>CLI app to manage transactions in Flow data storage</Description>
-    <Copyright>© nvsnkv 2021</Copyright>
-    <PackageProjectUrl>https://github.com/nvsnkv/flow2</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/nvsnkv/flow2</RepositoryUrl>
+	<Version>2.0.0</Version>
+	<AssemblyVersion>2.0.0.0</AssemblyVersion>
+	<Authors>nvsnkv</Authors>
+	<Copyright>© 2021 nvsnkv</Copyright>
     <AssemblyName>accountant</AssemblyName>
   </PropertyGroup>
 
