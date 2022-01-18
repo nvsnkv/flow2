@@ -64,6 +64,6 @@ public abstract class CommandBase
 
     private static string GeneratePath(SupportedFormat format, string command, string slug)
     {
-        return $"{command}.{DateTime.Now:s}.{slug}.{format.ToString().ToLower()}".Replace(":", "_");
+        return $"temp.{command}.{DateTime.Now:s}.{slug}.{format.ToString().ToLower()}".Replace(":", "_");
     }
 }
