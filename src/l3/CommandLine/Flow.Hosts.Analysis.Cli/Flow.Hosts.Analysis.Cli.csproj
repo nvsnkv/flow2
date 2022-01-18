@@ -6,7 +6,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <AssemblyName>flow</AssemblyName>
-    <Version>2.0.0</Version>
+    <Version>2.0.1</Version>
 	<AssemblyVersion>2.0.0.0</AssemblyVersion>
     <Authors>nvsnkv</Authors>
 	<Copyright>© 2021 nvsnkv</Copyright>
