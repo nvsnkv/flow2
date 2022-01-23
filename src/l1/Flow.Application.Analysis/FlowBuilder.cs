@@ -52,10 +52,7 @@ internal class FlowBuilder
             .Where(t => { 
                 if (sinks.Contains(t.Key))
                 {
-                    if (rejectionsHandler != null)
-                    {
-                        rejectionsHandler(new RejectedTransaction(t, "Given transaction is a transfer sink!"));
-                    }
+                    rejectionsHandler?.Invoke(new RejectedTransaction(t, "Given transaction is a transfer sink!"));
 
                     return false;
                 }
@@ -72,10 +69,7 @@ internal class FlowBuilder
             {
                 if (t.Amount == 0)
                 {
-                    if (rejectionsHandler != null)
-                    {
-                        rejectionsHandler(new RejectedTransaction(t, "Given transaction has zero amount!"));
-                    }
+                    rejectionsHandler?.Invoke(new RejectedTransaction(t, "Given transaction has zero amount!"));
 
                     return false;
                 }
@@ -104,10 +98,7 @@ internal class FlowBuilder
         var rate = await ratesProvider!.GetRate(request, ct);
         if (rate == null)
         {
-            if (rejectionsHandler != null)
-            {
-                rejectionsHandler(new RejectedTransaction(t, "Unable to get exchange rate for given transaction!"));
-            }
+            rejectionsHandler?.Invoke(new RejectedTransaction(t, "Unable to get exchange rate for given transaction!"));
 
             return null;
         }

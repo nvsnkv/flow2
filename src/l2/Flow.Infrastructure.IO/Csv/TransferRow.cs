@@ -5,6 +5,7 @@ namespace Flow.Infrastructure.IO.Csv;
 
 [SuppressMessage("ReSharper", "InconsistentNaming")]
 [SuppressMessage("ReSharper", "MemberCanBePrivate.Global")]
+[SuppressMessage("CodeQuality", "IDE0079:Remove unnecessary suppression", Justification = "False positive")]
 internal class TransferRow : TransferKeyRow
 {
     public decimal FEE { get; init; }

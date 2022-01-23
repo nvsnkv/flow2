@@ -30,7 +30,7 @@ public class FlowBuilderShould
 
     private static readonly Transfer[] Transfers =
     {
-        new(Expenses[0], Incomes[11], DetectionAccuracy.Exact, 0, "RUR"),
+        new(Expenses[0], Incomes[0], DetectionAccuracy.Exact, 0, "RUR"),
         new(Expenses[2], Incomes[3], DetectionAccuracy.Exact, 0, "RUR")
     };
 
