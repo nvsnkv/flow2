@@ -62,14 +62,14 @@ internal class Accountant : IAccountant
         return await storage.Delete(conditions, ct);
     }
 
-    public async IAsyncEnumerable<Transfer> GetTransfers(Expression<Func<RecordedTransaction, bool>> conditions, [EnumeratorCancellation] CancellationToken ct)
+    public async IAsyncEnumerable<Transfer> GetTransfers(Expression<Func<RecordedTransaction, bool>> conditions, DetectionAccuracy accuracy, [EnumeratorCancellation] CancellationToken ct)
     {
         var transactions = await storage.Read(conditions, ct);
         
         var builder = transferDetectors.Aggregate(new TransfersBuilder(transactions.ToList()), (b, d) => b.With(d));
         builder.With(await OverridesBasedTransferDetector.Create(transferKeyStorage, ratesProvider, ct));
 
-        await foreach (var t in builder.Build(ct))
+        await foreach (var t in builder.Build(ct).Where(t => t.AccuracyLevel >= accuracy).WithCancellation(ct))
         {
             yield return t;
         }

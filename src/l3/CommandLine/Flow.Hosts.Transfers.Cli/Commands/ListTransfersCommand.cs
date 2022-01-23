@@ -1,4 +1,5 @@
 ﻿using Flow.Application.Transactions.Contract;
+using Flow.Domain.Transactions.Transfers;
 using Flow.Hosts.Common.Commands;
 using Flow.Infrastructure.Configuration.Contract;
 using Flow.Infrastructure.IO.Contract;
@@ -32,7 +33,7 @@ internal class ListTransfersCommand : CommandBase
             }
         }
 
-        var transfers = accountant.GetTransfers(criteria.Conditions!, ct);
+        var transfers = accountant.GetTransfers(criteria.Conditions!, DetectionAccuracy.Exact, ct);
 
         var output = args.Output ?? (args.OpenEditor ? GetFallbackOutputPath(args.Format, "list", "transactions") : null);
         await using var streamWriter = CreateWriter(output);
