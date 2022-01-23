@@ -18,8 +18,8 @@ internal class TransferRow : TransferKeyRow
     {
         return new TransferRow
         {
-            SINK = key.Sink,
-            SOURCE = key.Source,
+            SINK = key.Sink.Key,
+            SOURCE = key.Source.Key,
             FEE = key.Fee,
             CURRENCY = key.Currency,
             COMMENT = key.Comment ?? string.Empty

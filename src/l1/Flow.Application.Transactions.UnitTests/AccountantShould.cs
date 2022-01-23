@@ -73,8 +73,8 @@ public class AccountantShould
         var exactTransfers = await accountant.GetTransfers(Constants<RecordedTransaction>.Truth, DetectionAccuracy.Exact, CancellationToken.None).ToListAsync(CancellationToken.None);
         exactTransfers.Count.Should().Be(1);
         var t = exactTransfers.Single();
-        t.Source.Should().Be(100);
-        t.Sink.Should().Be(101);
+        t.Source.Key.Should().Be(100);
+        t.Sink.Key.Should().Be(101);
     }
 
     [Fact, UnitTest]
@@ -84,8 +84,8 @@ public class AccountantShould
         transfers.Count.Should().Be(1);
 
         var likely = transfers.Single();
-        likely.Source.Should().Be(102);
-        likely.Sink.Should().Be(103);
+        likely.Source.Key.Should().Be(102);
+        likely.Sink.Key.Should().Be(103);
     }
 
     private class TestTransferDetector : ITransferDetector

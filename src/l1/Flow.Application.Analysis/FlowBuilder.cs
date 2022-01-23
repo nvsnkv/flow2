@@ -44,8 +44,8 @@ internal class FlowBuilder
 
     public async IAsyncEnumerable<RecordedTransaction> Build([EnumeratorCancellation] CancellationToken ct)
     {
-        var sources = await (transfers ?? AsyncEnumerable.Empty<Transfer>()).ToDictionaryAsync(s => s.Source, ct);
-        var sinks = sources.Values.Select(t => t.Sink).ToHashSet();
+        var sources = await (transfers ?? AsyncEnumerable.Empty<Transfer>()).ToDictionaryAsync(s => s.Source.Key, ct);
+        var sinks = sources.Values.Select(t => t.Sink.Key).ToHashSet();
 
         // meaningful transactions: transactions that changes amount of money within the system.
         var meaningfulTransactions = transactions

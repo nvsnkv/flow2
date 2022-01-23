@@ -72,8 +72,8 @@ public class TransferShould
     public void PopulateSourceAndSinkProperly()
     {
         var transfer = new Transfer(source, sink, DetectionAccuracy.Exact);
-        transfer.Source.Should().Be(source.Key);
-        transfer.Sink.Should().Be(sink.Key);
+        transfer.Source.Should().Be(source);
+        transfer.Sink.Should().Be(sink);
     }
 
     [Theory, UnitTest]

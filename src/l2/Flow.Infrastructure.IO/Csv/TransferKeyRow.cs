@@ -20,8 +20,8 @@ internal class TransferKeyRow
     {
         return new TransferKeyRow
         {
-            SINK = key.Sink,
-            SOURCE = key.Source
+            SINK = key.SinkKey,
+            SOURCE = key.SourceKey
         };
     }
 }

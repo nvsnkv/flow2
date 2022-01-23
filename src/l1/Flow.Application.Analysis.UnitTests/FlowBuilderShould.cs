@@ -48,7 +48,7 @@ public class FlowBuilderShould
     public async Task IgnoreTransfersWithZeroFee()
     {
         var transfersWithZeroFee = Transfers.Where(t => t.Fee == 0).ToList();
-        var transferKeys = transfersWithZeroFee.Select(t => t.Source).Union(transfersWithZeroFee.Select(t => t.Sink)).ToHashSet();
+        var transferKeys = transfersWithZeroFee.Select(t => t.Source.Key).Union(transfersWithZeroFee.Select(t => t.Sink.Key)).ToHashSet();
 
         var builder = new FlowBuilder(Expenses.Concat(Incomes)).WithTransfers(transfersWithZeroFee.ToAsyncEnumerable());
 
