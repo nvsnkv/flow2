@@ -44,16 +44,15 @@ public class AccountantShould
 
         transactionValidator.Setup(v => v.Validate(It.IsAny<Transaction>())).Returns(new ValidationResult());
 
-        var detector = new TestTransferDetector(new (long, long, DetectionAccuracy)[]
-        {
-            (100, 101, DetectionAccuracy.Exact),
-            (102, 103, DetectionAccuracy.Likely)
-        });
+        var detectors = new[] { 
+            new TestTransferDetector(new (long, long)[] { (100, 101) }, DetectionAccuracy.Exact),
+            new TestTransferDetector(new (long, long)[] { (102, 103) }, DetectionAccuracy.Likely)
+        };
 
         accountant = new Accountant(
             storage.Object,
             transactionValidator.Object,
-            Enumerable.Repeat(detector, 1),
+            detectors,
             overridesStorage.Object,
             transferKeyValidator.Object,
             ratesProvider.Object
@@ -79,26 +78,23 @@ public class AccountantShould
     }
 
     [Fact, UnitTest]
-    public async Task GetExactOrLikelyTransfersWhenLikelyTransfersWhenLikelyAccuracyRequested()
+    public async Task GetOnlyLikelyTransfersWhenLikelyTransfersWhenLikelyAccuracyRequested()
     {
         var transfers = await accountant.GetTransfers(Constants<RecordedTransaction>.Truth, DetectionAccuracy.Likely, CancellationToken.None).ToListAsync(CancellationToken.None);
-        transfers.Count.Should().Be(2);
+        transfers.Count.Should().Be(1);
 
-        var exact = transfers.Single(t => t.AccuracyLevel == DetectionAccuracy.Exact);
-        exact.Source.Should().Be(100);
-        exact.Sink.Should().Be(101);
-
-        var likely = transfers.Single(t => t.AccuracyLevel == DetectionAccuracy.Likely);
+        var likely = transfers.Single();
         likely.Source.Should().Be(102);
         likely.Sink.Should().Be(103);
     }
 
     private class TestTransferDetector : ITransferDetector
     {
-        private readonly (long, long, DetectionAccuracy)[] transfers;
+        private readonly (long, long)[] transfers;
 
-        public TestTransferDetector((long, long, DetectionAccuracy)[] transfers)
+        public TestTransferDetector((long, long)[] transfers, DetectionAccuracy accuracy)
         {
+            Accuracy = accuracy;
             this.transfers = transfers;
         }
 
@@ -109,9 +105,9 @@ public class AccountantShould
 
         public Task<Transfer> Create(RecordedTransaction left, RecordedTransaction right, CancellationToken ct)
         {
-            return Task.FromResult(new Transfer(left, right, transfers.First(t => t.Item1 == left.Key && t.Item2 == right.Key).Item3));
+            return Task.FromResult(new Transfer(left, right, Accuracy));
         }
 
-        public DetectionAccuracy Accuracy => DetectionAccuracy.Exact;
+        public DetectionAccuracy Accuracy { get; }
     }
 }

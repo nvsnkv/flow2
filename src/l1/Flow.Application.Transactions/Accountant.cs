@@ -66,10 +66,16 @@ internal class Accountant : IAccountant
     {
         var transactions = await storage.Read(conditions, ct);
         
-        var builder = transferDetectors.Aggregate(new TransfersBuilder(transactions.ToList()), (b, d) => b.With(d));
+        var builder = transferDetectors
+            .Where(d => d.Accuracy == accuracy)
+            .Aggregate(
+                new TransfersBuilder(transactions.ToList()), 
+                (b, d) => b.With(d)
+            );
+
         builder.With(await OverridesBasedTransferDetector.Create(transferKeyStorage, ratesProvider, ct));
 
-        await foreach (var t in builder.Build(ct).Where(t => t.AccuracyLevel >= accuracy).WithCancellation(ct))
+        await foreach (var t in builder.Build(ct))
         {
             yield return t;
         }
