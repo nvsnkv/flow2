@@ -4,18 +4,6 @@ namespace Flow.Domain.Transactions.Transfers;
 
 public class Transfer
 {
-    [Obsolete("Use ctor that accepts RecordedTransactions")]
-    public Transfer(long source, long sink, decimal fee, string currency, DetectionAccuracy accuracyLevel)
-    {
-        if (source == sink) throw new ArgumentException("Source and sink must be different!", nameof(sink));
-
-        Fee = fee;
-        Currency = currency;
-        AccuracyLevel = accuracyLevel;
-        Source = new RecordedTransaction(source, default, default, string.Empty, null, string.Empty, new(string.Empty, string.Empty));
-        Sink = new RecordedTransaction(sink, default, default, string.Empty, null, string.Empty, new(string.Empty, string.Empty));
-    }
-
     public Transfer(RecordedTransaction source, RecordedTransaction sink, DetectionAccuracy accuracyLevel, decimal? fee = null, string? currency = null)
     {
         if (source.Key == sink.Key) throw new ArgumentException("Source and sink must be different!", nameof(sink));
@@ -49,7 +37,7 @@ public class Transfer
 
     public override bool Equals(object? obj)
     {
-        if (ReferenceEquals(null, obj)) return false;
+        if (obj is null) return false;
         if (ReferenceEquals(this, obj)) return true;
         if (obj.GetType() != this.GetType()) return false;
         return Equals((Transfer)obj);

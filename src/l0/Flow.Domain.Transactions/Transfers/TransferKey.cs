@@ -22,7 +22,7 @@ public class TransferKey
     {
         if (obj is null) return false;
         if (ReferenceEquals(this, obj)) return true;
-        if (!(obj is TransferKey key)) return false;
+        if (obj is not TransferKey key) return false;
         return Equals(key);
     }
 

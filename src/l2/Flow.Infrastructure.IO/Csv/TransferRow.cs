@@ -3,7 +3,6 @@ using Flow.Domain.Transactions.Transfers;
 
 namespace Flow.Infrastructure.IO.Csv;
 
-[SuppressMessage("ReSharper", "MemberCanBeProtected.Global")]
 [SuppressMessage("ReSharper", "InconsistentNaming")]
 [SuppressMessage("ReSharper", "MemberCanBePrivate.Global")]
 internal class TransferRow : TransferKeyRow
