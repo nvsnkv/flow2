@@ -77,7 +77,7 @@ public class TransferBuilderShould : TestDataCarrier
 
     private static Transfer SetupDetector(Mock<ITransferDetector> mock, RecordedTransaction left, RecordedTransaction right, string? comment = null)
     {
-        var result = new Transfer(left, right) { Comment = comment };
+        var result = new Transfer(left, right, DetectionAccuracy.Exact) { Comment = comment };
 
         mock.Setup(d => d.CheckIsTransfer(left, right)).Returns(true);
         mock.Setup(d => d.Create(left, right, CancellationToken.None))

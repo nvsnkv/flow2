@@ -9,7 +9,7 @@ internal class OverridesBasedTransferDetector : TransferDetectorBase
 {
     private readonly HashSet<TransferKey> enforced;
     
-    private OverridesBasedTransferDetector(HashSet<TransferKey> enforced, IExchangeRatesProvider provider):base("User defined transfer", provider)
+    private OverridesBasedTransferDetector(HashSet<TransferKey> enforced, IExchangeRatesProvider provider):base("User defined transfer", provider, DetectionAccuracy.Exact)
     {
         this.enforced = enforced;
     }

@@ -21,7 +21,7 @@ public class TransferShould
     {
         Action a = () =>
         {
-            var _ = new Transfer(0, 0, 0, "");
+            var _ = new Transfer(0, 0, 0, "", DetectionAccuracy.Exact);
         };
 
         a.Should().Throw<ArgumentException>().Where(e => e.ParamName == "sink");
@@ -32,7 +32,7 @@ public class TransferShould
     {
         Action a = () =>
         {
-            var _ = new Transfer(source, sinkWithDifferentCurrency);
+            var _ = new Transfer(source, sinkWithDifferentCurrency, DetectionAccuracy.Exact);
         };
 
         a.Should().Throw<ArgumentException>().Where(e => e.ParamName == "sink");
@@ -43,7 +43,7 @@ public class TransferShould
     {
         Action a = () =>
         {
-            var _ = new Transfer(sinkWithFee, sink);
+            var _ = new Transfer(sinkWithFee, sink, DetectionAccuracy.Exact);
         };
 
         a.Should().Throw<ArgumentException>().Where(e => e.ParamName == "source");
@@ -54,7 +54,7 @@ public class TransferShould
     {
         Action a = () =>
         {
-            var _ = new Transfer(source, anotherSource);
+            var _ = new Transfer(source, anotherSource, DetectionAccuracy.Exact);
         };
 
         a.Should().Throw<ArgumentException>().Where(e => e.ParamName == "sink");
@@ -63,7 +63,7 @@ public class TransferShould
     [Fact, UnitTest]
     public void CalculateFeeAsDifferenceBetweenSourceAndSink()
     {
-        var transfer = new Transfer(source, sinkWithFee);
+        var transfer = new Transfer(source, sinkWithFee, DetectionAccuracy.Exact);
         transfer.Fee.Should().Be(source.Amount + sinkWithFee.Amount);
         transfer.Currency.Should().Be(source.Currency);
     }
@@ -71,7 +71,7 @@ public class TransferShould
     [Fact, UnitTest]
     public void PopulateSourceAndSinkProperly()
     {
-        var transfer = new Transfer(source, sink);
+        var transfer = new Transfer(source, sink, DetectionAccuracy.Exact);
         transfer.Source.Should().Be(source.Key);
         transfer.Sink.Should().Be(sink.Key);
     }
@@ -84,8 +84,8 @@ public class TransferShould
 
     public void MatchIfKeysMatch(long source, long sink, decimal lFee, decimal rFee, string lCurrency, string rCurrency)
     {
-        var left = new Transfer(source, sink, lFee, lCurrency);
-        var right = new Transfer(source, sink, rFee, rCurrency);
+        var left = new Transfer(source, sink, lFee, lCurrency, DetectionAccuracy.Exact);
+        var right = new Transfer(source, sink, rFee, rCurrency, DetectionAccuracy.Exact);
 
         left.Should().Be(right);
     }
@@ -93,7 +93,7 @@ public class TransferShould
     [Fact, UnitTest]
     public void HaveHashKeyDefinedByTransferKey()
     {
-        var transfer = new Transfer(100, 400, 0, "RUR");
+        var transfer = new Transfer(100, 400, 0, "RUR", DetectionAccuracy.Exact);
         var key = new TransferKey(100, 400);
 
         key.GetHashCode().Should().Be(transfer.GetHashCode());
@@ -109,8 +109,8 @@ public class TransferShould
     [InlineData(1, 2, 3, 4, 100, 200, "EUR", "RUR")]
     public void DifferIfKeysAreDifferent(long ls, long lsnk, long rs, long rsnk, decimal lFee, decimal rFee, string lCurrency, string rCurrency)
     {
-        var left = new Transfer(ls, lsnk, lFee, lCurrency);
-        var right = new Transfer(rs, rsnk, rFee, rCurrency);
+        var left = new Transfer(ls, lsnk, lFee, lCurrency, DetectionAccuracy.Exact);
+        var right = new Transfer(rs, rsnk, rFee, rCurrency, DetectionAccuracy.Exact);
 
         left.Should().NotBe(right);
     }

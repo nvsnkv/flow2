@@ -30,8 +30,8 @@ public class FlowBuilderShould
 
     private static readonly Transfer[] Transfers =
     {
-        new(1, 11, 0, "RUR"),
-        new(3, 14, 0, "RUR")
+        new(1, 11, 0, "RUR", DetectionAccuracy.Exact),
+        new(3, 14, 0, "RUR", DetectionAccuracy.Exact)
     };
 
     [Fact, UnitTest]
