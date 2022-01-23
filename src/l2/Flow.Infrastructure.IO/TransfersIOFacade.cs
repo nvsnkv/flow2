@@ -10,11 +10,13 @@ internal class TransfersIOFacade : ITransferKeysReader, ITransfersWriter
 {
     private readonly CsvSerializer csv;
     private readonly JsonSerializer json;
+    private readonly TransfersWriter transfersWriter;
 
-    public TransfersIOFacade(CsvSerializer csv, JsonSerializer json)
+    public TransfersIOFacade(CsvSerializer csv, JsonSerializer json, TransfersWriter transfersWriter)
     {
         this.csv = csv;
         this.json = json;
+        this.transfersWriter = transfersWriter;
     }
 
     public async Task<IEnumerable<TransferKey>> ReadTransferKeys(StreamReader reader, SupportedFormat format, CancellationToken ct)
@@ -32,7 +34,7 @@ internal class TransfersIOFacade : ITransferKeysReader, ITransfersWriter
         switch (format)
         {
             case SupportedFormat.CSV:
-                await csv.Write<Transfer, TransferRow, TransferRowMap>(writer, transfers, t => (TransferRow)t, ct);
+                await transfersWriter.Write(writer, transfers, ct);
                 return;
 
             case SupportedFormat.JSON:
