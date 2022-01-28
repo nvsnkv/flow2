@@ -16,6 +16,8 @@ public interface IAccountant
 
     IAsyncEnumerable<Transfer> GetTransfers(Expression<Func<RecordedTransaction, bool>> conditions, CancellationToken ct);
 
+    IAsyncEnumerable<Transfer> GuessTransfers(Expression<Func<RecordedTransaction, bool>> conditions, CancellationToken ct);
+
     Task<IEnumerable<RejectedTransferKey>> EnforceTransfers(IEnumerable<TransferKey> keys, CancellationToken ct);
 
     Task<IEnumerable<RejectedTransferKey>> AbandonTransfers(IEnumerable<TransferKey> keys, CancellationToken ct);

@@ -4,7 +4,6 @@ using Flow.Application.ExchangeRates.Contract;
 using Flow.Application.Transactions.Contract;
 using Flow.Domain.Analysis;
 using Flow.Domain.Transactions;
-using Flow.Domain.Transactions.Transfers;
 
 namespace Flow.Application.Analysis;
 

@@ -25,7 +25,9 @@ public class AccountantShould
         new(101, DateTime.UtcNow, 11, "RUB", null, "Transaction 101", new("Account", "Bank")),
         new(102, DateTime.UtcNow, -12, "RUB", null, "Transaction 102", new("Account", "Bank")),
         new(103, DateTime.UtcNow, 13, "RUB", null, "Transaction 103", new("Account", "Bank")),
-        new(104, DateTime.UtcNow, -104, "RUB", null, "Transaction 104", new("Account", "Bank")),
+        new(104, DateTime.UtcNow, 104, "RUB", null, "Transaction 104", new("Account", "Bank")),
+        new(105, DateTime.UtcNow, -104, "RUB", null, "Transaction 105", new("Account", "Bank")),
+        new(106, DateTime.UtcNow, 104, "RUB", null, "Transaction 106", new("Account", "Bank"))
     };
 
     private readonly Mock<ITransactionsStorage> storage = new();
@@ -46,7 +48,9 @@ public class AccountantShould
 
         var detectors = new[] { 
             new TestTransferDetector(new (long, long)[] { (100, 101) }, DetectionAccuracy.Exact),
-            new TestTransferDetector(new (long, long)[] { (102, 103) }, DetectionAccuracy.Likely)
+            new TestTransferDetector(new (long, long)[] { (102, 104) }, DetectionAccuracy.Exact),
+            new TestTransferDetector(new (long, long)[] { (102, 103) }, DetectionAccuracy.Likely),
+            new TestTransferDetector(new (long, long)[] { (105, 106) }, DetectionAccuracy.Likely)
         };
 
         accountant = new Accountant(
@@ -71,10 +75,26 @@ public class AccountantShould
     public async Task GetExactTransfersOnlyOnGetTransfersInvoked()
     {
         var exactTransfers = await accountant.GetTransfers(Constants<RecordedTransaction>.Truth, CancellationToken.None).ToListAsync(CancellationToken.None);
-        exactTransfers.Count.Should().Be(1);
-        var t = exactTransfers.Single();
-        t.Source.Key.Should().Be(100);
-        t.Sink.Key.Should().Be(101);
+        exactTransfers.Count.Should().Be(2);
+
+        var first = exactTransfers.First();
+        first.Source.Should().BeEquivalentTo(RecordedTransactions.First(s => s.Key == 100));
+        first.Sink.Should().BeEquivalentTo(RecordedTransactions.First(s => s.Key == 101));
+
+        var second = exactTransfers.Last();
+        second.Source.Should().BeEquivalentTo(RecordedTransactions.First(s => s.Key == 102));
+        second.Sink.Should().BeEquivalentTo(RecordedTransactions.First(s => s.Key == 104));
+    }
+
+    [Fact, UnitTest]
+    //See transfer detector setup in ctor
+    public async Task ReturnPossibleTransfersWithoutExactOnes()
+    {
+        var likelyTransfers = await accountant.GuessTransfers(Constants<RecordedTransaction>.Truth, CancellationToken.None).ToListAsync(CancellationToken.None);
+        likelyTransfers.Count.Should().Be(1);
+        var t = likelyTransfers.Single();
+        t.Source.Should().BeEquivalentTo(RecordedTransactions.First(s => s.Key == 105));
+        t.Sink.Should().BeEquivalentTo(RecordedTransactions.First(s => s.Key == 106));
     }
 
     private class TestTransferDetector : ITransferDetector
