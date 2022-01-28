@@ -1,4 +1,7 @@
-﻿using Flow.Application.Transactions.Contract;
+﻿using System.Linq.Expressions;
+using Flow.Application.Transactions.Contract;
+using Flow.Domain.Transactions;
+using Flow.Domain.Transactions.Transfers;
 using Flow.Hosts.Common.Commands;
 using Flow.Infrastructure.Configuration.Contract;
 using Flow.Infrastructure.IO.Contract;
@@ -22,6 +25,16 @@ internal class ListTransfersCommand : CommandBase
 
     public async Task<int> Execute(ListTransfersArgs args, CancellationToken ct)
     {
+        return await DoExecute(args, ct, accountant.GetTransfers);
+    }
+
+    public async Task<int> Execute(GuessTransfersArgs args, CancellationToken ct)
+    {
+        return await DoExecute(args, ct, accountant.GuessTransfers);
+    }
+
+    private async Task<int> DoExecute(ListArgsBase args, CancellationToken ct, Func<Expression<Func<RecordedTransaction, bool>>, CancellationToken, IAsyncEnumerable<Transfer>> getTransfersFunc)
+    {
         var criteria = parser.ParseRecordedTransactionCriteria(args.Criteria ?? Enumerable.Empty<string>());
         if (!criteria.Successful)
         {
@@ -32,7 +45,7 @@ internal class ListTransfersCommand : CommandBase
             }
         }
 
-        var transfers = accountant.GetTransfers(criteria.Conditions!, ct);
+        var transfers = getTransfersFunc(criteria.Conditions!, ct);
 
         var output = args.Output ?? (args.OpenEditor ? GetFallbackOutputPath(args.Format, "list", "transactions") : null);
         await using var streamWriter = CreateWriter(output);
