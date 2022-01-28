@@ -101,9 +101,7 @@ internal class Accountant : IAccountant
                 new TransfersBuilder(transactions.ToList()),
                 (b, d) => b.With(d)
             );
-
-        builder.With(await OverridesBasedTransferDetector.Create(transferKeyStorage, ratesProvider, ct));
-
+        
         await foreach (var t in builder.Build(ct))
         {
             yield return t;
