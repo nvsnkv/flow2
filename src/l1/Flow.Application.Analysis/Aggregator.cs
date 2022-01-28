@@ -44,7 +44,7 @@ internal class Aggregator : IAggregator
 
         Expression<Func<RecordedTransaction, bool>> dateRange = t => from <= t.Timestamp && t.Timestamp < till;
         var transactions = await accountant.GetTransactions(dateRange, ct);
-        var transfers = accountant.GetTransfers(dateRange, DetectionAccuracy.Exact, ct);
+        var transfers = accountant.GetTransfers(dateRange, ct);
 
         var rejected = new List<RejectedTransaction>();
         var flow = new FlowBuilder(transactions)

@@ -68,24 +68,13 @@ public class AccountantShould
 
     [Fact, UnitTest]
     //See transfer detector setup in ctor
-    public async Task GetExactTransfersWhenJustExactAccuracyRequested()
+    public async Task GetExactTransfersOnlyOnGetTransfersInvoked()
     {
-        var exactTransfers = await accountant.GetTransfers(Constants<RecordedTransaction>.Truth, DetectionAccuracy.Exact, CancellationToken.None).ToListAsync(CancellationToken.None);
+        var exactTransfers = await accountant.GetTransfers(Constants<RecordedTransaction>.Truth, CancellationToken.None).ToListAsync(CancellationToken.None);
         exactTransfers.Count.Should().Be(1);
         var t = exactTransfers.Single();
         t.Source.Key.Should().Be(100);
         t.Sink.Key.Should().Be(101);
-    }
-
-    [Fact, UnitTest]
-    public async Task GetOnlyLikelyTransfersWhenLikelyTransfersWhenLikelyAccuracyRequested()
-    {
-        var transfers = await accountant.GetTransfers(Constants<RecordedTransaction>.Truth, DetectionAccuracy.Likely, CancellationToken.None).ToListAsync(CancellationToken.None);
-        transfers.Count.Should().Be(1);
-
-        var likely = transfers.Single();
-        likely.Source.Key.Should().Be(102);
-        likely.Sink.Key.Should().Be(103);
     }
 
     private class TestTransferDetector : ITransferDetector
