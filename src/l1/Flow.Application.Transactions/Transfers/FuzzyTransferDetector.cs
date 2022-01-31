@@ -1,4 +1,5 @@
 ﻿using Flow.Application.ExchangeRates.Contract;
+using Flow.Domain.Common;
 using Flow.Domain.Transactions;
 using Flow.Domain.Transactions.Transfers;
 using FluentDateTime;
@@ -24,20 +25,11 @@ class FuzzyTransferDetector : TransferDetectorBase
             return false;
         }
 
-        var leftTs = GetBusinessDate(left.Timestamp);
-        var rightTs = GetBusinessDate(right.Timestamp);
+        var leftTs = left.Timestamp.BusinessDate();
+        var rightTs = right.Timestamp.BusinessDate();
         
 
         return leftTs <= rightTs && rightTs <= leftTs.AddBusinessDays(TransferWindowDays);
     }
 
-    private static DateTime GetBusinessDate(DateTime timestamp)
-    {
-        return timestamp.DayOfWeek switch
-        {
-            DayOfWeek.Sunday => timestamp.Date.AddDays(1),
-            DayOfWeek.Saturday => timestamp.Date.AddDays(2),
-            _ => timestamp.Date
-        };
-    }
 }
