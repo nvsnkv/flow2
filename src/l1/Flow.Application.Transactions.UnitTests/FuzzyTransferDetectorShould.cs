@@ -3,6 +3,7 @@ using Flow.Application.ExchangeRates.Contract;
 using Flow.Application.Transactions.Transfers;
 using Flow.Domain.Transactions;
 using FluentAssertions;
+using Microsoft.Extensions.Primitives;
 using Moq;
 using Xunit;
 using Xunit.Categories;
@@ -60,7 +61,7 @@ public class FuzzyTransferDetectorShould
     public void DetectTransfersMadeOverTheWeekend(string sourceTimestamp, string sinkTimestamp)
     {
         var left = new RecordedTransaction(0, DateTime.Parse(sourceTimestamp), -100, "ZBW", null, "Title", new("Account", "Bank"));
-        var right = new RecordedTransaction(1, DateTime.Parse(sinkTimestamp), 100, "ZBW", null, "Title", new("Account", "Bank"));
+        var right = new RecordedTransaction(1, DateTime.Parse(sinkTimestamp), 100, "ZBW", null, "Title", new("Accounto", "Bank"));
 
         new FuzzyTransferDetector(new Mock<IExchangeRatesProvider>().Object).CheckIsTransfer(left, right).Should().BeTrue();
     }
@@ -82,11 +83,21 @@ public class FuzzyTransferDetectorShould
     public void DetectTransfersMadeWithinThreeBusinessDays(string sourceTimestamp, string sinkTimestamp)
     {
         var left = new RecordedTransaction(0, DateTime.Parse(sourceTimestamp), -100, "ZBW", null, "Title", new("Account", "Bank"));
-        var right = new RecordedTransaction(1, DateTime.Parse(sinkTimestamp), 100, "ZBW", null, "Title", new("Account", "Bank"));
+        var right = new RecordedTransaction(1, DateTime.Parse(sinkTimestamp), 100, "ZBW", null, "Title", new("El Accounto", "El Banco"));
 
         new FuzzyTransferDetector(new Mock<IExchangeRatesProvider>().Object).CheckIsTransfer(left, right).Should().BeTrue();
     }
 
     [Theory, UnitTest]
     [InlineData(null, "Transfer", null, "Transfer")]
+    [InlineData(null, "Transfer", null, "Перевод")]
+    [InlineData(null, "Transfer", "СБП", "Transfer")]
+    [InlineData(null, "Transfer", "СБП", "Перевод")]
+    public void DetectTransfersRegardlessOfItsNames(string? lc, string lt, string? rc, string rt)
+    {
+        var left = new RecordedTransaction(0, DateTime.UtcNow, -100, "ZBW", lc, lt, new("Account", "Bank"));
+        var right = new RecordedTransaction(1, DateTime.UtcNow ,100, "ZBW", rc, rt, new("El Accounto", "El Banco"));
+
+        new FuzzyTransferDetector(new Mock<IExchangeRatesProvider>().Object).CheckIsTransfer(left, right).Should().BeTrue();
+    }
 }
