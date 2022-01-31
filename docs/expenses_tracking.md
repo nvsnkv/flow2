@@ -41,6 +41,9 @@ For each transfer tool returns Source (a Key of source transaction), Sink (a Key
 
 If necessary user can enforse a particular transfer by providing a pair of Source and Sink to `transfers enforce` command. Previously enforsed transfers can be abandoned using `transfers abandon` command.
 
+Flow comes with the logic that can find potential transfers - usually cross-bank transfer operations gets logged with different titles in source and sink. As a result, system cannot match them automatically.
+`transfers guess` command will provide the list of hypotetical transfers. Output of this command can be used to build the list of transfers to enforce with `transfers enforce`
+
 ### Exchange Rates
 Where needed, _flow_ automatically requests exchange rates to perform conversion. Rates that were successfully received from the Central Bank ofr the Russian Federation are getting cached in local storage to speed up subsequent calculations.
 
