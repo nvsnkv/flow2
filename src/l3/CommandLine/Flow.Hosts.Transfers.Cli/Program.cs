@@ -28,7 +28,7 @@ var config = container.Resolve<IFlowConfiguration>();
 var cancellationHandler = new ConsoleCancellationHandler();
 var parser = ParserHelper.Create(config);
 
-var arguments = parser.ParseArguments<ListTransfersArgs, EnforceTransfersArgs, AbandonTransfersArgs>(args);
+var arguments = parser.ParseArguments<ListTransfersArgs, EnforceTransfersArgs, AbandonTransfersArgs, GuessTransfersArgs>(args);
 return await arguments.MapResult(
     async (ListTransfersArgs arg) => await container.Resolve<ListTransfersCommand>().Execute(arg, cancellationHandler.Token),
     async (GuessTransfersArgs arg) => await container.Resolve<ListTransfersCommand>().Execute(arg, cancellationHandler.Token),
