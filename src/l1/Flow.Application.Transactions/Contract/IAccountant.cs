@@ -14,6 +14,8 @@ public interface IAccountant
 
     Task<int> DeleteTransactions(Expression<Func<RecordedTransaction, bool>> conditions, CancellationToken ct);
 
+    Task<IEnumerable<IEnumerable<RecordedTransaction>>> GuessDuplicates(Expression<Func<RecordedTransaction, bool>>? conditions, CancellationToken ct);
+
     IAsyncEnumerable<Transfer> GetTransfers(Expression<Func<RecordedTransaction, bool>> conditions, CancellationToken ct);
 
     IAsyncEnumerable<Transfer> GuessTransfers(Expression<Func<RecordedTransaction, bool>> conditions, CancellationToken ct);

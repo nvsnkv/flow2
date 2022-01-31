@@ -33,8 +33,7 @@ internal class Accountant : IAccountant
         this.ratesProvider = ratesProvider;
     }
 
-    public async Task<IEnumerable<RecordedTransaction>> GetTransactions(Expression<Func<RecordedTransaction, bool>>? conditions,
-        CancellationToken ct)
+    public async Task<IEnumerable<RecordedTransaction>> GetTransactions(Expression<Func<RecordedTransaction, bool>>? conditions, CancellationToken ct)
     {
         conditions ??= Constants<RecordedTransaction>.Truth;
 
@@ -60,6 +59,12 @@ internal class Accountant : IAccountant
     public async Task<int> DeleteTransactions(Expression<Func<RecordedTransaction, bool>> conditions, CancellationToken ct)
     {
         return await storage.Delete(conditions, ct);
+    }
+
+    public async Task<IEnumerable<IEnumerable<RecordedTransaction>>> GuessDuplicates(Expression<Func<RecordedTransaction, bool>>? conditions, CancellationToken ct)
+    {
+        var transactions = await GetTransactions(conditions, ct);
+        return transactions.GroupBy(t => t, t => t, new DuplicateTransactionsComparer());
     }
 
     public async IAsyncEnumerable<Transfer> GetTransfers(Expression<Func<RecordedTransaction, bool>> conditions, [EnumeratorCancellation] CancellationToken ct)
