@@ -61,10 +61,10 @@ internal class Accountant : IAccountant
         return await storage.Delete(conditions, ct);
     }
 
-    public async Task<IEnumerable<IEnumerable<RecordedTransaction>>> GuessDuplicates(Expression<Func<RecordedTransaction, bool>>? conditions, CancellationToken ct)
+    public async Task<IEnumerable<IEnumerable<RecordedTransaction>>> GuessDuplicates(Expression<Func<RecordedTransaction, bool>>? conditions, int daysRange, CancellationToken ct)
     {
         var transactions = await GetTransactions(conditions, ct);
-        return transactions.GroupBy(t => t, t => t, new DuplicateTransactionsComparer()).Where(dups => dups.Count() > 1);
+        return transactions.GroupBy(t => t, t => t, new DuplicateTransactionsComparer(daysRange)).Where(d => d.Count() > 1);
     }
 
     public async IAsyncEnumerable<Transfer> GetTransfers(Expression<Func<RecordedTransaction, bool>> conditions, [EnumeratorCancellation] CancellationToken ct)

@@ -122,7 +122,7 @@ public class AccountantShould
             ratesProvider.Object
         );
 
-        var result = (await accountant.GuessDuplicates(null, CancellationToken.None)).ToList();
+        var result = (await accountant.GuessDuplicates(null, 3, CancellationToken.None)).ToList();
         result.Should().BeEquivalentTo(expectedResults);
     }
 

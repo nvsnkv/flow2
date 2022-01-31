@@ -30,7 +30,9 @@ internal class ListTransactionsCommand : CommandBase
                 return 1;
             }
         }
-        var transactions = await accountant.GetTransactions(criteria.Conditions, ct);
+        var transactions = args.DuplicatesOnly 
+            ? (await accountant.GuessDuplicates(criteria.Conditions, args.DuplicatesDaysRange, ct)).SelectMany(d => d)
+            : await accountant.GetTransactions(criteria.Conditions, ct);
 
         var output = args.Output ?? (args.OpenEditor ? GetFallbackOutputPath(args.Format, "list", "transactions") : null);
         await using var streamWriter = CreateWriter(output);

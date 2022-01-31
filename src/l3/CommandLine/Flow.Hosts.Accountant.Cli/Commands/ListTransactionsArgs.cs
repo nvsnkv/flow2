@@ -27,6 +27,12 @@ internal class ListTransactionsArgs : ArgsBase
     [Option('e', "open-in-editor", Default = false, Required = false, HelpText = "Display transactions in external editor")]
     public bool OpenEditor { get; [UsedImplicitly] set;}
 
+    [Option('d', "duplicates", HelpText = "Export the list of potentially duplicated entries instead of full list", Default = false)]
+    public bool DuplicatesOnly { get; [UsedImplicitly] internal set; }
+
+    [Option('r', "duplicates-range", HelpText = "Number of days between earliest and latest duplicates", Default = 3)]
+    public int DuplicatesDaysRange { get; [UsedImplicitly] internal set; }
+
     [Value(0, MetaName = "Criteria", Required = true, HelpText = "Criteria for items that should be returned.")]
     public IEnumerable<string>? Criteria { get; [UsedImplicitly]  set; }
 }
