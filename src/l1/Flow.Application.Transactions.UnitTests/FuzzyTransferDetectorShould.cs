@@ -3,7 +3,6 @@ using Flow.Application.ExchangeRates.Contract;
 using Flow.Application.Transactions.Transfers;
 using Flow.Domain.Transactions;
 using FluentAssertions;
-using Microsoft.Extensions.Primitives;
 using Moq;
 using Xunit;
 using Xunit.Categories;
