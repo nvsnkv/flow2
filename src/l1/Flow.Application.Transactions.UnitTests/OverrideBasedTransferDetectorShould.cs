@@ -33,9 +33,17 @@ public class OverrideBasedTransferDetectorShould :TestDataCarrier
     }
 
     [Fact, UnitTest]
+    public async Task SetAccuracyLevelToExact()
+    {
+        var detector = await OverridesBasedTransferDetector.Create(storage.Object, ratesProvider.Object, CancellationToken.None);
+        var result = await detector.Create(Transactions[1], Transactions[2], CancellationToken.None);
+        result.AccuracyLevel.Should().Be(DetectionAccuracy.Exact);
+    }
+
+    [Fact, UnitTest]
     public async Task CreateEnforcedTransfers()
     {
-        var expectedTransfer = new Transfer(Transactions[400], Transactions[344]) {Comment = "User defined transfer" };
+        var expectedTransfer = new Transfer(Transactions[400], Transactions[344], DetectionAccuracy.Exact) {Comment = "User defined transfer" };
         var detector = await OverridesBasedTransferDetector.Create(storage.Object, ratesProvider.Object, CancellationToken.None);
         var transfer = await detector.Create(Transactions[400], Transactions[344], CancellationToken.None);
 

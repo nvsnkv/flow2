@@ -30,8 +30,8 @@ public class FlowBuilderShould
 
     private static readonly Transfer[] Transfers =
     {
-        new(1, 11, 0, "RUR"),
-        new(3, 14, 0, "RUR")
+        new(Expenses[0], Incomes[0], DetectionAccuracy.Exact, 0, "RUR"),
+        new(Expenses[2], Incomes[3], DetectionAccuracy.Exact, 0, "RUR")
     };
 
     [Fact, UnitTest]
@@ -48,7 +48,7 @@ public class FlowBuilderShould
     public async Task IgnoreTransfersWithZeroFee()
     {
         var transfersWithZeroFee = Transfers.Where(t => t.Fee == 0).ToList();
-        var transferKeys = transfersWithZeroFee.Select(t => t.Source).Union(transfersWithZeroFee.Select(t => t.Sink)).ToHashSet();
+        var transferKeys = transfersWithZeroFee.Select(t => t.Source.Key).Union(transfersWithZeroFee.Select(t => t.Sink.Key)).ToHashSet();
 
         var builder = new FlowBuilder(Expenses.Concat(Incomes)).WithTransfers(transfersWithZeroFee.ToAsyncEnumerable());
 

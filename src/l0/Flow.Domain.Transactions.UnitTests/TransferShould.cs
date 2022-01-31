@@ -21,7 +21,7 @@ public class TransferShould
     {
         Action a = () =>
         {
-            var _ = new Transfer(0, 0, 0, "");
+            var _ = new Transfer(GetTransaction(1), GetTransaction(1), DetectionAccuracy.Exact);
         };
 
         a.Should().Throw<ArgumentException>().Where(e => e.ParamName == "sink");
@@ -32,7 +32,7 @@ public class TransferShould
     {
         Action a = () =>
         {
-            var _ = new Transfer(source, sinkWithDifferentCurrency);
+            var _ = new Transfer(source, sinkWithDifferentCurrency, DetectionAccuracy.Exact);
         };
 
         a.Should().Throw<ArgumentException>().Where(e => e.ParamName == "sink");
@@ -43,7 +43,7 @@ public class TransferShould
     {
         Action a = () =>
         {
-            var _ = new Transfer(sinkWithFee, sink);
+            var _ = new Transfer(sinkWithFee, sink, DetectionAccuracy.Exact);
         };
 
         a.Should().Throw<ArgumentException>().Where(e => e.ParamName == "source");
@@ -54,7 +54,7 @@ public class TransferShould
     {
         Action a = () =>
         {
-            var _ = new Transfer(source, anotherSource);
+            var _ = new Transfer(source, anotherSource, DetectionAccuracy.Exact);
         };
 
         a.Should().Throw<ArgumentException>().Where(e => e.ParamName == "sink");
@@ -63,7 +63,7 @@ public class TransferShould
     [Fact, UnitTest]
     public void CalculateFeeAsDifferenceBetweenSourceAndSink()
     {
-        var transfer = new Transfer(source, sinkWithFee);
+        var transfer = new Transfer(source, sinkWithFee, DetectionAccuracy.Exact);
         transfer.Fee.Should().Be(source.Amount + sinkWithFee.Amount);
         transfer.Currency.Should().Be(source.Currency);
     }
@@ -71,9 +71,9 @@ public class TransferShould
     [Fact, UnitTest]
     public void PopulateSourceAndSinkProperly()
     {
-        var transfer = new Transfer(source, sink);
-        transfer.Source.Should().Be(source.Key);
-        transfer.Sink.Should().Be(sink.Key);
+        var transfer = new Transfer(source, sink, DetectionAccuracy.Exact);
+        transfer.Source.Should().Be(source);
+        transfer.Sink.Should().Be(sink);
     }
 
     [Theory, UnitTest]
@@ -84,8 +84,10 @@ public class TransferShould
 
     public void MatchIfKeysMatch(long source, long sink, decimal lFee, decimal rFee, string lCurrency, string rCurrency)
     {
-        var left = new Transfer(source, sink, lFee, lCurrency);
-        var right = new Transfer(source, sink, rFee, rCurrency);
+        var src = GetTransaction(source);
+        var snk = GetTransaction(sink, default, +15);
+        var left = new Transfer(src, snk, DetectionAccuracy.Exact, lFee, lCurrency);
+        var right = new Transfer(src, snk, DetectionAccuracy.Exact, rFee, rCurrency);
 
         left.Should().Be(right);
     }
@@ -93,7 +95,7 @@ public class TransferShould
     [Fact, UnitTest]
     public void HaveHashKeyDefinedByTransferKey()
     {
-        var transfer = new Transfer(100, 400, 0, "RUR");
+        var transfer = new Transfer(GetTransaction(100), GetTransaction(400, default, +15), DetectionAccuracy.Exact, 0, "RUR");
         var key = new TransferKey(100, 400);
 
         key.GetHashCode().Should().Be(transfer.GetHashCode());
@@ -109,9 +111,15 @@ public class TransferShould
     [InlineData(1, 2, 3, 4, 100, 200, "EUR", "RUR")]
     public void DifferIfKeysAreDifferent(long ls, long lsnk, long rs, long rsnk, decimal lFee, decimal rFee, string lCurrency, string rCurrency)
     {
-        var left = new Transfer(ls, lsnk, lFee, lCurrency);
-        var right = new Transfer(rs, rsnk, rFee, rCurrency);
+        var left = new Transfer(GetTransaction(ls), GetTransaction(lsnk, default, +15), DetectionAccuracy.Exact, lFee, lCurrency);
+        var right = new Transfer(GetTransaction(rs), GetTransaction(rsnk, default, +15), DetectionAccuracy.Exact, rFee, rCurrency);
 
         left.Should().NotBe(right);
+    }
+
+    private static RecordedTransaction GetTransaction(long key, DateTime timestamp = default, decimal amount = -350m,
+        string currency = "ZBW", string title = "title")
+    {
+        return new RecordedTransaction(key, timestamp, amount, currency, null, title, new("Account", "Bank"));
     }
 }

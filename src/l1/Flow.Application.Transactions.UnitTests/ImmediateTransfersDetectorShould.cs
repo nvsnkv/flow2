@@ -1,7 +1,10 @@
 using System;
+using System.Threading;
+using System.Threading.Tasks;
 using Flow.Application.ExchangeRates.Contract;
 using Flow.Application.Transactions.Transfers;
 using Flow.Domain.Transactions;
+using Flow.Domain.Transactions.Transfers;
 using FluentAssertions;
 using Moq;
 using Xunit;
@@ -76,5 +79,16 @@ public class ImmediateTransfersDetectorShould
         var sink = new RecordedTransaction(1, now, 100, "ZWL", "C", "Transfer", new AccountInfo("From", "bank"));
 
         new ImmediateTransfersDetector(ratesProvider.Object).CheckIsTransfer(source, sink).Should().BeFalse();
+    }
+
+    [Fact, UnitTest]
+    public async Task SetAccuracyLevelToExact()
+    {
+        var now = DateTime.UtcNow;
+        var source = new RecordedTransaction(1, now, -20, "ZWL", null, "Transfer", new AccountInfo("From", "bank"));
+        var sink = new RecordedTransaction(2, now, 20, "ZWL", null, "Transfer", new AccountInfo("To", "bank"));
+
+        var result = await new ImmediateTransfersDetector(ratesProvider.Object).Create(source, sink, CancellationToken.None);
+        result.AccuracyLevel.Should().Be(DetectionAccuracy.Exact);
     }
 }

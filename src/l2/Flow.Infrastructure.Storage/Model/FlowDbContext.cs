@@ -29,9 +29,9 @@ internal class FlowDbContext : DbContext
 
         modelBuilder.Entity<DbTransferKey>(kb =>
         {
-            kb.Property(k => k.Source);
-            kb.Property(k => k.Sink);
-            kb.HasKey(k => new { k.Source, k.Sink });
+            kb.Property(k => k.SourceKey);
+            kb.Property(k => k.SinkKey);
+            kb.HasKey(k => new { Source = k.SourceKey, Sink = k.SinkKey });
         });
 
         modelBuilder.Entity<DbTransaction>(tb =>
@@ -53,11 +53,11 @@ internal class FlowDbContext : DbContext
 
             tb.HasOne(t => t.SourceOf!)
                 .WithOne(k => k.SourceTransaction!)
-                .HasForeignKey<DbTransferKey>(t => t.Source);
+                .HasForeignKey<DbTransferKey>(t => t.SourceKey);
 
             tb.HasOne(t => t.SinkOf!)
                 .WithOne(k => k.SinkTransaction!)
-                .HasForeignKey<DbTransferKey>(t => t.Sink);
+                .HasForeignKey<DbTransferKey>(t => t.SinkKey);
         });
 
         modelBuilder.Entity<ExchangeRate>(rb =>

@@ -4,31 +4,31 @@ namespace Flow.Domain.Transactions.Transfers;
 
 public class TransferKey
 {
-    public TransferKey(long source, long sink)
+    public TransferKey(long sourceKey, long sinkKey)
     {
-        Source = source;
-        Sink = sink;
+        SourceKey = sourceKey;
+        SinkKey = sinkKey;
     }
 
-    public long Source { get; }
-    public long Sink { get; }
+    public long SourceKey { get; }
+    public long SinkKey { get; }
 
     protected bool Equals(TransferKey other)
     {
-        return Source == other.Source && Sink == other.Sink;
+        return SourceKey == other.SourceKey && SinkKey == other.SinkKey;
     }
 
     public override bool Equals(object? obj)
     {
         if (obj is null) return false;
         if (ReferenceEquals(this, obj)) return true;
-        if (!(obj is TransferKey key)) return false;
+        if (obj is not TransferKey key) return false;
         return Equals(key);
     }
 
     public override int GetHashCode()
     {
-        return HashCode.Combine(Source, Sink);
+        return HashCode.Combine(SourceKey, SinkKey);
     }
 
     public static bool operator ==(TransferKey? left, TransferKey? right)

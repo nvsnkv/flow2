@@ -66,7 +66,13 @@ internal class Accountant : IAccountant
     {
         var transactions = await storage.Read(conditions, ct);
         
-        var builder = transferDetectors.Aggregate(new TransfersBuilder(transactions.ToList()), (b, d) => b.With(d));
+        var builder = transferDetectors
+            .Where(d => d.Accuracy == DetectionAccuracy.Exact)
+            .Aggregate(
+                new TransfersBuilder(transactions.ToList()), 
+                (b, d) => b.With(d)
+            );
+
         builder.With(await OverridesBasedTransferDetector.Create(transferKeyStorage, ratesProvider, ct));
 
         await foreach (var t in builder.Build(ct))
@@ -74,6 +80,34 @@ internal class Accountant : IAccountant
             yield return t;
         }
     }
+
+    public async IAsyncEnumerable<Transfer> GuessTransfers(Expression<Func<RecordedTransaction, bool>> conditions, [EnumeratorCancellation] CancellationToken ct)
+    {
+        HashSet<long> sources = new();
+        HashSet<long> sinks = new();
+
+        await foreach (var t in GetTransfers(conditions, ct))
+        {
+            sources.Add(t.Source.Key);
+            sinks.Add(t.Sink.Key);
+        }
+
+        var transactions = await GetTransactions(conditions, ct);
+        transactions = transactions.Where(t => !sources.Contains(t.Key) && !sinks.Contains(t.Key));
+
+        var builder = transferDetectors
+            .Where(d => d.Accuracy == DetectionAccuracy.Likely)
+            .Aggregate(
+                new TransfersBuilder(transactions.ToList()),
+                (b, d) => b.With(d)
+            );
+        
+        await foreach (var t in builder.Build(ct))
+        {
+            yield return t;
+        }
+    }
+
 
     public async Task<IEnumerable<RejectedTransferKey>> EnforceTransfers(IEnumerable<TransferKey> keys, CancellationToken ct)
     {

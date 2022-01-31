@@ -27,19 +27,19 @@ internal class TransferOverridesStorage : ITransferOverridesStorage
 
         foreach (var key in keys)
         {
-            if (await context.EnforcedTransfers.AnyAsync(t => t.Source == key.Source && t.Sink == key.Sink, ct))
+            if (await context.EnforcedTransfers.AnyAsync(t => t.SourceKey == key.SourceKey && t.SinkKey == key.SinkKey, ct))
             {
                 rejections.Add(new RejectedTransferKey(key, "Transfer is already enforced!"));
             }
-            else if (await context.EnforcedTransfers.AnyAsync(t => t.Source == key.Source ||t.Sink == key.Sink || t.Source == key.Sink || t.Sink == key.Source, ct))
+            else if (await context.EnforcedTransfers.AnyAsync(t => t.SourceKey == key.SourceKey ||t.SinkKey == key.SinkKey || t.SourceKey == key.SinkKey || t.SinkKey == key.SourceKey, ct))
             {
                 rejections.Add(new RejectedTransferKey(key, "Referenced transaction already used in another enforced transaction!"));
             }
-            else if (!await context.Transactions.AnyAsync(t => t.Key == key.Source, ct))
+            else if (!await context.Transactions.AnyAsync(t => t.Key == key.SourceKey, ct))
             {
                 rejections.Add(new RejectedTransferKey(key, "Unable to find source transaction for this transfer!"));
             }
-            else if (!await context.Transactions.AnyAsync(t => t.Key == key.Sink, ct))
+            else if (!await context.Transactions.AnyAsync(t => t.Key == key.SinkKey, ct))
             {
                 rejections.Add(new RejectedTransferKey(key, "Unable to find sink transaction for this transfer!"));
             }
@@ -60,7 +60,7 @@ internal class TransferOverridesStorage : ITransferOverridesStorage
 
         foreach (var key in keys)
         {
-            var target = await context.EnforcedTransfers.FirstOrDefaultAsync(t => t.Source == key.Source && t.Sink == key.Sink, ct);
+            var target = await context.EnforcedTransfers.FirstOrDefaultAsync(t => t.SourceKey == key.SourceKey && t.SinkKey == key.SinkKey, ct);
             if (target == null)
             {
                 rejections.Add(new RejectedTransferKey(key, "Transfer is not enforced"));

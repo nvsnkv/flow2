@@ -4,11 +4,11 @@ namespace Flow.Infrastructure.Storage.Model;
 
 internal class DbTransferKey : TransferKey
 {
-    public DbTransferKey(TransferKey t):this(t.Source, t.Sink)
+    public DbTransferKey(TransferKey t):this(t.SourceKey, t.SinkKey)
     {
     }
 
-    public DbTransferKey(long source, long sink) : base(source, sink)
+    public DbTransferKey(long sourceKey, long sinkKey) : base(sourceKey, sinkKey)
     {
     }
 

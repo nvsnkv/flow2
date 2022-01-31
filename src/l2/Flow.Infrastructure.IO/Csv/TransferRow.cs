@@ -3,9 +3,9 @@ using Flow.Domain.Transactions.Transfers;
 
 namespace Flow.Infrastructure.IO.Csv;
 
-[SuppressMessage("ReSharper", "MemberCanBeProtected.Global")]
 [SuppressMessage("ReSharper", "InconsistentNaming")]
 [SuppressMessage("ReSharper", "MemberCanBePrivate.Global")]
+[SuppressMessage("CodeQuality", "IDE0079:Remove unnecessary suppression", Justification = "False positive")]
 internal class TransferRow : TransferKeyRow
 {
     public decimal FEE { get; init; }
@@ -18,8 +18,8 @@ internal class TransferRow : TransferKeyRow
     {
         return new TransferRow
         {
-            SINK = key.Sink,
-            SOURCE = key.Source,
+            SINK = key.Sink.Key,
+            SOURCE = key.Source.Key,
             FEE = key.Fee,
             CURRENCY = key.Currency,
             COMMENT = key.Comment ?? string.Empty

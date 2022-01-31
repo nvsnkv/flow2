@@ -21,7 +21,7 @@ namespace Flow.Domain.Patterns
 
         private class InvokeInliner : ExpressionVisitor
         {
-            private readonly Stack<Dictionary<ParameterExpression, Expression>> context = new Stack<Dictionary<ParameterExpression, Expression>>();
+            private readonly Stack<Dictionary<ParameterExpression, Expression>> context = new();
             
             public Expression Inline(Expression expression)
             {
@@ -30,8 +30,7 @@ namespace Flow.Domain.Patterns
 
             protected override Expression VisitInvocation(InvocationExpression e)
             {
-                var callingLambda = e.Expression as LambdaExpression;
-                if (callingLambda == null) //Fix as per comment
+                if (e.Expression is not LambdaExpression callingLambda) //Fix as per comment
                     return base.VisitInvocation(e);
                 var currentMapping = new Dictionary<ParameterExpression, Expression>();
                 for (var i = 0; i < e.Arguments.Count; i++)

@@ -9,10 +9,11 @@ internal abstract class TransferDetectorBase : ITransferDetector
     private readonly string comment;
     private readonly IExchangeRatesProvider ratesProvider;
 
-    protected TransferDetectorBase(string comment, IExchangeRatesProvider ratesProvider)
+    protected TransferDetectorBase(string comment, IExchangeRatesProvider ratesProvider, DetectionAccuracy accuracy)
     {
         this.comment = comment;
         this.ratesProvider = ratesProvider;
+        Accuracy = accuracy;
     }
 
     public abstract bool CheckIsTransfer(RecordedTransaction left, RecordedTransaction right);
@@ -29,15 +30,17 @@ internal abstract class TransferDetectorBase : ITransferDetector
             var rate = await ratesProvider.GetRate((right.Currency, left.Currency, left.Timestamp), ct);
             if (rate == null) { throw new ArgumentException("Failed to get exchange rate for transfer!"); }
 
-            return new Transfer(left.Key, right.Key, left.Amount + right.Amount * rate.Rate, left.Currency)
+            return new Transfer(left, right, Accuracy, left.Amount + right.Amount * rate.Rate, left.Currency)
             {
                 Comment = comment + " (converted)"
             };
         }
 
-        return new Transfer(left, right)
+        return new Transfer(left, right, DetectionAccuracy.Exact)
         {
             Comment = comment
         };
     }
+
+    public DetectionAccuracy Accuracy { get; }
 }

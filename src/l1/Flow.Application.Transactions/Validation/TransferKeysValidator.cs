@@ -12,7 +12,7 @@ public class TransferKeysValidator : AbstractValidator<TransferKey>
     {
         RuleFor(t => t).Custom((t, c) =>
         {
-            if (!keysDiffers(t)) { c.AddFailure(nameof(t.Sink), "Sink must be different from source!"); }
+            if (!keysDiffers(t)) { c.AddFailure(nameof(t.SinkKey), "Sink must be different from source!"); }
         });
     }
 }

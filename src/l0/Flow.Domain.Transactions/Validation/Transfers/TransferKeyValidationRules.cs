@@ -6,5 +6,5 @@ namespace Flow.Domain.Transactions.Validation.Transfers;
 
 public static class TransferKeyValidationRules
 {
-    public static readonly Expression<Func<TransferKey, bool>> SourceNotEqualToSink = t => t.Source != t.Sink;
+    public static readonly Expression<Func<TransferKey, bool>> SourceNotEqualToSink = t => t.SourceKey != t.SinkKey;
 }
