@@ -45,6 +45,6 @@ Flow comes with the logic that can find potential transfers - usually cross-bank
 `transfers guess` command will provide the list of hypotetical transfers. Output of this command can be used to build the list of transfers to enforce with `transfers enforce`
 
 ### Exchange Rates
-Where needed, _flow_ automatically requests exchange rates to perform conversion. Rates that were successfully received from the Central Bank ofr the Russian Federation are getting cached in local storage to speed up subsequent calculations.
+Where needed, Flow automatically requests exchange rates to perform conversion. Rates that were successfully received from the Central Bank ofr the Russian Federation are getting cached in local storage to speed up subsequent calculations.
 
 You can use `rates list` command to check which rates were already captured.
