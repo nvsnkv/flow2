@@ -20,7 +20,8 @@ namespace Flow.Application.Transactions.UnitTests;
 
 public class AccountantShould
 {
-    private static readonly RecordedTransaction[] RecordedTransactions = {
+    private static readonly RecordedTransaction[] RecordedTransactions =
+    {
         new(100, DateTime.UtcNow, -10, "RUB", null, "Transaction 100", new("Account", "Bank")),
         new(101, DateTime.UtcNow, 11, "RUB", null, "Transaction 101", new("Account", "Bank")),
         new(102, DateTime.UtcNow, -12, "RUB", null, "Transaction 102", new("Account", "Bank")),
@@ -35,8 +36,9 @@ public class AccountantShould
     private readonly Mock<ITransferOverridesStorage> overridesStorage = new();
     private readonly Mock<IValidator<TransferKey>> transferKeyValidator = new();
     private readonly Mock<IExchangeRatesProvider> ratesProvider = new();
+    private readonly TestTransferDetector[] detectors;
 
-    private readonly Accountant accountant;
+    private Accountant accountant;
 
     public AccountantShould()
     {
@@ -46,7 +48,8 @@ public class AccountantShould
 
         transactionValidator.Setup(v => v.Validate(It.IsAny<Transaction>())).Returns(new ValidationResult());
 
-        var detectors = new[] { 
+        detectors = new[]
+        {
             new TestTransferDetector(new (long, long)[] { (100, 101) }, DetectionAccuracy.Exact),
             new TestTransferDetector(new (long, long)[] { (102, 104) }, DetectionAccuracy.Exact),
             new TestTransferDetector(new (long, long)[] { (102, 103) }, DetectionAccuracy.Likely),
@@ -74,7 +77,8 @@ public class AccountantShould
     //See transfer detector setup in ctor
     public async Task GetExactTransfersOnlyOnGetTransfersInvoked()
     {
-        var exactTransfers = await accountant.GetTransfers(Constants<RecordedTransaction>.Truth, CancellationToken.None).ToListAsync(CancellationToken.None);
+        var exactTransfers = await accountant.GetTransfers(Constants<RecordedTransaction>.Truth, CancellationToken.None)
+            .ToListAsync(CancellationToken.None);
         exactTransfers.Count.Should().Be(2);
 
         var first = exactTransfers.First();
@@ -90,12 +94,121 @@ public class AccountantShould
     //See transfer detector setup in ctor
     public async Task ReturnPossibleTransfersWithoutExactOnes()
     {
-        var likelyTransfers = await accountant.GuessTransfers(Constants<RecordedTransaction>.Truth, CancellationToken.None).ToListAsync(CancellationToken.None);
+        var likelyTransfers = await accountant
+            .GuessTransfers(Constants<RecordedTransaction>.Truth, CancellationToken.None)
+            .ToListAsync(CancellationToken.None);
         likelyTransfers.Count.Should().Be(1);
         var t = likelyTransfers.Single();
         t.Source.Should().BeEquivalentTo(RecordedTransactions.First(s => s.Key == 105));
         t.Sink.Should().BeEquivalentTo(RecordedTransactions.First(s => s.Key == 106));
     }
+
+    [Theory, UnitTest]
+    [MemberData(nameof(TransactionsWithDuplicates))]
+    public async Task GuessDuplicates(string testCase, RecordedTransaction[] input, RecordedTransaction[][] expectedResults)
+    {
+        testCase.Should().NotBeEmpty();
+
+        storage
+            .Setup(s => s.Read(Constants<RecordedTransaction>.Truth, CancellationToken.None))
+            .Returns(Task.FromResult(input as IEnumerable<RecordedTransaction>));
+
+        accountant = new Accountant(
+            storage.Object,
+            transactionValidator.Object,
+            detectors,
+            overridesStorage.Object,
+            transferKeyValidator.Object,
+            ratesProvider.Object
+        );
+
+        var result = (await accountant.GuessDuplicates(null, CancellationToken.None)).ToList();
+        result.Should().BeEquivalentTo(expectedResults);
+    }
+
+    public static readonly IEnumerable<object[]> TransactionsWithDuplicates = new[]
+    {
+        new object[]
+        {
+            "Exact duplicates",
+            new RecordedTransaction[]
+            {
+                new(5, DateTime.Parse("2022-01-01"), 100, "RUB", null, "Transaction 1", new("Account", "Bank")),
+                new(7, DateTime.Parse("2022-01-01"), 100, "RUB", null, "Transaction 1", new("Account", "Bank")),
+                new(8, DateTime.Parse("2022-01-01"), 100, "RUB", null, "Transaction 1", new("Account", "Bank")),
+                new(0, DateTime.Parse("2022-01-01"), 100, "RUB", null, "Not a dup", new("Account", "Bank")),
+            },
+            new[]
+            {
+                new RecordedTransaction[]
+                {
+                    new(5, DateTime.Parse("2022-01-01"), 100, "RUB", null, "Transaction 1", new("Account", "Bank")),
+                    new(7, DateTime.Parse("2022-01-01"), 100, "RUB", null, "Transaction 1", new("Account", "Bank")),
+                    new(8, DateTime.Parse("2022-01-01"), 100, "RUB", null, "Transaction 1", new("Account", "Bank")),
+                }
+            }
+        },
+
+        new object[]
+        {
+            "Different dates",
+            new RecordedTransaction[]
+            {
+                new(5, DateTime.Parse("2022-01-01"), 100, "RUB", null, "Transaction 1", new("Account", "Bank")),
+                new(7, DateTime.Parse("2022-01-02"), 100, "RUB", null, "Transaction 1", new("Account", "Bank")),
+                new(8, DateTime.Parse("2022-01-03"), 100, "RUB", null, "Transaction 1", new("Account", "Bank")),
+                new(0, DateTime.Parse("2022-01-01"), 100, "RUB", null, "Not a dup", new("Account", "Bank")),
+            },
+            new[]
+            {
+                new RecordedTransaction[]
+                {
+                    new(5, DateTime.Parse("2022-01-01"), 100, "RUB", null, "Transaction 1", new("Account", "Bank")),
+                    new(7, DateTime.Parse("2022-01-02"), 100, "RUB", null, "Transaction 1", new("Account", "Bank")),
+                    new(8, DateTime.Parse("2022-01-03"), 100, "RUB", null, "Transaction 1", new("Account", "Bank")),
+                }
+            }
+        },
+
+        new object[]
+        {
+            "Two sets",
+            new RecordedTransaction[]
+            {
+                new(5, DateTime.Parse("2022-01-01"), 100, "RUB", null, "Transaction 2", new("Account", "Bank")),
+                new(7, DateTime.Parse("2022-01-02"), 100, "RUB", null, "Transaction 1", new("Account", "Bank")),
+                new(8, DateTime.Parse("2022-01-03"), 100, "RUB", null, "Transaction 1", new("Account", "Bank")),
+                new(0, DateTime.Parse("2022-01-01"), 100, "RUB", null, "Not a dup", new("Account", "Bank")),
+                new(9, DateTime.Parse("2022-01-01"), 100, "RUB", null, "Transaction 2", new("Account", "Bank")),
+            },
+            new[]
+            {
+                new RecordedTransaction[]
+                {
+                    new(7, DateTime.Parse("2022-01-02"), 100, "RUB", null, "Transaction 1", new("Account", "Bank")),
+                    new(8, DateTime.Parse("2022-01-03"), 100, "RUB", null, "Transaction 1", new("Account", "Bank")),
+                },
+                new RecordedTransaction[]
+                {
+                    new(5, DateTime.Parse("2022-01-01"), 100, "RUB", null, "Transaction 2", new("Account", "Bank")),
+                    new(9, DateTime.Parse("2022-01-01"), 100, "RUB", null, "Transaction 2", new("Account", "Bank")),
+                }
+            }
+        },
+
+        new object[]
+        {
+            "No dups",
+            new RecordedTransaction[]
+            {
+                new(5, DateTime.Parse("2022-01-01"), 110, "RUB", null, "Transaction 1", new("Account", "Bank")),
+                new(7, DateTime.Parse("2022-01-01"), 100, "RUB", null, "Transaction 1", new("Account", "Bank")),
+                new(8, DateTime.Parse("2022-01-01"), 102, "RUB", null, "Transaction 1", new("Account", "Bank")),
+                new(0, DateTime.Parse("2022-01-01"), 100, "RUB", null, "Not a dup", new("Account", "Bank")),
+            },
+            new  RecordedTransaction[][] {}
+        }
+    };
 
     private class TestTransferDetector : ITransferDetector
     {

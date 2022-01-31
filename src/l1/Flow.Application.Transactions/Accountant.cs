@@ -64,7 +64,7 @@ internal class Accountant : IAccountant
     public async Task<IEnumerable<IEnumerable<RecordedTransaction>>> GuessDuplicates(Expression<Func<RecordedTransaction, bool>>? conditions, CancellationToken ct)
     {
         var transactions = await GetTransactions(conditions, ct);
-        return transactions.GroupBy(t => t, t => t, new DuplicateTransactionsComparer());
+        return transactions.GroupBy(t => t, t => t, new DuplicateTransactionsComparer()).Where(dups => dups.Count() > 1);
     }
 
     public async IAsyncEnumerable<Transfer> GetTransfers(Expression<Func<RecordedTransaction, bool>> conditions, [EnumeratorCancellation] CancellationToken ct)

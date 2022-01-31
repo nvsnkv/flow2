@@ -32,6 +32,6 @@ internal class DuplicateTransactionsComparer : IEqualityComparer<RecordedTransac
 
     public int GetHashCode(RecordedTransaction obj)
     {
-        return obj.GetHashCode();
+        return HashCode.Combine(obj.Amount, obj.Currency, obj.Category, obj.Title, obj.Account);
     }
 }
