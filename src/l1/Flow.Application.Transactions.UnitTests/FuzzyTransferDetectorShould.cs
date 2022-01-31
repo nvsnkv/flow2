@@ -86,4 +86,7 @@ public class FuzzyTransferDetectorShould
 
         new FuzzyTransferDetector(new Mock<IExchangeRatesProvider>().Object).CheckIsTransfer(left, right).Should().BeTrue();
     }
+
+    [Theory, UnitTest]
+    [InlineData(null, "Transfer", null, "Transfer")]
 }
