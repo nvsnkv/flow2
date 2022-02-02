@@ -6,7 +6,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <AssemblyName>transfers</AssemblyName>
-    <Version>2.1.0</Version>
+    <Version>2.2.0</Version>
 	<AssemblyVersion>2.0.0.0</AssemblyVersion>
     <Authors>nvsnkv</Authors>
 	<Copyright>© 2021 nvsnkv</Copyright>
