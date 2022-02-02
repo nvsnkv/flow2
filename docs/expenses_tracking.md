@@ -1,7 +1,7 @@
 ## Expences tracking
 `accountant.exe` is the tool that helps to manage information about accounts and transactions.
 ### Transactions management
-Flow allows to capturee following information about transactions: Timestamp, Amount, Currency, Category, Title, Account Name, Bank Name.
+Flow allows to capture following information about transactions: Timestamp, Amount, Currency, Category, Title, Account Name, Bank Name.
 Once stored, every transaction receives a unique Key value and user receives an opportunity to provide a Note, and overrides for Title and Category.
 Overrides will replace original values on flow lists.
 
@@ -32,6 +32,12 @@ For example, `accountant list ts[2021-01-01:2021-10-01)` will return transaction
 Transactions can be inserted using `accountant add` command, edited using `accountant update` and deleted by `accountant delete` command. Please refer to help screens for each of the commands for additional details.
 
 `accountant edit` would be useful if you need to retrive the data from database and update it in one pass. Basically it's a combination of `list` and `update` commands.
+
+#### Duplicates detection
+Sometimes banks make adjustments during the processing that may move transaction date from, let's say, weekend to the next Monday. As a result, the same transaction will receive different dates in account statements as of Sunday and as of Monday. That may lead to unexpected duplication.
+
+`accountant list` accepts `-d` or `--duplicates` key to list only (potentially) duplicated records. This key can be extended by `-r, --duplicates-range` parameter that specifies the date range between earliest and latest duplicated rows.
+Application will threat records as duplicate if all fields except overrides, key and timestamp are the same and the timestamps are "close enough".
 
 ### Transfers
 Flow automatically detects various occurences of money transfers between accounts. That allows to exclude them from list of really valuable transactions and simplify analysis.
