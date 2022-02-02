@@ -206,7 +206,7 @@ public class AccountantShould
                 new(8, DateTime.Parse("2022-01-01"), 102, "RUB", null, "Transaction 1", new("Account", "Bank")),
                 new(0, DateTime.Parse("2022-01-01"), 100, "RUB", null, "Not a dup", new("Account", "Bank")),
             },
-            new  RecordedTransaction[][] {}
+            Array.Empty<RecordedTransaction[]>()
         }
     };
 

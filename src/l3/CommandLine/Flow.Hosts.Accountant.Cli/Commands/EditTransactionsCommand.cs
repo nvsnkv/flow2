@@ -57,7 +57,7 @@ internal class EditTransactionsCommand : CommandBase
             Expression<Func<RecordedTransaction, bool>> conditions = t => initial.Min <= t.Timestamp && t.Timestamp <= initial.Max;
             var interim = GetFallbackOutputPath(format, "add", "edit-appended");
 
-            return await Edit(conditions, format, ct, interim, errsPath, rejected);
+            return await Edit(conditions, format, interim, errsPath, ct, rejected);
         }
 
         return 0;
@@ -79,16 +79,16 @@ internal class EditTransactionsCommand : CommandBase
             return 1;
         }
 
-        return await Edit(parserResult.Conditions, args.Format, ct, interim, errors);
+        return await Edit(parserResult.Conditions, args.Format, interim, errors, ct);
     }
 
     public async Task<int> Execute(UpdateTransactionsArgs args, CancellationToken ct)
     {
-        return await Update(args.Input, args.Format, ct, args.Errors);
+        return await Update(args.Input, args.Format, args.Errors, ct);
     }
 
 
-    private async Task<int> Edit(Expression<Func<RecordedTransaction, bool>>? conditions, SupportedFormat format, CancellationToken ct, string? interim, string? errsPath, EnumerableWithCount<RejectedTransaction>? rejected = null)
+    private async Task<int> Edit(Expression<Func<RecordedTransaction, bool>>? conditions, SupportedFormat format, string? interim, string? errsPath, CancellationToken ct, EnumerableWithCount<RejectedTransaction>? rejected = null)
     {
         if (interim == null)
         {
@@ -107,10 +107,10 @@ internal class EditTransactionsCommand : CommandBase
             return exitCode;
         }
 
-        return await Update(interim, format, ct, errsPath, rejected);
+        return await Update(interim, format, errsPath, ct, rejected);
     }
 
-    private async Task<int> Update(string? interim, SupportedFormat format, CancellationToken ct, string? errsPath, EnumerableWithCount<RejectedTransaction>? rejected = null)
+    private async Task<int> Update(string? interim, SupportedFormat format, string? errsPath, CancellationToken ct, EnumerableWithCount<RejectedTransaction>? rejected = null)
     {
         rejected ??= new EnumerableWithCount<RejectedTransaction>(Enumerable.Empty<RejectedTransaction>());
 

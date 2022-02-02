@@ -25,15 +25,15 @@ internal class ListTransfersCommand : CommandBase
 
     public async Task<int> Execute(ListTransfersArgs args, CancellationToken ct)
     {
-        return await DoExecute(args, ct, accountant.GetTransfers);
+        return await DoExecute(args, accountant.GetTransfers, ct);
     }
 
     public async Task<int> Execute(GuessTransfersArgs args, CancellationToken ct)
     {
-        return await DoExecute(args, ct, accountant.GuessTransfers);
+        return await DoExecute(args, accountant.GuessTransfers, ct);
     }
 
-    private async Task<int> DoExecute(ListArgsBase args, CancellationToken ct, Func<Expression<Func<RecordedTransaction, bool>>, CancellationToken, IAsyncEnumerable<Transfer>> getTransfersFunc)
+    private async Task<int> DoExecute(ListArgsBase args, Func<Expression<Func<RecordedTransaction, bool>>, CancellationToken, IAsyncEnumerable<Transfer>> getTransfersFunc, CancellationToken ct)
     {
         var criteria = parser.ParseRecordedTransactionCriteria(args.Criteria ?? Enumerable.Empty<string>());
         if (!criteria.Successful)
