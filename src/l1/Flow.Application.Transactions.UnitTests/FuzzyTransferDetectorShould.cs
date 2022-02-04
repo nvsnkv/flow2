@@ -70,6 +70,7 @@ public class FuzzyTransferDetectorShould
     [InlineData("2022-01-29", "2022-01-31")]
     [InlineData("2022-01-30", "2022-01-31")]
     [InlineData("2022-01-31", "2022-01-31")]
+    [InlineData("2022-01-31 22:00", "2022-01-31")]
     [InlineData("2022-01-28", "2022-02-01")]
     [InlineData("2022-01-29", "2022-02-01")]
     [InlineData("2022-01-30", "2022-02-01")]

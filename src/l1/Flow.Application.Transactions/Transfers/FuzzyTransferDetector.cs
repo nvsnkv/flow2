@@ -29,7 +29,7 @@ class FuzzyTransferDetector : TransferDetectorBase
         var rightTs = right.Timestamp.BusinessDate();
         
 
-        return leftTs <= rightTs && rightTs <= leftTs.AddBusinessDays(TransferWindowDays);
+        return leftTs <= rightTs.AddDays(1) && rightTs <= leftTs.AddBusinessDays(TransferWindowDays);
     }
 
 }
