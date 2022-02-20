@@ -39,7 +39,7 @@ internal class CsvCalendarWriter
         }
     }
     
-    private IEnumerable<object?> GetRow<T>(IEnumerable<string> vector, IEnumerable<T> rangedData, Func<T, object?>? selectorFunc = null)
+    private static IEnumerable<object?> GetRow<T>(IEnumerable<string> vector, IEnumerable<T> rangedData, Func<T, object?>? selectorFunc = null)
     {
         foreach (var item in vector)
         {

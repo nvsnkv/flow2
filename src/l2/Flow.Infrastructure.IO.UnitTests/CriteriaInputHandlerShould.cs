@@ -17,7 +17,7 @@ public class CriteriaInputHandlerShould
     [InlineData(new [] { @"'t=""double-quoted""'" }, new[] { "t=double-quoted" })]
     public void CleanupItemsProperly(IEnumerable<string> input, string[] expected)
     {
-        var result = new CriteriaInputHandler().SplitAndUnquote(input);
+        var result = CriteriaInputHandler.SplitAndUnquote(input);
         result.ToArray().Should().BeEquivalentTo(expected);
     }
 }

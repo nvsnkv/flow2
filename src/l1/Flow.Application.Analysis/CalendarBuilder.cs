@@ -148,10 +148,7 @@ internal class CalendarBuilder
             result++;
         }
 
-        if (rejectionsHandler != null)
-        {
-            rejectionsHandler(new RejectedTransaction(transaction, "Given transaction does not belong to any date range!"));
-        }
+        rejectionsHandler?.Invoke(new RejectedTransaction(transaction, "Given transaction does not belong to any date range!"));
 
         return -1;
     }
@@ -169,10 +166,7 @@ internal class CalendarBuilder
         {
             if (group.Alternative == null)
             {
-                if (rejectionsHandler != null)
-                {
-                    rejectionsHandler(new RejectedTransaction(transaction, $"Given transaction does not match to any aggregation rule!"));
-                }
+                rejectionsHandler?.Invoke(new RejectedTransaction(transaction, $"Given transaction does not match to any aggregation rule!"));
 
                 return null;
             }
@@ -183,10 +177,7 @@ internal class CalendarBuilder
         if (matchedDimensions.Count > 1)
         {
             var matched = string.Join(", ", matchedDimensions.Select(r => $"[{string.Join(", ", r.Measure)}]"));
-            if (rejectionsHandler != null)
-            {
-                rejectionsHandler(new RejectedTransaction(transaction, $"Given transaction matches with more than one aggregation rule ({matched}). Only first value will be used!"));
-            }
+            rejectionsHandler?.Invoke(new RejectedTransaction(transaction, $"Given transaction matches with more than one aggregation rule ({matched}). Only first value will be used!"));
         }
 
         var dimension = matchedDimensions.First().Measure;

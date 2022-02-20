@@ -5,7 +5,7 @@ namespace Flow.Application.Analysis;
 
 internal class VectorComparer : IComparer<Vector>
 {
-    private CultureInfo culture;
+    private readonly CultureInfo culture;
 
     public VectorComparer(CultureInfo culture)
     {
