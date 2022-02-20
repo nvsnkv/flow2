@@ -1,4 +1,5 @@
 ﻿using Flow.Domain.Analysis;
+using Flow.Domain.Analysis.Setup;
 
 namespace Flow.Infrastructure.IO.Contract;
 

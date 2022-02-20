@@ -1,6 +1,6 @@
 ﻿using Flow.Domain.Transactions;
 
-namespace Flow.Domain.Analysis;
+namespace Flow.Domain.Analysis.Setup;
 
 public class AggregationRule
 {

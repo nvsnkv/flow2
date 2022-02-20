@@ -1,4 +1,4 @@
-﻿namespace Flow.Domain.Analysis;
+﻿namespace Flow.Domain.Analysis.Setup;
 
 public class AggregationSetup
 {

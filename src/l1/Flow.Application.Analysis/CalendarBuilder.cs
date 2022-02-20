@@ -1,5 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using Flow.Domain.Analysis;
+using Flow.Domain.Analysis.Setup;
 using Flow.Domain.Transactions;
 using Range = Flow.Domain.Analysis.Range;
 

@@ -1,6 +1,7 @@
 ﻿using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
 using Flow.Domain.Analysis;
+using Flow.Domain.Analysis.Setup;
 using Flow.Domain.Patterns;
 using Flow.Domain.Transactions;
 using Flow.Infrastructure.IO.Contract;
