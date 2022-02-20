@@ -18,9 +18,9 @@ internal class JsonCalendarWriter
     public async Task Write(StreamWriter writer, Calendar calendar, CancellationToken ct)
     {
         using var jsonWriter = new JsonTextWriter(writer) { CloseOutput = false };
-        var sections = calendar.Sections
-            .Select(s => new Section(
-                s.Measure,
+        var series = calendar.Series
+            .Select(s => new Series(
+                s.Measurement,
                 s.Values
                     .Select(
                         v => new Aggregate(v.Value, v.Transactions.Select(t => (RecordedTransaction)(JsonRecordedTransaction)t)))
@@ -29,7 +29,7 @@ internal class JsonCalendarWriter
             )
             .ToList();
 
-        calendar = new Calendar(calendar.Ranges, calendar.Dimensions, sections);
+        calendar = new Calendar(calendar.Ranges, calendar.Dimensions, series);
         serializer.Serialize(jsonWriter, calendar);
         await jsonWriter.FlushAsync(ct);
     }

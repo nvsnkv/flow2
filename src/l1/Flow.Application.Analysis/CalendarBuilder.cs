@@ -93,7 +93,7 @@ internal class CalendarBuilder
         var sections = rows
             .OrderBy(r => GetOrder(r.Key))
             .Select(r => 
-                new Section(
+                new Series(
                     r.Key,
                     r.Value.Select(b => b.Build())
                 )

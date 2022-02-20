@@ -24,11 +24,11 @@ internal class CsvCalendarWriter
         }
         await csvWriter.NextRecordAsync();
 
-        foreach (var section in calendar.Sections)
+        foreach (var series in calendar.Series)
         {
             if (ct.IsCancellationRequested) { return; }
 
-            var row = GetRow(section.Measure, section.Values, a => a.Value).ToList();
+            var row = GetRow(series.Measurement, series.Values, a => a.Value).ToList();
             foreach (var o in row)
             {
                 if (ct.IsCancellationRequested) { return; }

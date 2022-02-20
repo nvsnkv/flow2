@@ -18,14 +18,14 @@ internal class VectorComparer : IComparer<Vector>
         if (y == null) return 1;
 
         var idx = 0;
-        while (idx < x.Length) {
-            if (y.Length <= idx) return 1;
+        while (idx < x.Count) {
+            if (y.Count <= idx) return 1;
             var result = string.Compare(x[idx], y[idx], culture, CompareOptions.StringSort);
             if (result != 0) return result;
             idx++;
         }
 
-        return x.Length - y.Length;
+        return x.Count - y.Count;
     }
 
 }

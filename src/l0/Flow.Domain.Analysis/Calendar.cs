@@ -2,16 +2,16 @@
 
 public class Calendar
 {
-    public Calendar(IEnumerable<Range> ranges, IEnumerable<string> dimensions, IEnumerable<Section> sections)
+    public Calendar(IEnumerable<Range> ranges, Vector dimensions, IEnumerable<Series> series)
     {
         Ranges = ranges;
         Dimensions = dimensions;
-        Sections = sections;
+        Series = series;
     }
 
     public IEnumerable<Range> Ranges { get; }
 
-    public IEnumerable<string> Dimensions { get; }
+    public Vector Dimensions { get; }
 
-    public IEnumerable<Section> Sections { get; }
+    public IEnumerable<Series> Series { get; }
 }

@@ -43,7 +43,7 @@ internal class AggregationSetupParserResultBuilder
             return new AggregationSetupParsingResult($"{line}: Unable to parse headers!");
         }
 
-        var dimensionality = header.Length;
+        var dimensionality = header.Count;
         var errors = new List<string>();
 
         var sections = await ParseSections(dimensionality, e => errors.Add(e), ct).ToListAsync(ct);
