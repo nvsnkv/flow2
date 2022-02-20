@@ -2,13 +2,13 @@
 
 public class AggregationSetup
 {
-    public AggregationSetup(IReadOnlyList<AggregationGroup> groups, Vector headers)
+    public AggregationSetup(IReadOnlyList<SectionSetup> sections, Vector dimensions)
     {
-        Groups = groups;
-        Headers = headers;
+        Sections = sections;
+        Dimensions = dimensions;
     }
 
-    public Vector Headers { get; }
+    public Vector Dimensions { get; }
 
-    public IReadOnlyList<AggregationGroup> Groups { get; }
+    public IReadOnlyList<SectionSetup> Sections { get; }
 }

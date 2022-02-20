@@ -23,7 +23,7 @@ public class AggregationSetupParserShould
                                              Total; Income;a>0";
 
     private readonly string invalidSetup = @"Dimension 1; Dimension 2
-                                             More; Values; Than; Dimensions; ...
+                                             More; Values; Than; Measure; ...
                                              Less; Values
                                              Bad; Criteria; ...
                                              
@@ -62,26 +62,26 @@ public class AggregationSetupParserShould
 
         var setup = result.Setup!;
         setup.Should().NotBeNull();
-        setup.Headers.Should().BeEquivalentTo("Category", "Title");
-        setup.Groups.Count.Should().Be(1);
+        setup.Dimensions.Should().BeEquivalentTo("Category", "Title");
+        setup.Sections.Count.Should().Be(1);
 
-        var group = setup.Groups.Single();
+        var group = setup.Sections.Single();
         group.Name.Should().NotBeNullOrEmpty();
 
         group.Rules.Should().HaveCount(2);
         
         var rule = group.Rules[0];
-        rule.Dimensions.Should().BeEquivalentTo("Total", "Expense");
+        rule.Measure.Should().BeEquivalentTo("Total", "Expense");
 
         rule.Rule(new RecordedTransaction(0, DateTime.UtcNow, -1, "RUR", null, "Expense", accountInfo)).Should().BeTrue();
         rule.Rule(new RecordedTransaction(0, DateTime.UtcNow, 1, "RUR", null, "Income", accountInfo)).Should().BeFalse();
 
         rule = group.Rules[1];
-        rule.Dimensions.Should().BeEquivalentTo("Total", "Income");
+        rule.Measure.Should().BeEquivalentTo("Total", "Income");
         rule.Rule(new RecordedTransaction(0, DateTime.UtcNow, -1, "RUR", null, "Expense", accountInfo)).Should().BeFalse();
         rule.Rule(new RecordedTransaction(0, DateTime.UtcNow, 1, "RUR", null, "Income", accountInfo)).Should().BeTrue();
 
-        group.Subgroup.Should().BeNull();
+        group.Alternative.Should().BeNull();
     }
 
     [Fact, IntegrationTest]
@@ -114,8 +114,8 @@ public class AggregationSetupParserShould
 
         result.Successful.Should().BeTrue();
         result.Setup.Should().NotBeNull();
-        result.Setup!.Groups.Should().HaveCount(1);
-        var group = result.Setup.Groups.Single();
+        result.Setup!.Sections.Should().HaveCount(1);
+        var group = result.Setup.Sections.Single();
 
         group.Rules.Should().HaveCount(2);
         var group1 = group.Rules[0];
@@ -144,25 +144,25 @@ public class AggregationSetupParserShould
         result.Successful.Should().BeTrue();
         result.Setup.Should().NotBeNull();
 
-        var groups = result.Setup!.Groups;
+        var groups = result.Setup!.Sections;
         groups.Should().HaveCount(2);
 
         var t = groups[0];
         t.Name.Should().Be("totals");
         t.Rules.Should().HaveCount(1);
-        t.Rules.Single().Dimensions.Should().BeEquivalentTo("total");
+        t.Rules.Single().Measure.Should().BeEquivalentTo("total");
 
         var a = groups[1];
         a.Name.Should().Be("A");
         a.Rules.Should().HaveCount(1);
-        a.Rules.Single().Dimensions.Should().BeEquivalentTo("As");
-        a.Subgroup.Should().NotBeNull();
+        a.Rules.Single().Measure.Should().BeEquivalentTo("As");
+        a.Alternative.Should().NotBeNull();
         
-        var b = a.Subgroup!;
+        var b = a.Alternative!;
         b.Name.Should().Be("b");
         b.Rules.Should().HaveCount(2);
-        b.Rules[0].Dimensions.Should().BeEquivalentTo("Bs");
-        b.Rules[1].Dimensions.Should().BeEquivalentTo("Cs");
-        b.Subgroup.Should().BeNull();
+        b.Rules[0].Measure.Should().BeEquivalentTo("Bs");
+        b.Rules[1].Measure.Should().BeEquivalentTo("Cs");
+        b.Alternative.Should().BeNull();
     }
 }

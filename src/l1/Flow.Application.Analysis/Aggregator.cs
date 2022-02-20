@@ -28,10 +28,10 @@ internal class Aggregator : IAggregator
 
         var calendarBuilder = new CalendarBuilder(flow, @from, till)
             .WithRejectionsHandler(r => rejected.Add(r))
-            .WithHeader(setup.Headers)
+            .WithHeader(setup.Dimensions)
             .WithSubstitutor(substitutor);
 
-        calendarBuilder = setup.Groups.Aggregate(calendarBuilder, (b, g) => b.WithAggregationGroup(g));
+        calendarBuilder = setup.Sections.Aggregate(calendarBuilder, (b, g) => b.WithAggregationGroup(g));
 
         var calendar = await calendarBuilder.Build(ct);
         return (calendar, rejected.AsReadOnly());

@@ -8,7 +8,7 @@ namespace Flow.Application.Analysis;
 
 internal class CalendarBuilder
 {
-    private readonly List<AggregationGroup> groups = new();
+    private readonly List<SectionSetup> groups = new();
     private readonly List<Vector> dimensions = new();
     private readonly IAsyncEnumerable<RecordedTransaction> transactions;
     private readonly MonthlyRangesBuilder monthlyRangesBuilder;
@@ -34,7 +34,7 @@ internal class CalendarBuilder
         return this;
     }
     
-    public CalendarBuilder WithAggregationGroup(AggregationGroup group)
+    public CalendarBuilder WithAggregationGroup(SectionSetup group)
     {
         if (groups.Any(g => g.Name == group.Name)) { throw new ArgumentException("Group with this name already added!"); }
         groups.Add(group);
@@ -44,11 +44,11 @@ internal class CalendarBuilder
         return this;
     }
 
-    private void AddMeasures(AggregationGroup? group)
+    private void AddMeasures(SectionSetup? group)
     {
         while (group != null) {
-            dimensions.AddRange(group.Rules.Select(r => r.Dimensions));
-            group = group.Subgroup;
+            dimensions.AddRange(group.Rules.Select(r => r.Measure));
+            group = group.Alternative;
         }
     }
 
@@ -161,13 +161,13 @@ internal class CalendarBuilder
         return groups.Select(group => GetMatchedVector(transaction, group)).Where(v => v != null)!;
     }
 
-    private Vector? GetMatchedVector(RecordedTransaction transaction, AggregationGroup group)
+    private Vector? GetMatchedVector(RecordedTransaction transaction, SectionSetup group)
     {
         var matchedDimensions = group.Rules.Where(r => r.Rule(transaction)).ToList();
 
         if (!matchedDimensions.Any())
         {
-            if (group.Subgroup == null)
+            if (group.Alternative == null)
             {
                 if (rejectionsHandler != null)
                 {
@@ -177,19 +177,19 @@ internal class CalendarBuilder
                 return null;
             }
 
-            return GetMatchedVector(transaction, group.Subgroup);
+            return GetMatchedVector(transaction, group.Alternative);
         }
 
         if (matchedDimensions.Count > 1)
         {
-            var matched = string.Join(", ", matchedDimensions.Select(r => $"[{string.Join(", ", r.Dimensions)}]"));
+            var matched = string.Join(", ", matchedDimensions.Select(r => $"[{string.Join(", ", r.Measure)}]"));
             if (rejectionsHandler != null)
             {
                 rejectionsHandler(new RejectedTransaction(transaction, $"Given transaction matches with more than one aggregation rule ({matched}). Only first value will be used!"));
             }
         }
 
-        var dimension = matchedDimensions.First().Dimensions;
+        var dimension = matchedDimensions.First().Measure;
 
         if (substitutor?.IsSubstitutionNeeded(dimension) ?? false)
         {

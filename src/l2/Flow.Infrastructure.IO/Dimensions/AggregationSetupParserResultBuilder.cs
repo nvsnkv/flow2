@@ -10,8 +10,8 @@ namespace Flow.Infrastructure.IO.Dimensions;
 
 internal class AggregationSetupParserResultBuilder
 {
-    private readonly Regex groupNamePattern = new("^group:\\s*(.*)$", RegexOptions.Compiled);
-    private readonly Regex subGroupPattern = new("^subgroup:\\s*(.*)$", RegexOptions.Compiled);
+    private readonly Regex sectionNamePattern = new("^section:\\s*(.*)$", RegexOptions.Compiled);
+    private readonly Regex altSectionPattern = new("^alt section:\\s*(.*)$", RegexOptions.Compiled);
     private readonly char separator;
     private readonly StreamReader reader;
     private readonly ITransactionCriteriaParser criteriaParser;
@@ -46,22 +46,22 @@ internal class AggregationSetupParserResultBuilder
         var dimensionality = header.Length;
         var errors = new List<string>();
 
-        var groups = await ParseGroups(dimensionality, e => errors.Add(e), ct).ToListAsync(ct);
+        var sections = await ParseSections(dimensionality, e => errors.Add(e), ct).ToListAsync(ct);
 
         return errors.Count > 0
             ? new AggregationSetupParsingResult(errors)
-            : new AggregationSetupParsingResult(new AggregationSetup(groups.Where(g => g != null).ToList().AsReadOnly()!, header));
+            : new AggregationSetupParsingResult(new AggregationSetup(sections.Where(g => g != null).ToList().AsReadOnly()!, header));
     }
 
-    private async IAsyncEnumerable<AggregationGroup?> ParseGroups(int dimensionality, Action<string> errorHandler, [EnumeratorCancellation] CancellationToken ct)
+    private async IAsyncEnumerable<SectionSetup?> ParseSections(int dimensionality, Action<string> errorHandler, [EnumeratorCancellation] CancellationToken ct)
     {
         text = await ReadLine();
         while (!ct.IsCancellationRequested && !reader.EndOfStream)
         {
-            var group = await ParseGroup(dimensionality, errorHandler);
-            if (group != null)
+            var section = await ParseSection(dimensionality, errorHandler);
+            if (section != null)
             {
-                yield return group;
+                yield return section;
             }
         }
 
@@ -69,10 +69,9 @@ internal class AggregationSetupParserResultBuilder
         {
             errorHandler("!: Task cancelled!");
         }
-
     }
 
-    private async Task<AggregationGroup?> ParseGroup(int dimensionality, Action<string> errorHandler)
+    private async Task<SectionSetup?> ParseSection(int dimensionality, Action<string> errorHandler)
     {
         if (text == null)
         {
@@ -80,9 +79,9 @@ internal class AggregationSetupParserResultBuilder
             return null;
         }
 
-        var (name, lineProcessed) = GetGroupName(text);
+        var (name, lineProcessed) = GetSectionName(text);
         var rules = new List<AggregationRuleRow>();
-        var subGroupDetected = false;
+        var altSectionDetected = false;
 
         while (!ct.IsCancellationRequested && !reader.EndOfStream)
         {
@@ -98,8 +97,8 @@ internal class AggregationSetupParserResultBuilder
                 continue;
             }
 
-            subGroupDetected = subGroupPattern.IsMatch(text);
-            if (groupNamePattern.IsMatch(text) || subGroupDetected)
+            altSectionDetected = altSectionPattern.IsMatch(text);
+            if (sectionNamePattern.IsMatch(text) || altSectionDetected)
             {
                 break;
             }
@@ -128,7 +127,7 @@ internal class AggregationSetupParserResultBuilder
         var result = rules
             .GroupBy(r => r.Dimensions)
             .Select(g =>
-                new AggregationRule(
+                new SectionRule(
                     g.Key,
                     g.Select(r => r.Rule)
                         .Aggregate((PatternBuilder<RecordedTransaction>)new OrPatternBuilder<RecordedTransaction>(),
@@ -138,22 +137,22 @@ internal class AggregationSetupParserResultBuilder
                 )
             );
 
-        AggregationGroup? subgroup =  null;
-        if (subGroupDetected)
+        SectionSetup? alternative =  null;
+        if (altSectionDetected)
         {
-            subgroup = await ParseGroup(dimensionality, errorHandler);
+            alternative = await ParseSection(dimensionality, errorHandler);
         }
 
         groupsFound++;
-        return new AggregationGroup(name, result.ToList().AsReadOnly(), subgroup);
+        return new SectionSetup(name, result.ToList().AsReadOnly(), alternative);
     }
 
-    private (string , bool) GetGroupName(string text)
+    private (string , bool) GetSectionName(string text)
     {
-        var match = groupNamePattern.Match(text);
+        var match = sectionNamePattern.Match(text);
         if (!match.Success)
         {
-            match = subGroupPattern.Match(text);
+            match = altSectionPattern.Match(text);
         }
 
         return (match.Success ? match.Groups[1].Value : $"Group {groupsFound}", match.Success);
