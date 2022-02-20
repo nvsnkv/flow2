@@ -1,5 +1,4 @@
-﻿using System.Globalization;
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 using Flow.Domain.Analysis;
 using Flow.Domain.Transactions;
 
@@ -13,7 +12,7 @@ internal class Substitutor
     public Substitutor(IFormatProvider formatProvider, IComparer<Vector> vectorComparer)
     {
         this.vectorComparer = vectorComparer;
-        substitutors = new()
+        substitutors = new List<(Regex, Func<RecordedTransaction, string>)>
         {
             (new Regex(@"\$ts", RegexOptions.Compiled), t => t.Timestamp.ToString(formatProvider)),
             (new Regex(@"\$t", RegexOptions.Compiled), t => t.Title),
@@ -71,31 +70,4 @@ internal class Substitutor
 
         SubstitutionsSorted = true;
     }
-}
-
-internal class VectorComparer : IComparer<Vector>
-{
-    private CultureInfo culture;
-
-    public VectorComparer(CultureInfo culture)
-    {
-        this.culture = culture;
-    }
-
-    public int Compare(Vector? x, Vector? y)
-    {
-        if (x == null) return -1;
-        if (y == null) return 1;
-
-        var idx = 0;
-        while (idx < x.Length) {
-            if (y.Length <= idx) return 1;
-            var result = string.Compare(x[idx], y[idx], culture, CompareOptions.StringSort);
-            if (result != 0) return result;
-            idx++;
-        }
-
-        return x.Length - y.Length;
-    }
-
 }

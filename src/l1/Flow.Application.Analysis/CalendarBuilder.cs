@@ -90,17 +90,16 @@ internal class CalendarBuilder
 
         substitutor?.SortSubstitutions();
 
-        var values = new ReadOnlyDictionary<Vector, IReadOnlyList<Aggregate>>(
-            rows.OrderBy(r => GetOrder(r.Key)).ToDictionary(
-                r => r.Key, 
-                r => (IReadOnlyList<Aggregate>)r.Value
-                    .Select(b => b.Build())
-                    .ToList()
-                    .AsReadOnly()
+        var sections = rows
+            .OrderBy(r => GetOrder(r.Key))
+            .Select(r => 
+                new Section(
+                    r.Key,
+                    r.Value.Select(b => b.Build())
                 )
             );
 
-        return new Calendar(ranges, header ?? Vector.Empty, values);
+        return new Calendar(ranges, header ?? Vector.Empty, sections);
     }
 
     private long GetOrder(Vector dimension)
