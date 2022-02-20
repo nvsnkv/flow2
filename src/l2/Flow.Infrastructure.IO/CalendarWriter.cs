@@ -1,5 +1,4 @@
-﻿using Flow.Domain.Analysis;
-using Flow.Infrastructure.Configuration.Contract;
+﻿using Flow.Infrastructure.Configuration.Contract;
 using Flow.Infrastructure.IO.Contract;
 using Flow.Infrastructure.IO.Csv;
 using Flow.Infrastructure.IO.Json;
@@ -17,7 +16,7 @@ internal class CalendarWriter : ICalendarWriter
         this.json = json;
     }
 
-    public async Task WriteCalendar(StreamWriter writer, Calendar calendar, SupportedFormat format, CancellationToken ct)
+    public async Task WriteCalendar(StreamWriter writer, Domain.Analysis.Calendar calendar, SupportedFormat format, CancellationToken ct)
     {
         switch (format)
         {

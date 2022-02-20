@@ -1,6 +1,5 @@
 ﻿using CsvHelper;
 using CsvHelper.Configuration;
-using Flow.Domain.Analysis;
 
 namespace Flow.Infrastructure.IO.Csv;
 
@@ -13,7 +12,7 @@ internal class CsvCalendarWriter
         this.config = config;
     }
 
-    public async Task Write(StreamWriter writer, Calendar calendar, CancellationToken ct)
+    public async Task Write(StreamWriter writer, Domain.Analysis.Calendar calendar, CancellationToken ct)
     {
         await using var csvWriter = new CsvWriter(writer, config);
         var headerRow = GetRow(calendar.Dimensions, calendar.Ranges, r => r.Alias);

@@ -21,6 +21,12 @@ internal class JsonSerializer
         return Task.FromResult(result.Select(convertFunc));
     }
 
+    public Task<TJson?> Read<TJson>(StreamReader reader)
+    {
+        using var jsonReader = new JsonTextReader(reader) { CloseInput = false };
+        return Task.FromResult(serializer.Deserialize<TJson>(jsonReader));
+    }
+
     public async Task Write<T>(StreamWriter writer, IEnumerable<T> transactions, CancellationToken ct)
     {
         using var jsonWriter = new JsonTextWriter(writer) { CloseOutput = false };

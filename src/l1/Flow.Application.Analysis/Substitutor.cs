@@ -31,15 +31,15 @@ internal class Substitutor
     public Dictionary<Vector, List<Vector>> SubstitutionsMade { get; } = new();
     public bool SubstitutionsSorted { get; private set; }
 
-    public bool IsSubstitutionNeeded(Vector dimension)
+    public bool IsSubstitutionNeeded(Vector source)
     {
-        return dimension.Any(d => substitutors.Any(s => s.Item1.IsMatch(d)));
+        return source.Any(d => substitutors.Any(s => s.Item1.IsMatch(d)));
     }
     
-    public Vector Substitute(Vector dimension, RecordedTransaction transaction)
+    public Vector Substitute(Vector source, RecordedTransaction transaction)
     {
         var result = new Vector(
-            dimension.Select(
+            source.Select(
                 d =>
                     substitutors.Aggregate(
                         d,
@@ -48,14 +48,14 @@ internal class Substitutor
             )
         );
 
-        if (!SubstitutionsMade.ContainsKey(dimension))
+        if (!SubstitutionsMade.ContainsKey(source))
         {
-            SubstitutionsMade.Add(dimension, new List<Vector>());
+            SubstitutionsMade.Add(source, new List<Vector>());
         }
 
-        if (!SubstitutionsMade[dimension].Contains(result))
+        if (!SubstitutionsMade[source].Contains(result))
         {
-            SubstitutionsMade[dimension].Add(result);
+            SubstitutionsMade[source].Add(result);
         }
 
         return result;

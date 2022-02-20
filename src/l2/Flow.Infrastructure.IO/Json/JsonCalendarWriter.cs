@@ -15,7 +15,7 @@ internal class JsonCalendarWriter
             : Newtonsoft.Json.JsonSerializer.Create(settings);
     }
 
-    public async Task Write(StreamWriter writer, Calendar calendar, CancellationToken ct)
+    public async Task Write(StreamWriter writer, Domain.Analysis.Calendar calendar, CancellationToken ct)
     {
         using var jsonWriter = new JsonTextWriter(writer) { CloseOutput = false };
         var series = calendar.Series
@@ -29,7 +29,7 @@ internal class JsonCalendarWriter
             )
             .ToList();
 
-        calendar = new Calendar(calendar.Ranges, calendar.Dimensions, series);
+        calendar = new Domain.Analysis.Calendar(calendar.Ranges, calendar.Dimensions, series);
         serializer.Serialize(jsonWriter, calendar);
         await jsonWriter.FlushAsync(ct);
     }

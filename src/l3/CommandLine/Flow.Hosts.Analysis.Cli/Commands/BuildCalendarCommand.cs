@@ -11,12 +11,12 @@ namespace Flow.Hosts.Analysis.Cli.Commands;
 [UsedImplicitly]
 internal class BuildCalendarCommand :CommandBase
 {
-    private readonly IAggregationSetupParser parser;
+    private readonly ICalendarConfigParser parser;
     private readonly IAggregator aggregator;
     private readonly IRejectionsWriter rejectionsWriter;
     private readonly ICalendarWriter calendarWriter;
 
-    public BuildCalendarCommand(IFlowConfiguration config, IAggregationSetupParser parser, IAggregator aggregator, IRejectionsWriter rejectionsWriter, ICalendarWriter calendarWriter) : base(config)
+    public BuildCalendarCommand(IFlowConfiguration config, ICalendarConfigParser parser, IAggregator aggregator, IRejectionsWriter rejectionsWriter, ICalendarWriter calendarWriter) : base(config)
     {
         this.parser = parser;
         this.aggregator = aggregator;
@@ -26,7 +26,7 @@ internal class BuildCalendarCommand :CommandBase
 
     public async Task<int> Execute(BuildCalendarArgs arg, CancellationToken ct)
     {
-        AggregationSetupParsingResult parsingResult;
+        CalendarConfigParsingResult parsingResult;
         using (var streamReader = CreateReader(arg.DimensionsSetup))
         {
             parsingResult = await parser.ParseFromStream(streamReader, ct);
@@ -41,7 +41,7 @@ internal class BuildCalendarCommand :CommandBase
             }
         }
 
-        var (calendar, rejections) = await aggregator.GetCalendar(arg.From.ToUniversalTime(), arg.Till.ToUniversalTime(), arg.Currency, parsingResult.Setup!, ct);
+        var (calendar, rejections) = await aggregator.GetCalendar(arg.From.ToUniversalTime(), arg.Till.ToUniversalTime(), arg.Currency, parsingResult.Config!, ct);
 
         var rejectionsWithCount = new EnumerableWithCount<RejectedTransaction>(rejections);
         
