@@ -22,9 +22,9 @@ internal class CalendarBuilder
         monthlyRangesBuilder = new MonthlyRangesBuilder(from, till);
     }
 
-    public CalendarBuilder WithHeader(Vector header)
+    public CalendarBuilder WithDimensions(Vector dimensions)
     {
-        this.dimensions = header;
+        this.dimensions = dimensions;
         return this;
     }
 

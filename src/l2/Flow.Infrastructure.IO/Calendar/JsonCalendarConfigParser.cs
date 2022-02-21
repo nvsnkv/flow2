@@ -21,7 +21,7 @@ internal class JsonCalendarConfigParser : ICalendarConfigParser
 
     public async Task<CalendarConfigParsingResult> ParseFromStream(StreamReader reader, CancellationToken ct)
     {
-        JsonCalendarConfig? config = null;
+        JsonCalendarConfig? config;
         try
         {
             config = await serializer.Read<JsonCalendarConfig>(reader);
@@ -41,12 +41,16 @@ internal class JsonCalendarConfigParser : ICalendarConfigParser
             return new CalendarConfigParsingResult("No dimensions provided for calendar config.");
         }
 
-
         var errors = new List<string>();
         var series = ParseSeries(config.Series, errors, string.Empty);
         if (series == null)
         {
             errors.Add("No series configs were parsed");
+            return new CalendarConfigParsingResult(errors);
+        }
+
+        if (errors.Any())
+        {
             return new CalendarConfigParsingResult(errors);
         }
 

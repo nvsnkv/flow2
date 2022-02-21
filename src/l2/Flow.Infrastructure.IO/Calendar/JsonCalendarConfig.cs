@@ -1,8 +1,11 @@
-﻿namespace Flow.Infrastructure.IO.Calendar;
+﻿using JetBrains.Annotations;
 
+namespace Flow.Infrastructure.IO.Calendar;
+
+[UsedImplicitly]
 internal class JsonCalendarConfig
 {
-    public List<string>? Dimensions { get; set; }
+    public List<string>? Dimensions { get; [UsedImplicitly] set; }
 
-    public List<JsonSeriesConfig>? Series { get; set; }
+    public List<JsonSeriesConfig>? Series { get; [UsedImplicitly] set; }
 }

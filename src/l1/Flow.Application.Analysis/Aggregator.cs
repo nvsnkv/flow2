@@ -26,9 +26,9 @@ internal class Aggregator : IAggregator
         var (flow, rejectedItems) = await GetFlow(from, till, currency, ct);
         var rejected = rejectedItems.ToList();
 
-        var calendarBuilder = new CalendarBuilder(flow, @from, till)
+        var calendarBuilder = new CalendarBuilder(flow, from, till)
             .WithRejectionsHandler(r => rejected.Add(r))
-            .WithHeader(setup.Dimensions)
+            .WithDimensions(setup.Dimensions)
             .WithSubstitutor(substitutor);
 
         calendarBuilder = setup.Series.Aggregate(calendarBuilder, (b, g) => b.WithSeries(g));
