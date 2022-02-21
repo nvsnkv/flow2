@@ -20,7 +20,7 @@ public class Aggregation : Module
     protected override void Load(ContainerBuilder builder)
     {
         builder
-            .Register(c => new Aggregator(c.Resolve<IAccountant>(), c.Resolve<IExchangeRatesProvider>(), new Substitutor(culture, new VectorComparer(culture))))
+            .Register(c => new Aggregator(c.Resolve<IAccountant>(), c.Resolve<IExchangeRatesProvider>(), new Substitutor(culture), new SeriesBuilderComparer(new VectorComparer(culture))))
             .AsImplementedInterfaces();
 
         base.Load(builder);

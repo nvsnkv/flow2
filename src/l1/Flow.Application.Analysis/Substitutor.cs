@@ -7,11 +7,9 @@ namespace Flow.Application.Analysis;
 internal class Substitutor
 {
     private readonly List<(Regex, Func<RecordedTransaction, string>)> substitutors;
-    private readonly IComparer<Vector> vectorComparer;
-
-    public Substitutor(IFormatProvider formatProvider, IComparer<Vector> vectorComparer)
+    
+    public Substitutor(IFormatProvider formatProvider)
     {
-        this.vectorComparer = vectorComparer;
         substitutors = new List<(Regex, Func<RecordedTransaction, string>)>
         {
             (new Regex(@"\$ts", RegexOptions.Compiled), t => t.Timestamp.ToString(formatProvider)),
@@ -27,9 +25,6 @@ internal class Substitutor
             (new Regex(@"\$k", RegexOptions.Compiled), t => t.Key.ToString(formatProvider)),
         };
     }
-
-    public Dictionary<Vector, List<Vector>> SubstitutionsMade { get; } = new();
-    public bool SubstitutionsSorted { get; private set; }
 
     public bool IsSubstitutionNeeded(Vector source)
     {
@@ -48,26 +43,6 @@ internal class Substitutor
             )
         );
 
-        if (!SubstitutionsMade.ContainsKey(source))
-        {
-            SubstitutionsMade.Add(source, new List<Vector>());
-        }
-
-        if (!SubstitutionsMade[source].Contains(result))
-        {
-            SubstitutionsMade[source].Add(result);
-        }
-
         return result;
-    }
-
-    public void SortSubstitutions()
-    {
-        foreach (var key in SubstitutionsMade.Keys)
-        {
-            SubstitutionsMade[key].Sort(vectorComparer);
-        }
-
-        SubstitutionsSorted = true;
     }
 }

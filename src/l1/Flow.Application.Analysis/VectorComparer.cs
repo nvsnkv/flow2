@@ -27,5 +27,4 @@ internal class VectorComparer : IComparer<Vector>
 
         return x.Count - y.Count;
     }
-
 }

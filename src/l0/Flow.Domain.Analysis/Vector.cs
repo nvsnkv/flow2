@@ -68,4 +68,25 @@ public class Vector : IReadOnlyList<string>
     {
         return !Equals(left, right);
     }
+
+    public Vector PadRight(int dimensionsCount)
+    {
+        return new Vector(PadParts(dimensionsCount));
+    }
+
+    private IEnumerable<string> PadParts(int dimensionsCount)
+    {
+        int i = 0;
+        foreach (var value in values)
+        {
+            yield return value;
+            i++;
+        }
+
+        while (i < dimensionsCount)
+        {
+            yield return string.Empty;
+            i++;
+        }
+    }
 }
