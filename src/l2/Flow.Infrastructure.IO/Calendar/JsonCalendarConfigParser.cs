@@ -122,8 +122,10 @@ internal class JsonCalendarConfigParser : ICalendarConfigParser
                 {
                     errors.AddRange(result.Errors.Select(e => $"[Setup {position}:{order}] Rule {index} - {e}"));
                 }
-
-                yield return result.Conditions!;
+                else
+                {
+                    yield return result.Conditions!;
+                }
             }
 
             index++;
