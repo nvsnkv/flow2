@@ -40,15 +40,21 @@ internal class SeriesBuilder
 
     public IEnumerable<SeriesBuilder> SubSeries => subSeries;
 
-    public bool TryAppend(RecordedTransaction transaction)
+    public bool TryAppend(RecordedTransaction transaction, int? depth = null)
     {
         var index = GetIndex(transaction);
-        return index != -1 && TryAppend(transaction, index);
+        return index != -1 && TryAppend(transaction, index, depth);
     }
 
-    public IEnumerable<Series> Build(int dimensionsCount)
+    public IEnumerable<Series> Build(int dimensionsCount, int? depth = null)
     {
-        if (!(substitutor?.IsSubstitutionNeeded(Config.Measurement) ?? false))
+        if (depth == 0)
+        {
+            yield break;
+        }
+
+        var isSubstitutionNeeded = substitutor?.IsSubstitutionNeeded(Config.Measurement) ?? false;
+        if (!isSubstitutionNeeded)
         {
             yield return new Series(Config.Measurement.PadRight(dimensionsCount), aggregates.Select(a => a.Build()));
         }
@@ -60,15 +66,20 @@ internal class SeriesBuilder
 
         foreach (var builder in SubSeries)
         {
-            foreach (var series in builder.Build(dimensionsCount))
+            foreach (var series in builder.Build(dimensionsCount, depth - (isSubstitutionNeeded ? 0 : 1)))
             {
                 yield return series;
             }
         }
     }
 
-    private bool TryAppend(RecordedTransaction transaction, int index)
+    private bool TryAppend(RecordedTransaction transaction, int index, int? depth)
     {
+        if (depth == 0)
+        {
+            return false;
+        }
+
         if (Config.Rules.All(r => !r(transaction)))
         {
             return false;
@@ -84,12 +95,12 @@ internal class SeriesBuilder
                 subSeries.Add(series);
             }
 
-            series.TryAppend(transaction, index);
+            series.TryAppend(transaction, index, depth);
         }
         else
         {
             aggregates[index].Append(transaction);
-            var _ = SubSeries.Any(b => b.TryAppend(transaction, index));
+            var _ = SubSeries.Any(b => b.TryAppend(transaction, index, depth - 1));
         }
         
         

@@ -23,7 +23,7 @@ internal class Aggregator : IAggregator
         this.comparer = comparer;
     }
 
-    public async Task<(Calendar, IReadOnlyCollection<RejectedTransaction>)> GetCalendar(DateTime from, DateTime till, string currency, CalendarConfig setup, CancellationToken ct)
+    public async Task<(Calendar, IReadOnlyCollection<RejectedTransaction>)> GetCalendar(DateTime from, DateTime till, string currency, CalendarConfig setup, int? depth, CancellationToken ct)
     {
         var (flow, rejectedItems) = await GetFlow(from, till, currency, ct);
         var rejected = rejectedItems.ToList();
@@ -35,7 +35,7 @@ internal class Aggregator : IAggregator
 
         calendarBuilder = setup.Series.Aggregate(calendarBuilder, (b, g) => b.WithSeries(g));
 
-        var calendar = await calendarBuilder.Build(ct);
+        var calendar = await calendarBuilder.Build(ct, depth);
         return (calendar, rejected.AsReadOnly());
     }
 

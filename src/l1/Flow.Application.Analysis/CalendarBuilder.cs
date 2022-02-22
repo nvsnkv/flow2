@@ -51,7 +51,7 @@ internal class CalendarBuilder
         return this;
     }
 
-    public async Task<Calendar> Build(CancellationToken ct)
+    public async Task<Calendar> Build(CancellationToken ct, int? depth = null)
     {
         var ranges = monthlyRangesBuilder.GetRanges().ToList().AsReadOnly();
         var builders = series.Select(
@@ -63,7 +63,7 @@ internal class CalendarBuilder
 
         await foreach (var transaction in transactions.WithCancellation(ct))
         {
-            if (!builders.Any(b => b.TryAppend(transaction)))
+            if (!builders.Any(b => b.TryAppend(transaction, depth)))
             {
                 rejectionsHandler?.Invoke(new RejectedTransaction(transaction, "Given transaction does not belong to any group!"));
             }
@@ -71,6 +71,6 @@ internal class CalendarBuilder
 
         var dimensionsCount = builders.Max(b => b.GetDimensionsCount());
         
-        return new Calendar(ranges, dimensions?.PadRight(dimensionsCount) ?? Vector.Empty.PadRight(dimensionsCount), builders.SelectMany(b => b.Build(dimensionsCount)));
+        return new Calendar(ranges, dimensions?.PadRight(dimensionsCount) ?? Vector.Empty.PadRight(dimensionsCount), builders.SelectMany(b => b.Build(dimensionsCount, depth)));
     }
 }

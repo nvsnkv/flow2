@@ -41,7 +41,7 @@ internal class BuildCalendarCommand :CommandBase
             }
         }
 
-        var (calendar, rejections) = await aggregator.GetCalendar(arg.From.ToUniversalTime(), arg.Till.ToUniversalTime(), arg.Currency, parsingResult.Config!, ct);
+        var (calendar, rejections) = await aggregator.GetCalendar(arg.From.ToUniversalTime(), arg.Till.ToUniversalTime(), arg.Currency, parsingResult.Config!, arg.Depth, ct);
 
         var rejectionsWithCount = new EnumerableWithCount<RejectedTransaction>(rejections);
         
