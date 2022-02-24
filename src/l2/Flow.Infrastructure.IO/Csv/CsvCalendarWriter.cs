@@ -1,6 +1,5 @@
 ﻿using CsvHelper;
 using CsvHelper.Configuration;
-using Flow.Domain.Analysis;
 
 namespace Flow.Infrastructure.IO.Csv;
 
@@ -13,7 +12,7 @@ internal class CsvCalendarWriter
         this.config = config;
     }
 
-    public async Task Write(StreamWriter writer, Calendar calendar, CancellationToken ct)
+    public async Task Write(StreamWriter writer, Domain.Analysis.Calendar calendar, CancellationToken ct)
     {
         await using var csvWriter = new CsvWriter(writer, config);
         var headerRow = GetRow(calendar.Dimensions, calendar.Ranges, r => r.Alias);
@@ -24,11 +23,11 @@ internal class CsvCalendarWriter
         }
         await csvWriter.NextRecordAsync();
 
-        foreach (var value in calendar.Values)
+        foreach (var series in calendar.Series)
         {
             if (ct.IsCancellationRequested) { return; }
 
-            var row = GetRow(value.Key, value.Value, a => a.Value).ToList();
+            var row = GetRow(series.Measurement, series.Values, a => a.Value).ToList();
             foreach (var o in row)
             {
                 if (ct.IsCancellationRequested) { return; }
@@ -39,7 +38,7 @@ internal class CsvCalendarWriter
         }
     }
     
-    private IEnumerable<object?> GetRow<T>(Vector vector, IEnumerable<T> rangedData, Func<T, object?>? selectorFunc = null)
+    private static IEnumerable<object?> GetRow<T>(IEnumerable<string> vector, IEnumerable<T> rangedData, Func<T, object?>? selectorFunc = null)
     {
         foreach (var item in vector)
         {

@@ -1,19 +1,19 @@
-﻿using System.Collections.ObjectModel;
-using Flow.Domain.Analysis;
+﻿using Flow.Domain.Analysis;
+using Flow.Domain.Analysis.Setup;
 using Flow.Domain.Transactions;
-using Range = Flow.Domain.Analysis.Range;
 
 namespace Flow.Application.Analysis;
 
 internal class CalendarBuilder
 {
-    private readonly List<AggregationGroup> groups = new();
-    private readonly List<Vector> dimensions = new();
+    private readonly List<SeriesConfig> series = new();
     private readonly IAsyncEnumerable<RecordedTransaction> transactions;
     private readonly MonthlyRangesBuilder monthlyRangesBuilder;
+
     private Action<RejectedTransaction>? rejectionsHandler;
-    private Vector? header;
+    private Vector? dimensions;
     private Substitutor? substitutor;
+    private SeriesBuilderComparer? comparer;
 
     public CalendarBuilder(IAsyncEnumerable<RecordedTransaction> transactions, DateTime from, DateTime till)
     {
@@ -21,36 +21,29 @@ internal class CalendarBuilder
         monthlyRangesBuilder = new MonthlyRangesBuilder(from, till);
     }
 
-    public CalendarBuilder WithHeader(Vector header)
+    public CalendarBuilder WithDimensions(Vector dimensions)
     {
-        this.header = header;
+        this.dimensions = dimensions;
         return this;
     }
 
-    public CalendarBuilder WithSubstitutor(Substitutor substitutor)
+    public CalendarBuilder WithSubstitutor(Substitutor substitutor, SeriesBuilderComparer comparer)
     {
         this.substitutor = substitutor;
+        this.comparer = comparer;
         return this;
     }
     
-    public CalendarBuilder WithAggregationGroup(AggregationGroup group)
+    public CalendarBuilder WithSeries(SeriesConfig config)
     {
-        if (groups.Any(g => g.Name == group.Name)) { throw new ArgumentException("Group with this name already added!"); }
-        groups.Add(group);
-        
-        AddMeasures(group);
+        if (series.Any(s => s.Measurement == config.Measurement))
+        {
+            throw new ArgumentException("Series with these measurements were already added!", nameof(config));
+        }
 
+        series.Add(config);
         return this;
     }
-
-    private void AddMeasures(AggregationGroup? group)
-    {
-        while (group != null) {
-            dimensions.AddRange(group.Rules.Select(r => r.Dimensions));
-            group = group.Subgroup;
-        }
-    }
-
 
     public CalendarBuilder WithRejectionsHandler(Action<RejectedTransaction> handler)
     {
@@ -58,144 +51,26 @@ internal class CalendarBuilder
         return this;
     }
 
-
-    public async Task<Calendar> Build(CancellationToken ct)
+    public async Task<Calendar> Build(CancellationToken ct, int? depth = null)
     {
         var ranges = monthlyRangesBuilder.GetRanges().ToList().AsReadOnly();
-        var rows = new Dictionary<Vector, List<AggregateBuilder>>();
+        var builders = series.Select(
+            s =>
+            substitutor != null
+                ? new SeriesBuilder(ranges, s).WithSubstitutor(substitutor, comparer!)
+                : new SeriesBuilder(ranges, s)
+            ).ToList();
 
         await foreach (var transaction in transactions.WithCancellation(ct))
         {
-            var vectors = GetVectors(transaction);
-            foreach (var vector in vectors)
+            if (!builders.Any(b => b.TryAppend(transaction, depth)))
             {
-                if (!rows.ContainsKey(vector))
-                {
-                    var rowValues = new List<AggregateBuilder>();
-                    while(rowValues.Count < ranges.Count)
-                    {
-                        rowValues.Add(new AggregateBuilder());
-                    }
-                    rows.Add(vector,rowValues);
-                }
-
-                var index = GetIndex(transaction, ranges);
-                if (index >= 0)
-                {
-                    rows[vector][index].Append(transaction);
-                }
+                rejectionsHandler?.Invoke(new RejectedTransaction(transaction, "Given transaction does not belong to any group!"));
             }
         }
 
-        substitutor?.SortSubstitutions();
-
-        var values = new ReadOnlyDictionary<Vector, IReadOnlyList<Aggregate>>(
-            rows.OrderBy(r => GetOrder(r.Key)).ToDictionary(
-                r => r.Key, 
-                r => (IReadOnlyList<Aggregate>)r.Value
-                    .Select(b => b.Build())
-                    .ToList()
-                    .AsReadOnly()
-                )
-            );
-
-        return new Calendar(ranges, header ?? Vector.Empty, values);
-    }
-
-    private long GetOrder(Vector dimension)
-    {
-        if (!substitutor?.SubstitutionsSorted ?? false)
-        {
-            substitutor?.SortSubstitutions();
-        }
-
-        int idx = 0;
-
-        while (idx < dimensions.Count)
-        {
-            var main= dimensions[idx];
-            if (main == dimension)
-            {
-                return (long)idx << 32;
-            }
-
-            if (substitutor?.SubstitutionsMade.ContainsKey(main) ?? false)
-            {
-                var secIdx = substitutor.SubstitutionsMade[main].IndexOf(dimension);
-                if (secIdx != -1)
-                {
-                    return ((long)idx << 32) + secIdx;
-                }
-            }
-
-            idx++;
-        }
-
-        return -1;
-    }
-
-    private int GetIndex(Transaction transaction, IReadOnlyList<Range> ranges)
-    {
-        var result = 0;
-        while (result < ranges.Count)
-        {
-            var range = ranges[result];
-            if (range.Start <= transaction.Timestamp && transaction.Timestamp < range.End)
-            {
-                return result;
-            }
-
-            result++;
-        }
-
-        if (rejectionsHandler != null)
-        {
-            rejectionsHandler(new RejectedTransaction(transaction, "Given transaction does not belong to any date range!"));
-        }
-
-        return -1;
-    }
-
-    private IEnumerable<Vector> GetVectors(RecordedTransaction transaction)
-    {
-        return groups.Select(group => GetMatchedVector(transaction, group)).Where(v => v != null)!;
-    }
-
-    private Vector? GetMatchedVector(RecordedTransaction transaction, AggregationGroup group)
-    {
-        var matchedDimensions = group.Rules.Where(r => r.Rule(transaction)).ToList();
-
-        if (!matchedDimensions.Any())
-        {
-            if (group.Subgroup == null)
-            {
-                if (rejectionsHandler != null)
-                {
-                    rejectionsHandler(new RejectedTransaction(transaction, $"Given transaction does not match to any aggregation rule!"));
-                }
-
-                return null;
-            }
-
-            return GetMatchedVector(transaction, group.Subgroup);
-        }
-
-        if (matchedDimensions.Count > 1)
-        {
-            var matched = string.Join(", ", matchedDimensions.Select(r => $"[{string.Join(", ", r.Dimensions)}]"));
-            if (rejectionsHandler != null)
-            {
-                rejectionsHandler(new RejectedTransaction(transaction, $"Given transaction matches with more than one aggregation rule ({matched}). Only first value will be used!"));
-            }
-        }
-
-        var dimension = matchedDimensions.First().Dimensions;
-
-        if (substitutor?.IsSubstitutionNeeded(dimension) ?? false)
-        {
-            dimension = substitutor.Substitute(dimension, transaction);
-        }
+        var dimensionsCount = builders.Max(b => b.GetDimensionsCount());
         
-        return dimension;
+        return new Calendar(ranges, dimensions?.PadRight(dimensionsCount) ?? Vector.Empty.PadRight(dimensionsCount), builders.SelectMany(b => b.Build(dimensionsCount, depth)));
     }
 }

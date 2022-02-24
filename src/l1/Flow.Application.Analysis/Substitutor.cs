@@ -1,5 +1,4 @@
-﻿using System.Globalization;
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 using Flow.Domain.Analysis;
 using Flow.Domain.Transactions;
 
@@ -8,12 +7,10 @@ namespace Flow.Application.Analysis;
 internal class Substitutor
 {
     private readonly List<(Regex, Func<RecordedTransaction, string>)> substitutors;
-    private readonly IComparer<Vector> vectorComparer;
-
-    public Substitutor(IFormatProvider formatProvider, IComparer<Vector> vectorComparer)
+    
+    public Substitutor(IFormatProvider formatProvider)
     {
-        this.vectorComparer = vectorComparer;
-        substitutors = new()
+        substitutors = new List<(Regex, Func<RecordedTransaction, string>)>
         {
             (new Regex(@"\$ts", RegexOptions.Compiled), t => t.Timestamp.ToString(formatProvider)),
             (new Regex(@"\$t", RegexOptions.Compiled), t => t.Title),
@@ -29,18 +26,15 @@ internal class Substitutor
         };
     }
 
-    public Dictionary<Vector, List<Vector>> SubstitutionsMade { get; } = new();
-    public bool SubstitutionsSorted { get; private set; }
-
-    public bool IsSubstitutionNeeded(Vector dimension)
+    public bool IsSubstitutionNeeded(Vector source)
     {
-        return dimension.Any(d => substitutors.Any(s => s.Item1.IsMatch(d)));
+        return source.Any(d => substitutors.Any(s => s.Item1.IsMatch(d)));
     }
     
-    public Vector Substitute(Vector dimension, RecordedTransaction transaction)
+    public Vector Substitute(Vector source, RecordedTransaction transaction)
     {
         var result = new Vector(
-            dimension.Select(
+            source.Select(
                 d =>
                     substitutors.Aggregate(
                         d,
@@ -49,53 +43,6 @@ internal class Substitutor
             )
         );
 
-        if (!SubstitutionsMade.ContainsKey(dimension))
-        {
-            SubstitutionsMade.Add(dimension, new List<Vector>());
-        }
-
-        if (!SubstitutionsMade[dimension].Contains(result))
-        {
-            SubstitutionsMade[dimension].Add(result);
-        }
-
         return result;
     }
-
-    public void SortSubstitutions()
-    {
-        foreach (var key in SubstitutionsMade.Keys)
-        {
-            SubstitutionsMade[key].Sort(vectorComparer);
-        }
-
-        SubstitutionsSorted = true;
-    }
-}
-
-internal class VectorComparer : IComparer<Vector>
-{
-    private CultureInfo culture;
-
-    public VectorComparer(CultureInfo culture)
-    {
-        this.culture = culture;
-    }
-
-    public int Compare(Vector? x, Vector? y)
-    {
-        if (x == null) return -1;
-        if (y == null) return 1;
-
-        var idx = 0;
-        while (idx < x.Length) {
-            if (y.Length <= idx) return 1;
-            var result = string.Compare(x[idx], y[idx], culture, CompareOptions.StringSort);
-            if (result != 0) return result;
-            idx++;
-        }
-
-        return x.Length - y.Length;
-    }
-
 }

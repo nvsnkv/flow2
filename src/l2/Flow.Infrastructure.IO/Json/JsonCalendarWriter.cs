@@ -1,5 +1,4 @@
-﻿using System.Collections.ObjectModel;
-using Flow.Domain.Analysis;
+﻿using Flow.Domain.Analysis;
 using Flow.Domain.Transactions;
 using Newtonsoft.Json;
 
@@ -16,18 +15,21 @@ internal class JsonCalendarWriter
             : Newtonsoft.Json.JsonSerializer.Create(settings);
     }
 
-    public async Task Write(StreamWriter writer, Calendar calendar, CancellationToken ct)
+    public async Task Write(StreamWriter writer, Domain.Analysis.Calendar calendar, CancellationToken ct)
     {
         using var jsonWriter = new JsonTextWriter(writer) { CloseOutput = false };
-        var rows = calendar.Values.ToDictionary(
-            v => v.Key, 
-            v => (IReadOnlyList<Aggregate>)v.Value
-                .Select(a => new Aggregate(a.Value, a.Transactions.Select(t => (RecordedTransaction)(JsonRecordedTransaction)t).ToList().AsReadOnly()))
-                .ToList()
-                .AsReadOnly()
-            );
+        var series = calendar.Series
+            .Select(s => new Series(
+                s.Measurement,
+                s.Values
+                    .Select(
+                        v => new Aggregate(v.Value, v.Transactions.Select(t => (RecordedTransaction)(JsonRecordedTransaction)t)))
+                    .ToList()
+                )
+            )
+            .ToList();
 
-        calendar = new Calendar(calendar.Ranges, calendar.Dimensions,  new ReadOnlyDictionary<Vector, IReadOnlyList<Aggregate>>(rows));
+        calendar = new Domain.Analysis.Calendar(calendar.Ranges, calendar.Dimensions, series);
         serializer.Serialize(jsonWriter, calendar);
         await jsonWriter.FlushAsync(ct);
     }

@@ -2,7 +2,7 @@
 
 namespace Flow.Domain.Analysis;
 
-public class Vector : IEnumerable<string>
+public class Vector : IReadOnlyList<string>
 {
     public static Vector Empty { get; } = new(Enumerable.Empty<string>());
 
@@ -13,18 +13,18 @@ public class Vector : IEnumerable<string>
         this.values = values?.ToList() ?? Empty.values;
     }
 
-    public int Length => values.Count;
+    public int Count => values.Count;
 
     public string this[int i] => values[i];
 
     protected bool Equals(Vector other)
     {
-        if (Length != other.Length)
+        if (Count != other.Count)
         {
             return false;
         }
 
-        for (var i = 0; i < Length; i++)
+        for (var i = 0; i < Count; i++)
         {
             if (this[i] != other[i])
             {
@@ -67,5 +67,26 @@ public class Vector : IEnumerable<string>
     public static bool operator !=(Vector? left, Vector? right)
     {
         return !Equals(left, right);
+    }
+
+    public Vector PadRight(int dimensionsCount)
+    {
+        return new Vector(PadParts(dimensionsCount));
+    }
+
+    private IEnumerable<string> PadParts(int dimensionsCount)
+    {
+        int i = 0;
+        foreach (var value in values)
+        {
+            yield return value;
+            i++;
+        }
+
+        while (i < dimensionsCount)
+        {
+            yield return string.Empty;
+            i++;
+        }
     }
 }

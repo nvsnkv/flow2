@@ -3,6 +3,7 @@ using Flow.Application.Analysis.Contract;
 using Flow.Application.ExchangeRates.Contract;
 using Flow.Application.Transactions.Contract;
 using Flow.Domain.Analysis;
+using Flow.Domain.Analysis.Setup;
 using Flow.Domain.Transactions;
 
 namespace Flow.Application.Analysis;
@@ -12,27 +13,29 @@ internal class Aggregator : IAggregator
     private readonly IAccountant accountant;
     private readonly IExchangeRatesProvider ratesProvider;
     private readonly Substitutor substitutor;
+    private readonly SeriesBuilderComparer comparer;
 
-    public Aggregator(IAccountant accountant, IExchangeRatesProvider ratesProvider, Substitutor substitutor)
+    public Aggregator(IAccountant accountant, IExchangeRatesProvider ratesProvider, Substitutor substitutor, SeriesBuilderComparer comparer)
     {
         this.accountant = accountant;
         this.ratesProvider = ratesProvider;
         this.substitutor = substitutor;
+        this.comparer = comparer;
     }
 
-    public async Task<(Calendar, IReadOnlyCollection<RejectedTransaction>)> GetCalendar(DateTime from, DateTime till, string currency, AggregationSetup setup, CancellationToken ct)
+    public async Task<(Calendar, IReadOnlyCollection<RejectedTransaction>)> GetCalendar(DateTime from, DateTime till, string currency, CalendarConfig setup, int? depth, CancellationToken ct)
     {
         var (flow, rejectedItems) = await GetFlow(from, till, currency, ct);
         var rejected = rejectedItems.ToList();
 
-        var calendarBuilder = new CalendarBuilder(flow, @from, till)
+        var calendarBuilder = new CalendarBuilder(flow, from, till)
             .WithRejectionsHandler(r => rejected.Add(r))
-            .WithHeader(setup.Headers)
-            .WithSubstitutor(substitutor);
+            .WithDimensions(setup.Dimensions)
+            .WithSubstitutor(substitutor, comparer);
 
-        calendarBuilder = setup.Groups.Aggregate(calendarBuilder, (b, g) => b.WithAggregationGroup(g));
+        calendarBuilder = setup.Series.Aggregate(calendarBuilder, (b, g) => b.WithSeries(g));
 
-        var calendar = await calendarBuilder.Build(ct);
+        var calendar = await calendarBuilder.Build(ct, depth);
         return (calendar, rejected.AsReadOnly());
     }
 

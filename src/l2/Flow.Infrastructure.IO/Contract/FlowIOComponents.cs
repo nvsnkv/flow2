@@ -3,9 +3,9 @@ using System.Runtime.CompilerServices;
 using Autofac;
 using CsvHelper.Configuration;
 using Flow.Infrastructure.Configuration.Contract;
+using Flow.Infrastructure.IO.Calendar;
 using Flow.Infrastructure.IO.Criteria;
 using Flow.Infrastructure.IO.Csv;
-using Flow.Infrastructure.IO.Dimensions;
 using Flow.Infrastructure.IO.Json;
 using Newtonsoft.Json;
 using JsonSerializer = Flow.Infrastructure.IO.Json.JsonSerializer;
@@ -110,8 +110,17 @@ public class FlowIOComponents : Module
 
         builder.Register(c =>
         {
+            var config = c.Resolve<IFlowConfiguration>();
+
+            var culture = CultureInfo
+                              .GetCultures(CultureTypes.AllCultures)
+                              .FirstOrDefault(ci => ci.Name == config.CultureCode)
+                          ?? CultureInfo.CurrentCulture;
+
+            var json = new JsonSerializer(new JsonSerializerSettings() { Culture = culture, Formatting = Formatting.Indented });
+
             var criteriaParser = c.Resolve<ITransactionCriteriaParser>();
-            return new AggregationSetupParser(';', criteriaParser);
+            return new JsonCalendarConfigParser(json, criteriaParser);
         }).InstancePerLifetimeScope().AsImplementedInterfaces();
 
         base.Load(builder);

@@ -2,16 +2,16 @@
 
 public class Calendar
 {
-    public Calendar(IReadOnlyList<Range> ranges, Vector dimensions, IReadOnlyDictionary<Vector, IReadOnlyList<Aggregate>> values)
+    public Calendar(IEnumerable<Range> ranges, Vector dimensions, IEnumerable<Series> series)
     {
         Ranges = ranges;
         Dimensions = dimensions;
-        Values = values;
+        Series = series;
     }
 
-    public IReadOnlyList<Range> Ranges { get; }
+    public IEnumerable<Range> Ranges { get; }
 
     public Vector Dimensions { get; }
 
-    public IReadOnlyDictionary<Vector, IReadOnlyList<Aggregate>> Values { get; }
+    public IEnumerable<Series> Series { get; }
 }

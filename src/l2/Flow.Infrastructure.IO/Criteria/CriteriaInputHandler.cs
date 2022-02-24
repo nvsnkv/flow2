@@ -9,7 +9,7 @@ internal class CriteriaInputHandler
     private static readonly Regex QuotesPattern = new($"[{Quotes}]", RegexOptions.Compiled);
     private static readonly string Whitespaces = " ";
     
-    public IEnumerable<string> SplitAndUnquote(IEnumerable<string> input)
+    public static IEnumerable<string> SplitAndUnquote(IEnumerable<string> input)
     {
         foreach (var item in input)
         {
@@ -20,7 +20,7 @@ internal class CriteriaInputHandler
         }
     }
 
-    private IEnumerable<string> Split(string input)
+    private static IEnumerable<string> Split(string input)
     {
         var builder = new StringBuilder();
         var i = 0;

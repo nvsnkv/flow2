@@ -33,7 +33,6 @@ internal class TransactionCriteriaParser : ITransactionCriteriaParser
 {
     private readonly GenericParser parser;
     private readonly Regex criterionPattern = new(@"^(?<neg>!?)(?<prop>ts?|a|cat|acc|c|bnk|ocom|ocat|ot|k)(?<opStart>\=|\%|\<=?|\>=?|\[|\()(?<arg>.*?)(?<opEnd>\]?|\)?)$");
-    private readonly CriteriaInputHandler inputHandler = new();
     
     public TransactionCriteriaParser(GenericParser parser)
     {
@@ -50,7 +49,7 @@ internal class TransactionCriteriaParser : ITransactionCriteriaParser
         var builder = new AndPatternBuilder<RecordedTransaction>();
         var errors = new List<string>();
 
-        foreach (var part in inputHandler.SplitAndUnquote(parts))
+        foreach (var part in CriteriaInputHandler.SplitAndUnquote(parts))
         {
             var result = ParseCondition(part, builder);
             if (!result.Successful)
