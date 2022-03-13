@@ -10,7 +10,8 @@ internal class CBRFRemoteRatesProvider : IRemoteExchangeRatesProvider
     private static readonly Dictionary<string, string> CurrenciesMapping = new()
     {
         { "₽", "RUB" },
-        { "$", "USD" }
+        { "$", "USD" },
+        { "€", "EUR" }
     };
 
     private static readonly string HomelandCurrency = "RUB";
