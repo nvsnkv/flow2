@@ -27,7 +27,7 @@ internal class BuildCalendarCommand :CommandBase
     public async Task<int> Execute(BuildCalendarArgs arg, CancellationToken ct)
     {
         CalendarConfigParsingResult parsingResult;
-        using (var streamReader = CreateReader(arg.DimensionsSetup))
+        using (var streamReader = CreateReader(arg.SeriesSetup))
         {
             parsingResult = await parser.ParseFromStream(streamReader, ct);
             if (!parsingResult.Successful)

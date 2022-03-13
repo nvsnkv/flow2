@@ -20,9 +20,9 @@ All information can be exported or imported in one of 2 supported formats: CSV o
 * `ocat` - Category override
 * `ottl` - Title override
 
-Following operation are supported:
+Following operations are supported:
 * equality: `=`
-* likeness: `~`
+* likeness: `%`
 * comparison: `<`, `>` , `>=`, `<=`
 * in-range: `[]`, `[)`, `(]` `()`
 * within: `(1, 2, 14)`
