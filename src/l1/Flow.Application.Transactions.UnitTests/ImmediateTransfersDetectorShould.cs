@@ -44,17 +44,18 @@ public class ImmediateTransfersDetectorShould
     [InlineData(null, 0, null, "A", null)]
     [InlineData(null, 0, "A", null, null)]
     [InlineData(null, 1.0, null, null, null)]
-    [InlineData("00:00:05", 0, null, null, null)]
+    [InlineData("00:02:01", 0, null, null, null)]
     [InlineData(null, 0, null, "A", "null")]
     [InlineData(null, 0, "A", null, "null")]
     [InlineData(null, 1.0, null, null, "null")]
-    [InlineData("00:00:05", 0, null, null, "null")]
+    [InlineData("00:02:01", 0, null, null, "null")]
     [InlineData(null, 0, "A", "null", "null")]
     [InlineData(null, 1.0, null, "null", "null")]
-    [InlineData("00:00:05", 0, null, "null", "null")]
+    [InlineData("00:02:01", 0, null, "null", "null")]
     [InlineData(null, 1.0, "null", "null", "null")]
-    [InlineData("00:00:05", 0, "null", "null", "null")]
-    [InlineData("00:00:05", 2.5, "null", "null", "null")]
+    [InlineData("00:02:01", 0, "null", "null", "null")]
+    [InlineData("00:02:01", 2.5, "null", "null", "null")]
+    [InlineData("-00:01:01", 2.5, "null", "null", "null")]
     public void IgnoreTransactionsThatDoesNotMeetImmediateTransferCriteria(string? timeShift, decimal amountShift, string? currencyShift, string? categoryShift, string? titleShift)
     {
         var now = DateTime.UtcNow;

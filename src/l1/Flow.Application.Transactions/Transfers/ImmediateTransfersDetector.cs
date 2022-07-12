@@ -8,7 +8,9 @@ internal class ImmediateTransfersDetector : TransferDetectorBase
 {
     public override bool CheckIsTransfer(RecordedTransaction left, RecordedTransaction right)
     {
-        return left.Timestamp == right.Timestamp
+        var timeGap = right.Timestamp - left.Timestamp;
+        return TimeSpan.Zero <= timeGap 
+               && timeGap < TimeSpan.FromMinutes(2)
                && left.Amount == -1 * right.Amount
                && left.Amount < 0
                && left.Currency == right.Currency
