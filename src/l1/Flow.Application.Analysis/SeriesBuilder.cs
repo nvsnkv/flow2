@@ -80,6 +80,9 @@ internal class SeriesBuilder
             return false;
         }
 
+        // hackfix for issue #47. TODO fix issue properly!
+        transaction.Overrides ??= new Overrides(string.Empty, string.Empty, string.Empty);
+
         if (Config.Rules.All(r => !r(transaction)))
         {
             return false;
