@@ -5,8 +5,8 @@
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <AssemblyName>rates</AssemblyName>
-    <Version>2.0.2</Version>
+    <AssemblyName>flow-rates</AssemblyName>
+    <Version>2.0.3</Version>
 	<AssemblyVersion>2.0.0.0</AssemblyVersion>
     <Authors>nvsnkv</Authors>
 	<Copyright>© 2021 nvsnkv</Copyright>

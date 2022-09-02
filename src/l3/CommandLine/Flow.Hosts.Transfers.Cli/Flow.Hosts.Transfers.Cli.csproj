@@ -5,8 +5,8 @@
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <AssemblyName>transfers</AssemblyName>
-    <Version>2.2.1</Version>
+    <AssemblyName>flow-xfers</AssemblyName>
+    <Version>2.2.2</Version>
 	<AssemblyVersion>2.0.0.0</AssemblyVersion>
     <Authors>nvsnkv</Authors>
 	<Copyright>© 2021 nvsnkv</Copyright>
