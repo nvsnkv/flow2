@@ -70,7 +70,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Flow.Application.Analysis.U
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Flow.Hosts.Analysis.Cli", "l3\CommandLine\Flow.Hosts.Analysis.Cli\Flow.Hosts.Analysis.Cli.csproj", "{81F7EAE2-4B23-4050-99D7-B7601C364ECD}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CommandLine.Bundle", "l3\CommandLine\CommandLine.Bundle\CommandLine.Bundle.csproj", "{5FACD097-8A71-41D7-8CAD-7E8E3FDCF605}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Flow.Hosts.Bundling.Cli", "l3\CommandLine\Flow.Host.Bundling.Cli\Flow.Hosts.Bundling.Cli.csproj", "{5FACD097-8A71-41D7-8CAD-7E8E3FDCF605}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

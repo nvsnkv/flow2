@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿using System.Diagnostics;
+using System.Globalization;
 using CommandLine;
 using Flow.Hosts.Common;
 using Flow.Infrastructure.Configuration.Contract;
