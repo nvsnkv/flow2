@@ -15,7 +15,7 @@ var config = configContainer.Resolve<IFlowConfiguration>();
 var culture = CultureInfo.GetCultures(CultureTypes.AllCultures).FirstOrDefault(c => c.Name == config.CultureCode) ?? CultureInfo.CurrentCulture;
 
 var cancellationHandler = new ConsoleCancellationHandler();
-var executor = new Executor(cancellationHandler.Token);
+var executor = new Executor(cancellationHandler.Token, Console.Error);
 
 var parser = ParserHelper.Create(culture);
 

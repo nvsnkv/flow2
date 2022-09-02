@@ -14,7 +14,24 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Flow.Hosts.Common\Flow.Hosts.Common.csproj" />
+    <ProjectReference Include="..\Flow.Host.Bundling.Cli\Flow.Hosts.Bundling.Cli.csproj">
+      <Private>True</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\Flow.Hosts.Analysis.Cli\Flow.Hosts.Analysis.Cli.csproj">
+      <Private>True</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\Flow.Hosts.Common\Flow.Hosts.Common.csproj">
+      <Private>True</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\Flow.Hosts.ExchangeRates.Cli\Flow.Hosts.ExchangeRates.Cli.csproj">
+      <Private>True</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\Flow.Hosts.Transactions.Cli\Flow.Hosts.Transactions.Cli.csproj">
+      <Private>True</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\Flow.Hosts.Transfers.Cli\Flow.Hosts.Transfers.Cli.csproj">
+      <Private>True</Private>
+    </ProjectReference>
   </ItemGroup>
 
 </Project>
