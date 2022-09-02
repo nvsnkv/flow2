@@ -16,16 +16,18 @@ __Flow__ works best together with file editors, but they are optional. Apps can 
 1. Clone repository
 2. Navigate to `src` folder
 3. Build solution using `dotnet build` or Visual Studio
-4. Navigate to `src\l3\CommandLine\CommandLine.Bundle`
+4. Navigate to `src\l3\CommandLine\Flow.Hosts.EntryPoint.Cli` folder
 5. Publish bundle to preferrable ouptut directory (ex. `dotnet publish -c Release -o ..\..\..\..\build\cli-bundle`)
 6. Navigate to target folder with the bundle
-7. run `flow-bundle` to add folder with bundle to path and set appsettings.json as a global config file for all flow apps
+7. run `flow bundle register` to add folder with bundle to path and set appsettings.json as a global config file for all flow apps
 
 Now you can use all CLI tools in any folder.
 
 ## Configuration
 CLI tools uses [.NET Configuration](https://docs.microsoft.com/en-us/dotnet/core/extensions/configuration) with [json](https://docs.microsoft.com/en-us/dotnet/core/extensions/configuration-providers#json-configuration-provider) and [Environment Variables](https://docs.microsoft.com/en-us/dotnet/core/extensions/configuration-providers#environment-variable-configuration-provider) providers available. 
 You can write settings to _appsettings.json_ file in the working directory, specify a separate file location in `FLOW_CONFIG_FILE` environment variable or set environment variables to override anyting what's already in settings file.
+
+`flow bundle configure` shorthand allows to open editor for configuration file from `FLOW_CONFIG_FILE`  environment variable.
 
 There are quite a few settings to provide, and most of them optional:
 * `flow:ConnectionString` - required. A connection string to PostgreSQL database that handles data;
