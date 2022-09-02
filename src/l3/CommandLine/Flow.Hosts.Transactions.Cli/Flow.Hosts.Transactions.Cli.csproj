@@ -9,7 +9,7 @@
 	<AssemblyVersion>2.0.0.0</AssemblyVersion>
 	<Authors>nvsnkv</Authors>
 	<Copyright>© 2021 nvsnkv</Copyright>
-    <AssemblyName>accountant</AssemblyName>
+    <AssemblyName>flow-tx</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>

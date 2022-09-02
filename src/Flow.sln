@@ -31,7 +31,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "l3", "l3", "{249EE53E-3FC4-
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CommandLine", "CommandLine", "{128C34A4-0A1B-44B2-AD90-F3B76381F851}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Flow.Hosts.Accountant.Cli", "l3\CommandLine\Flow.Hosts.Accountant.Cli\Flow.Hosts.Accountant.Cli.csproj", "{FF7F0C82-916F-4ECA-9510-B74864B626F4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Flow.Hosts.Transactions.Cli", "l3\CommandLine\Flow.Hosts.Transactions.Cli\Flow.Hosts.Transactions.Cli.csproj", "{FF7F0C82-916F-4ECA-9510-B74864B626F4}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{65511899-B4E1-4208-A29A-114C3E778822}"
 	ProjectSection(SolutionItems) = preProject
@@ -52,25 +52,25 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Flow.Application.ExchangeRa
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Flow.Infrastructure.Rates.CBRF", "l2\Flow.Infrastructure.Rates.CBRF\Flow.Infrastructure.Rates.CBRF.csproj", "{793B41AE-C100-4A0F-8EF7-E00C05EDCFC1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Flow.Domain.Common", "l0\Flow.Domain.Common\Flow.Domain.Common.csproj", "{D87BA5AF-4152-4DC4-89AB-111C66934FA9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Flow.Domain.Common", "l0\Flow.Domain.Common\Flow.Domain.Common.csproj", "{D87BA5AF-4152-4DC4-89AB-111C66934FA9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Flow.Domain.Common.UnitTests", "l0\Flow.Domain.Common.UnitTests\Flow.Domain.Common.UnitTests.csproj", "{F998042F-ACF5-487E-AEF8-8C991ECFAC45}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Flow.Domain.Common.UnitTests", "l0\Flow.Domain.Common.UnitTests\Flow.Domain.Common.UnitTests.csproj", "{F998042F-ACF5-487E-AEF8-8C991ECFAC45}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Flow.Hosts.Common", "l3\CommandLine\Flow.Hosts.Common\Flow.Hosts.Common.csproj", "{D5FE81B0-0888-45D6-A09C-147283EEA8CD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Flow.Hosts.Common", "l3\CommandLine\Flow.Hosts.Common\Flow.Hosts.Common.csproj", "{D5FE81B0-0888-45D6-A09C-147283EEA8CD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Flow.Hosts.Transfers.Cli", "l3\CommandLine\Flow.Hosts.Transfers.Cli\Flow.Hosts.Transfers.Cli.csproj", "{AC5F1179-5A33-4AA0-93FC-3A7B9DB06829}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Flow.Hosts.Transfers.Cli", "l3\CommandLine\Flow.Hosts.Transfers.Cli\Flow.Hosts.Transfers.Cli.csproj", "{AC5F1179-5A33-4AA0-93FC-3A7B9DB06829}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Flow.Hosts.ExchangeRates.Cli", "l3\CommandLine\Flow.Hosts.ExchangeRates.Cli\Flow.Hosts.ExchangeRates.Cli.csproj", "{189E948D-01CE-4CF1-927E-447253559BFC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Flow.Hosts.ExchangeRates.Cli", "l3\CommandLine\Flow.Hosts.ExchangeRates.Cli\Flow.Hosts.ExchangeRates.Cli.csproj", "{189E948D-01CE-4CF1-927E-447253559BFC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Flow.Domain.Analysis", "l0\Flow.Domain.Analysis\Flow.Domain.Analysis.csproj", "{850B9C43-3C52-4E6D-B7E2-C408E393B103}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Flow.Domain.Analysis", "l0\Flow.Domain.Analysis\Flow.Domain.Analysis.csproj", "{850B9C43-3C52-4E6D-B7E2-C408E393B103}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Flow.Application.Analysis", "l1\Flow.Application.Analysis\Flow.Application.Analysis.csproj", "{8288C5FE-9DC3-4E6C-83E7-5368B2C3CD55}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Flow.Application.Analysis", "l1\Flow.Application.Analysis\Flow.Application.Analysis.csproj", "{8288C5FE-9DC3-4E6C-83E7-5368B2C3CD55}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Flow.Application.Analysis.UnitTests", "l1\Flow.Application.Analysis.UnitTests\Flow.Application.Analysis.UnitTests.csproj", "{19A8D219-062D-4D88-82C2-1BD160006B29}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Flow.Application.Analysis.UnitTests", "l1\Flow.Application.Analysis.UnitTests\Flow.Application.Analysis.UnitTests.csproj", "{19A8D219-062D-4D88-82C2-1BD160006B29}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Flow.Hosts.Analysis.Cli", "l3\CommandLine\Flow.Hosts.Analysis.Cli\Flow.Hosts.Analysis.Cli.csproj", "{81F7EAE2-4B23-4050-99D7-B7601C364ECD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Flow.Hosts.Analysis.Cli", "l3\CommandLine\Flow.Hosts.Analysis.Cli\Flow.Hosts.Analysis.Cli.csproj", "{81F7EAE2-4B23-4050-99D7-B7601C364ECD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommandLine.Bundle", "l3\CommandLine\CommandLine.Bundle\CommandLine.Bundle.csproj", "{5FACD097-8A71-41D7-8CAD-7E8E3FDCF605}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CommandLine.Bundle", "l3\CommandLine\CommandLine.Bundle\CommandLine.Bundle.csproj", "{5FACD097-8A71-41D7-8CAD-7E8E3FDCF605}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
