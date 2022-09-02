@@ -8,7 +8,7 @@ _flow_ allows to aggregate your expences and incomes into calendar-like represen
 | ...   | ........ | ... | ... | ... | ... |
 
 Transactions, stored in the database are getting grouped into the rows based on aggregation criteria defined by the user.
-Basically, each row is defined as a set of specific dimension values ('Car' for dimenson 'Group' and 'Gas' or 'Services' for dimension 'Subgroup') and a transaction selection criteria (the same format as for `acountant list` command). Transactions that does not belong to any of configured group will be reported as rejected.
+Basically, each row is defined as a set of specific dimension values ('Car' for dimenson 'Group' and 'Gas' or 'Services' for dimension 'Subgroup') and a transaction selection criteria (the same format as for `flow tx list` command). Transactions that does not belong to any of configured group will be reported as rejected.
 _flow_ allows multi-level aggregation, for example you can
 * Group all your grocery stores in one row (Grocery)
 * Group car-related expences (Car) into 
@@ -71,4 +71,4 @@ Aggregations can be defined using the following JSON object:
 ```
 
 ### Building a calendar
-`flow calendar` command builds a calendar from the transactions stored in the database. It requires the dimensions setup, left and right boundaries for the calendar and target currency. Please refere to `flow help calendar` output for details.
+`flow core calendar` command builds a calendar from the transactions stored in the database. It requires the dimensions setup, left and right boundaries for the calendar and target currency. Please refere to `flow core help calendar` output for details.
