@@ -72,7 +72,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Flow.Hosts.Analysis.Cli", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Flow.Hosts.Bundling.Cli", "l3\CommandLine\Flow.Host.Bundling.Cli\Flow.Hosts.Bundling.Cli.csproj", "{5FACD097-8A71-41D7-8CAD-7E8E3FDCF605}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Flow.Hosts.Entrypoint", "l3\CommandLine\Flow.Hosts.Entrypoint\Flow.Hosts.Entrypoint.csproj", "{8EEA755C-61C2-4C82-90B8-94F6BA8E4038}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Flow.Hosts.EntryPoint.Cli", "l3\CommandLine\Flow.Hosts.EntryPoint.Cli\Flow.Hosts.EntryPoint.Cli.csproj", "{8EEA755C-61C2-4C82-90B8-94F6BA8E4038}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

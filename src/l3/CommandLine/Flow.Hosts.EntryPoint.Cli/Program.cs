@@ -4,6 +4,8 @@ using Flow.Hosts.Common;
 using Flow.Infrastructure.Configuration.Contract;
 using System.Globalization;
 using CommandLine;
+using Flow.Hosts.EntryPoint.Cli;
+using Flow.Hosts.EntryPoint.Cli.Commands;
 
 var builder = new ContainerBuilder();
 builder.RegisterModule(new FlowConfiguration());

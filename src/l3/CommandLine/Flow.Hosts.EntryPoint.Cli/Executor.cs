@@ -1,4 +1,6 @@
-﻿internal sealed class Executor
+﻿namespace Flow.Hosts.EntryPoint.Cli;
+
+internal sealed class Executor
 {
     private readonly CancellationToken cancellationToken;
 

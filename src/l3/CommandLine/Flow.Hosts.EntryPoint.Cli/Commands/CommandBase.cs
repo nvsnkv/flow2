@@ -1,7 +1,7 @@
 ﻿using CommandLine;
 using JetBrains.Annotations;
 
-namespace Flow.Hosts.Entrypoint.Commands;
+namespace Flow.Hosts.EntryPoint.Cli.Commands;
 
 internal class CommandBase
 {
