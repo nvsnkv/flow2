@@ -16,7 +16,8 @@ internal sealed class Executor
     {
         if (!entryPoints.ContainsKey(assemblyName))
         {
-            var filename = Path.Combine(".", $"{assemblyName}.dll");
+            var dir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            var filename = Path.Combine(dir, $"{assemblyName}.dll");
 
             Assembly assembly;
             try
