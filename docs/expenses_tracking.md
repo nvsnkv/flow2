@@ -42,10 +42,10 @@ Application will threat records as duplicate if all fields except overrides, key
 ### Transfers
 Flow automatically detects various occurences of money transfers between accounts. That allows to exclude them from list of really valuable transactions and simplify analysis.
 
-To check correctness of transfer detection algorythms you can use `transfers list` command. Like `flow tx list`, it accepts the search criteria for the set of transactions in which app will try to find transfers.
+To check correctness of transfer detection algorythms you can use `flow xfrs list` command. Like `flow tx list`, it accepts the search criteria for the set of transactions in which app will try to find transfers.
 For each transfer tool returns Source (a Key of source transaction), Sink (a Key of sink transaction), Fee (difference between source and sink), Currency in which Fee was calculated and a Comment that explains why tool believe it's a transfer.
 
-If necessary user can enforse a particular transfer by providing a pair of Source and Sink to `transfers enforce` command. Previously enforsed transfers can be abandoned using `transfers abandon` command.
+If necessary user can enforse a particular transfer by providing a pair of Source and Sink to `flow xfrs enforce` command. Previously enforsed transfers can be abandoned using `flow xfrs abandon` command.
 
 Flow comes with the logic that can find potential transfers - usually cross-bank transfer operations gets logged with different titles in source and sink. As a result, system cannot match them automatically.
 `transfers guess` command will provide the list of hypotetical transfers. Output of this command can be used to build the list of transfers to enforce with `transfers enforce`
