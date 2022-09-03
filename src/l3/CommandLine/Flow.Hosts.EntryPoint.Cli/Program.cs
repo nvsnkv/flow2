@@ -25,11 +25,11 @@ Task<int> Process(IReadOnlyCollection<string> arguments)
 {
     var result = parser.ParseArguments<CoreCommand, TxCommand, XfersCommand, RatesCommand, BundleCommand, ExitCommand>(arguments);
     return result.MapResult(
-        async (CoreCommand c) => await executor.Execute("flow-core", c.Agrs),
-        async (TxCommand c) => await executor.Execute("flow-tx", c.Agrs),
-        async (XfersCommand c) => await executor.Execute("flow-xfers", c.Agrs),
-        async (RatesCommand c) => await executor.Execute("flow-rates", c.Agrs),
-        async (BundleCommand c) => await executor.Execute("flow-bundle", c.Agrs),
+        async (CoreCommand _) => await executor.Execute("flow-core", arguments.Skip(1)),
+        async (TxCommand _) => await executor.Execute("flow-tx", arguments.Skip(1)),
+        async (XfersCommand _) => await executor.Execute("flow-xfers", arguments.Skip(1)),
+        async (RatesCommand _) => await executor.Execute("flow-rates", arguments.Skip(1)),
+        async (BundleCommand _) => await executor.Execute("flow-bundle", arguments.Skip(1)),
         (ExitCommand _) => { shouldExit = true; return Task.FromResult(0); },
         async errs => await ParserHelper.HandleUnparsed(errs, result)
     );

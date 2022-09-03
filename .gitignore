@@ -14,3 +14,4 @@ obj
 launchSettings.json
 appsettings.Development.json
 /src/l3/CommandLine/CommandLine.Bundle/Properties/PublishProfiles/FolderProfile.pubxml.user
+/src/l3/CommandLine/Flow.Hosts.EntryPoint.Cli/Properties/PublishProfiles/FolderProfile.pubxml.user
