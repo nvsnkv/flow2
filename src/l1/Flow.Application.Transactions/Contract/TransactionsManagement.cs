@@ -18,6 +18,7 @@ public class TransactionsManagement : Module
         builder.RegisterType<TransferKeysValidator>().AsImplementedInterfaces();
         builder.RegisterType<ImmediateTransfersDetector>().AsImplementedInterfaces();
         builder.RegisterType<FuzzyTransferDetector>().AsImplementedInterfaces();
+        builder.RegisterType<TKFTransferDetector>().AsImplementedInterfaces();
         
         builder.RegisterType<Accountant>().AsImplementedInterfaces();
 
