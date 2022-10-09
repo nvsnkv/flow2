@@ -10,4 +10,6 @@ public interface IFlowConfiguration
     string? DateStyle { get; }
 
     IDictionary<SupportedFormat, string>? Editor { get; }
+
+    string? PluginsPath { get; }
 }
