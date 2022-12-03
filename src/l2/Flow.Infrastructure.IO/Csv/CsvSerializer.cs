@@ -16,7 +16,7 @@ internal class CsvSerializer
     {
         using var csvReader = new CsvReader(reader, config);
 
-        return await csvReader.GetRecordsAsync(typeof(TRow), ct).Select(row => convertFunc((TRow)row)).ToListAsync(ct);
+        return await csvReader.GetRecordsAsync(typeof(TRow), ct).Select(row => convertFunc((TRow)row!)).ToListAsync(ct);
     }
 
     public async Task Write<T, TRow, TMap>(StreamWriter writer, IEnumerable<T> records, Func<T, TRow> convertFunc, CancellationToken ct) where TMap : ClassMap
@@ -26,7 +26,7 @@ internal class CsvSerializer
     
     public async Task Write<T, TRow, TMap>(StreamWriter writer, IAsyncEnumerable<T> records, Func<T, TRow> convertFunc, CancellationToken ct) where TMap : ClassMap
     {
-        await using var csvWriter = new CsvWriter(writer, config);
+        await using var csvWriter = new CsvWriter(writer, config, true);
         csvWriter.Context.RegisterClassMap<TMap>();
 
         await csvWriter.WriteRecordsAsync(records.Select(convertFunc), ct);
@@ -34,7 +34,7 @@ internal class CsvSerializer
 
     public async Task Write<T, TRow>(StreamWriter writer, IEnumerable<T> records, Func<T, TRow> convertFunc, CancellationToken ct)
     {
-        await using var csvWriter = new CsvWriter(writer, config);
+        await using var csvWriter = new CsvWriter(writer, config, true);
 
         await csvWriter.WriteRecordsAsync(records.Select(convertFunc), ct);
     }

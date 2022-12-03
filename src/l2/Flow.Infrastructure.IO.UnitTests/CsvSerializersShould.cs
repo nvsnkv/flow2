@@ -22,7 +22,7 @@ public class CsvSerializersShould : TestDataCarrier
     public async Task SerializeAndDeserializeTransactionsProperly(string cultureCode)
     {
         var culture = CultureInfo.GetCultureInfo(cultureCode);
-        var serializer = new CsvSerializer(new CsvConfiguration(culture) { LeaveOpen = true });
+        var serializer = new CsvSerializer(new CsvConfiguration(culture));
 
         await using var stream = new MemoryStream();
         await using var writer = new StreamWriter(stream);
@@ -43,7 +43,7 @@ public class CsvSerializersShould : TestDataCarrier
     public async Task SerializeAndDeserializeRecordedTransactionsProperly(string cultureCode)
     {
         var culture = CultureInfo.GetCultureInfo(cultureCode);
-        var serializer = new CsvSerializer(new CsvConfiguration(culture) { LeaveOpen = true });
+        var serializer = new CsvSerializer(new CsvConfiguration(culture));
 
         await using var stream = new MemoryStream();
         await using var writer = new StreamWriter(stream);
@@ -64,7 +64,7 @@ public class CsvSerializersShould : TestDataCarrier
     public async Task SerializeAndDeserializeTransferKeysProperly(string cultureCode)
     {
         var culture = CultureInfo.GetCultureInfo(cultureCode);
-        var serializer = new CsvSerializer(new CsvConfiguration(culture) { LeaveOpen = true });
+        var serializer = new CsvSerializer(new CsvConfiguration(culture));
 
         await using var stream = new MemoryStream();
         await using var writer = new StreamWriter(stream);
@@ -85,7 +85,7 @@ public class CsvSerializersShould : TestDataCarrier
     public async Task SerializeAndDeserializeExchangeRatesProperly(string cultureCode)
     {
         var culture = CultureInfo.GetCultureInfo(cultureCode);
-        var serializer = new CsvSerializer(new CsvConfiguration(culture) { LeaveOpen = true });
+        var serializer = new CsvSerializer(new CsvConfiguration(culture));
 
         await using var stream = new MemoryStream();
         await using var writer = new StreamWriter(stream);
