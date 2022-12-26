@@ -8,6 +8,7 @@ using Flow.Hosts.Analysis.Cli.Commands;
 using Flow.Hosts.Common;
 using Flow.Infrastructure.Configuration.Contract;
 using Flow.Infrastructure.IO.Contract;
+using Flow.Infrastructure.Plugins.Transactions.Loader;
 using Flow.Infrastructure.Rates.CBRF.Contract;
 using Flow.Infrastructure.Storage.Contract;
 
@@ -21,6 +22,7 @@ var culture = CultureInfo.GetCultures(CultureTypes.AllCultures).FirstOrDefault(c
 builder = new ContainerBuilder();
 builder
     .RegisterModule(new FlowConfiguration())
+    .RegisterModule(new TransactionsPluginsModule(config))
     .RegisterModule(new FlowDatabase())
     .RegisterModule(new FlowIOComponents())
     .RegisterModule(new CBRFData())

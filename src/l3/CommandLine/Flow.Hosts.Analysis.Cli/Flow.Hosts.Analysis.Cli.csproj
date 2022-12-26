@@ -26,6 +26,7 @@
     <ProjectReference Include="..\..\..\l1\Flow.Application.Analysis\Flow.Application.Analysis.csproj" />
     <ProjectReference Include="..\..\..\l2\Flow.Infrastructure.Configuration\Flow.Infrastructure.Configuration.csproj" />
     <ProjectReference Include="..\..\..\l2\Flow.Infrastructure.IO\Flow.Infrastructure.IO.csproj" />
+    <ProjectReference Include="..\..\..\l2\Flow.Infrastructure.Plugins.Transactions.Loader\Flow.Infrastructure.Plugins.Transactions.Loader.csproj" />
     <ProjectReference Include="..\..\..\l2\Flow.Infrastructure.Rates.CBRF\Flow.Infrastructure.Rates.CBRF.csproj" />
     <ProjectReference Include="..\..\..\l2\Flow.Infrastructure.Storage\Flow.Infrastructure.Storage.csproj" />
     <ProjectReference Include="..\Flow.Hosts.Common\Flow.Hosts.Common.csproj" />

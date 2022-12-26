@@ -2,7 +2,6 @@
 using System.Reflection;
 using Autofac;
 using Flow.Infrastructure.Configuration.Contract;
-using System.Runtime.InteropServices;
 using Flow.Infrastructure.Plugins.Transactions.Contract;
 using Module = Autofac.Module;
 
@@ -11,31 +10,70 @@ namespace Flow.Infrastructure.Plugins.Transactions.Loader
     public sealed class TransactionsPluginsModule : Module
     {
         private readonly IFlowConfiguration config;
+        private volatile int isInitialized;
 
-        TransactionsPluginsModule(IFlowConfiguration config)
+        public TransactionsPluginsModule(IFlowConfiguration config)
         {
             this.config = config;
         }
 
-        public async Task InitializePlugins(CancellationToken ct = default)
+        private IEnumerable<IPlugin> LoadTransferDetectionPlugins()
         {
             if (string.IsNullOrEmpty(config.PluginsPath) || !Directory.Exists(config.PluginsPath))
             {
-                return;
+                return Enumerable.Empty<IPlugin>();
             }
 
-            var bclPaths = Directory.EnumerateFiles(RuntimeEnvironment.GetRuntimeDirectory(), "*.dll").ToList();
-
-            foreach (var dir in Directory.EnumerateDirectories(config.PluginsPath))
+            if (Interlocked.CompareExchange(ref isInitialized, 1, 0) != 0)
             {
-                var libraryPaths = Directory.EnumerateFiles(dir, "*.dll").ToList();
-                    throw new NotImplementedException("Load me and map types!");
-            
+                return Enumerable.Empty<IPlugin>();
             }
+
+            var result = new List<IPlugin>();
+
+            try
+            {
+                foreach (var dir in Directory.EnumerateDirectories(config.PluginsPath))
+                {
+                    var libraryPaths = Directory.EnumerateFiles(dir, "*.dll").ToList();
+                    foreach (var path in libraryPaths)
+                    {
+                        var ctx = new PluginLoadContext(dir);
+                        var assembly = ctx.LoadFromAssemblyName(new AssemblyName(Path.GetFileNameWithoutExtension(path)));
+                        var plugins =
+                            assembly.ExportedTypes.Where(t => t.IsAssignableTo(typeof(ITransferDetectionPlugin)));
+
+                        foreach (var plugin in plugins)
+                        {
+                            if (Activator.CreateInstance(plugin) is IPlugin instance)
+                            {
+                                result.Add(instance);
+                            }
+                        }
+                    }
+                }
+            }
+            catch
+            {
+                isInitialized = 0;
+                throw;
+            }
+
+            return result;
         }
 
         protected override void Load(ContainerBuilder builder)
         {
+            var plugins = LoadTransferDetectionPlugins();
+
+            foreach (var plugin in plugins)
+            {
+                if (plugin is ITransferDetectionPlugin detectionPlugin)
+                {
+                    builder.RegisterInstance(new TransferDetectorAdapter(detectionPlugin)).AsImplementedInterfaces();
+                }
+            }
+
             base.Load(builder);
         }
     }

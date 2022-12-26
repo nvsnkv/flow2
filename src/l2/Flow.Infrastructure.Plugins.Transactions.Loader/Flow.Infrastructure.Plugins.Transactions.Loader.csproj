@@ -11,6 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\l1\Flow.Application.Transactions\Flow.Application.Transactions.csproj" />
     <ProjectReference Include="..\Flow.Infrastructure.Configuration\Flow.Infrastructure.Configuration.csproj" />
     <ProjectReference Include="..\Flow.Infrastructure.Plugins.Transactions.Contract\Flow.Infrastructure.Plugins.Transactions.Contract.csproj" />
   </ItemGroup>

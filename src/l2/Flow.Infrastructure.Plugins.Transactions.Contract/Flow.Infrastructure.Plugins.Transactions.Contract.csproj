@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
@@ -8,8 +8,8 @@
     <Authors>nvsnkv</Authors>
     <PackageProjectUrl>https://github.com/nvsnkv/flow2</PackageProjectUrl>
     <Copyright>Copyright 2021 nvsnkv</Copyright>
-    <RepositoryUrl>https://github.com/nvsnkv/flow2</RepositoryUrl>
     <AssemblyVersion>2.0.0.0</AssemblyVersion>
+    <Description>Contracts for Flow plugins</Description>
   </PropertyGroup>
 
   <ItemGroup>
