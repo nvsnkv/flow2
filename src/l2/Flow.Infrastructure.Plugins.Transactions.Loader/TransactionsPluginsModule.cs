@@ -38,7 +38,7 @@ namespace Flow.Infrastructure.Plugins.Transactions.Loader
                     var libraryPaths = Directory.EnumerateFiles(dir, "*.dll").ToList();
                     foreach (var path in libraryPaths)
                     {
-                        var ctx = new PluginLoadContext(dir);
+                        var ctx = new PluginLoadContext(path);
                         var assembly = ctx.LoadFromAssemblyName(new AssemblyName(Path.GetFileNameWithoutExtension(path)));
                         var plugins =
                             assembly.ExportedTypes.Where(t => t.IsAssignableTo(typeof(ITransferDetectionPlugin)));
