@@ -51,7 +51,7 @@ return await arguments.MapResult(
         }
 
         if (arg.Verbose) Console.WriteLine("Opening editor...");
-        var proc = Process.Start(new ProcessStartInfo(cfg) { UseShellExecute = true });
+        var proc = Process.Start(new ProcessStartInfo(cfg) { UseShellExecute = true }) ?? throw new Exception("Failed to start editor!");
         await proc.WaitForExitAsync();
         if (proc.ExitCode != 0)
         {
