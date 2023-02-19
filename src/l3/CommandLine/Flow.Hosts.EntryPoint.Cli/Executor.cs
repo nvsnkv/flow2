@@ -16,7 +16,9 @@ internal sealed class Executor
     {
         if (!entryPoints.ContainsKey(assemblyName))
         {
-            var dir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            var dir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) 
+                      ?? throw new NotSupportedException("Failed to detect current location of the current assembly!");
+
             var filename = Path.Combine(dir, $"{assemblyName}.dll");
 
             Assembly assembly;
