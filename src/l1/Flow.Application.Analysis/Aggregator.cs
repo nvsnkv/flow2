@@ -4,6 +4,7 @@ using Flow.Application.ExchangeRates.Contract;
 using Flow.Application.Transactions.Contract;
 using Flow.Domain.Analysis;
 using Flow.Domain.Analysis.Setup;
+using Flow.Domain.Patterns;
 using Flow.Domain.Transactions;
 
 namespace Flow.Application.Analysis;
@@ -23,26 +24,28 @@ internal class Aggregator : IAggregator
         this.comparer = comparer;
     }
 
-    public async Task<(Calendar, IReadOnlyCollection<RejectedTransaction>)> GetCalendar(DateTime from, DateTime till, string currency, CalendarConfig setup, int? depth, CancellationToken ct)
+    public async Task<(Calendar, IReadOnlyCollection<RejectedTransaction>)> GetCalendar(FlowConfig flowConfig, CalendarConfig calendarConfig, CancellationToken ct = default)
     {
-        var (flow, rejectedItems) = await GetFlow(from, till, currency, ct);
+        var (flow, rejectedItems) = await GetFlow(flowConfig, ct);
         var rejected = rejectedItems.ToList();
 
-        var calendarBuilder = new CalendarBuilder(flow, from, till)
-            .WithRejectionsHandler(r => rejected.Add(r))
-            .WithDimensions(setup.Dimensions)
+        var calendarBuilder = new CalendarBuilder(flow, flowConfig.From, flowConfig.Till)
+            .WithRejectionsHandler(rejected.Add)
+            .WithDimensions(calendarConfig.Dimensions)
             .WithSubstitutor(substitutor, comparer);
 
-        calendarBuilder = setup.Series.Aggregate(calendarBuilder, (b, g) => b.WithSeries(g));
+        calendarBuilder = calendarConfig.Series.Aggregate(calendarBuilder, (b, g) => b.WithSeries(g));
 
-        var calendar = await calendarBuilder.Build(ct, depth);
+        var calendar = await calendarBuilder.Build(ct, calendarConfig.Depth);
         return (calendar, rejected.AsReadOnly());
     }
 
-    public async Task<(IAsyncEnumerable<RecordedTransaction>, IEnumerable<RejectedTransaction>)> GetFlow(DateTime from, DateTime till, string currency, CancellationToken ct)
+    public async Task<(IAsyncEnumerable<RecordedTransaction>, IEnumerable<RejectedTransaction>)> GetFlow(FlowConfig flowConfig, CancellationToken ct = default)
     {
+        var (from, till, currency, filter) = flowConfig;
         from = from.ToUniversalTime();
         till = till.ToUniversalTime();
+        filter ??= Constants<RecordedTransaction>.Truth;
 
         Expression<Func<RecordedTransaction, bool>> dateRange = t => from <= t.Timestamp && t.Timestamp < till;
         var transactions = await accountant.GetTransactions(dateRange, ct);
@@ -52,9 +55,19 @@ internal class Aggregator : IAggregator
         var flow = new FlowBuilder(transactions)
             .WithTransfers(transfers)
             .InCurrency(currency, ratesProvider)
-            .WithRejectionsHandler(r => rejected.Add(r))
+            .WithRejectionsHandler(rejected.Add)
             .Build(ct);
 
-        return (flow.OrderByDescending(t => t.Timestamp), rejected);
+        return (flow.Where(filter.Compile()).OrderByDescending(t => t.Timestamp), rejected);
+    }
+
+    public Task<(Calendar, IReadOnlyCollection<RejectedTransaction>)> GetCalendar(DateTime from, DateTime till, string currency, CalendarConfig setup, int? depth, CancellationToken ct)
+    {
+        return GetCalendar(new(from, till, currency), new(setup.Series, setup.Dimensions, setup.Depth), ct);
+    }
+
+    public Task<(IAsyncEnumerable<RecordedTransaction>, IEnumerable<RejectedTransaction>)> GetFlow(DateTime from, DateTime till, string currency, CancellationToken ct)
+    {
+        return GetFlow(new(from, till, currency), ct);
     }
 }
