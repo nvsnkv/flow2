@@ -2,7 +2,7 @@
 using Flow.Infrastructure.Configuration.Contract;
 using JetBrains.Annotations;
 
-namespace Flow.Hosts.Accountant.Cli.Commands;
+namespace Flow.Hosts.Transactions.Cli.Commands;
 
 [Verb("edit", HelpText = "Edit stored transactions using external editor."), UsedImplicitly]
 internal class EditTransactionsArgs

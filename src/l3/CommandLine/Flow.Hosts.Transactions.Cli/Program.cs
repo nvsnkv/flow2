@@ -2,8 +2,8 @@
 using CommandLine;
 using Flow.Application.ExchangeRates.Contract;
 using Flow.Application.Transactions.Contract;
-using Flow.Hosts.Accountant.Cli.Commands;
 using Flow.Hosts.Common;
+using Flow.Hosts.Transactions.Cli.Commands;
 using Flow.Infrastructure.Configuration.Contract;
 using Flow.Infrastructure.IO.Contract;
 using Flow.Infrastructure.Plugins.Transactions.Loader;

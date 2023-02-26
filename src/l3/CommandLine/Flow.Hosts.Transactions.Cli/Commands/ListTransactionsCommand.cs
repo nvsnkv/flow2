@@ -4,7 +4,7 @@ using Flow.Infrastructure.Configuration.Contract;
 using Flow.Infrastructure.IO.Contract;
 using JetBrains.Annotations;
 
-namespace Flow.Hosts.Accountant.Cli.Commands;
+namespace Flow.Hosts.Transactions.Cli.Commands;
 
 [UsedImplicitly]
 internal class ListTransactionsCommand : CommandBase

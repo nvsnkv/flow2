@@ -1,13 +1,11 @@
 ﻿using System.Globalization;
 using System.Linq.Expressions;
 using Flow.Domain.Transactions;
-using System.Security.Principal;
 using Flow.Application.ExchangeRates.Contract;
 using Flow.Application.Transactions.Contract;
 using Moq;
 using Xunit;
 using Xunit.Categories;
-using System.Text.RegularExpressions;
 using FluentAssertions;
 
 namespace Flow.Application.Analysis.UnitTests;

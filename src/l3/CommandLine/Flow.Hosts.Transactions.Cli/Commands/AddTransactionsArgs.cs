@@ -3,7 +3,7 @@ using Flow.Hosts.Common.Commands;
 using Flow.Infrastructure.Configuration.Contract;
 using JetBrains.Annotations;
 
-namespace Flow.Hosts.Accountant.Cli.Commands;
+namespace Flow.Hosts.Transactions.Cli.Commands;
 
 [Verb("add", HelpText = "Add new transactions to storage."), UsedImplicitly]
 internal class AddTransactionsArgs : ArgsBase

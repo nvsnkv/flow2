@@ -3,7 +3,7 @@ using Flow.Hosts.Common.Commands;
 using Flow.Infrastructure.Configuration.Contract;
 using Flow.Infrastructure.IO.Contract;
 
-namespace Flow.Hosts.Accountant.Cli.Commands;
+namespace Flow.Hosts.Transactions.Cli.Commands;
 
 internal class DeleteTransactionsCommand : CommandBase
 {

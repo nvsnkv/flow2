@@ -1,13 +1,13 @@
-﻿using Flow.Domain.Transactions;
-using Flow.Domain.Transactions.Collections;
-using Flow.Infrastructure.Configuration.Contract;
-using Flow.Infrastructure.IO.Contract;
-using System.Linq.Expressions;
+﻿using System.Linq.Expressions;
 using Flow.Application.Transactions.Contract;
 using Flow.Domain.Common.Collections;
+using Flow.Domain.Transactions;
+using Flow.Domain.Transactions.Collections;
 using Flow.Hosts.Common.Commands;
+using Flow.Infrastructure.Configuration.Contract;
+using Flow.Infrastructure.IO.Contract;
 
-namespace Flow.Hosts.Accountant.Cli.Commands;
+namespace Flow.Hosts.Transactions.Cli.Commands;
 
 internal class EditTransactionsCommand : CommandBase
 {

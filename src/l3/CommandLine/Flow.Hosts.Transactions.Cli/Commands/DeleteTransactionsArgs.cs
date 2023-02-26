@@ -2,7 +2,7 @@
 using Flow.Hosts.Common.Commands;
 using JetBrains.Annotations;
 
-namespace Flow.Hosts.Accountant.Cli.Commands;
+namespace Flow.Hosts.Transactions.Cli.Commands;
 
 [Verb("delete", HelpText = "Remove transactions from the storage."), UsedImplicitly]
 internal class DeleteTransactionsArgs : ArgsBase
