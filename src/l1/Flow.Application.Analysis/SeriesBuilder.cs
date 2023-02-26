@@ -80,8 +80,8 @@ internal class SeriesBuilder
             return false;
         }
 
-        // hackfix for issue #47. TODO fix issue properly!
-        transaction.Overrides ??= new Overrides(string.Empty, string.Empty, string.Empty);
+        
+        ReplaceNullsWithEmptyStringsInOverrides(transaction);
 
         if (Config.Rules.All(r => !r(transaction)))
         {
@@ -109,6 +109,17 @@ internal class SeriesBuilder
         
 
         return true;
+    }
+
+    /// <summary>
+    /// Hackfix for issue #47. TODO fix issue properly!
+    /// </summary>
+    private static void ReplaceNullsWithEmptyStringsInOverrides(RecordedTransaction transaction)
+    {
+        transaction.Overrides = new Overrides(
+            transaction.Overrides?.Category ?? string.Empty,
+            transaction.Overrides?.Title ?? string.Empty, 
+            transaction.Overrides?.Comment ?? string.Empty);
     }
 
     private int GetIndex(RecordedTransaction transaction)
