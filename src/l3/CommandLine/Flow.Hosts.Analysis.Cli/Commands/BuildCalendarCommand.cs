@@ -1,4 +1,5 @@
 ﻿using Flow.Application.Analysis.Contract;
+using Flow.Domain.Analysis.Setup;
 using Flow.Domain.Common.Collections;
 using Flow.Domain.Transactions;
 using Flow.Hosts.Common.Commands;
@@ -11,17 +12,20 @@ namespace Flow.Hosts.Analysis.Cli.Commands;
 [UsedImplicitly]
 internal class BuildCalendarCommand :CommandBase
 {
-    private readonly ICalendarConfigParser parser;
+    private readonly ICalendarConfigParser calendarConfigParser;
+    private readonly ITransactionCriteriaParser criteriaParser;
     private readonly IAggregator aggregator;
     private readonly IRejectionsWriter rejectionsWriter;
     private readonly ICalendarWriter calendarWriter;
 
-    public BuildCalendarCommand(IFlowConfiguration config, ICalendarConfigParser parser, IAggregator aggregator, IRejectionsWriter rejectionsWriter, ICalendarWriter calendarWriter) : base(config)
+
+    public BuildCalendarCommand(IFlowConfiguration config, ICalendarConfigParser calendarConfigParser, IAggregator aggregator, IRejectionsWriter rejectionsWriter, ICalendarWriter calendarWriter, ITransactionCriteriaParser criteriaParser) : base(config)
     {
-        this.parser = parser;
+        this.calendarConfigParser = calendarConfigParser;
         this.aggregator = aggregator;
         this.rejectionsWriter = rejectionsWriter;
         this.calendarWriter = calendarWriter;
+        this.criteriaParser = criteriaParser;
     }
 
     public async Task<int> Execute(BuildCalendarArgs arg, CancellationToken ct)
@@ -29,7 +33,7 @@ internal class BuildCalendarCommand :CommandBase
         CalendarConfigParsingResult parsingResult;
         using (var streamReader = CreateReader(arg.SeriesSetup))
         {
-            parsingResult = await parser.ParseFromStream(streamReader, ct);
+            parsingResult = await calendarConfigParser.ParseFromStream(streamReader, ct);
             if (!parsingResult.Successful)
             {
                 foreach (var error in parsingResult.Errors)
@@ -41,7 +45,20 @@ internal class BuildCalendarCommand :CommandBase
             }
         }
 
-        var (calendar, rejections) = await aggregator.GetCalendar(arg.From.ToUniversalTime(), arg.Till.ToUniversalTime(), arg.Currency, parsingResult.Config!, arg.Depth, ct);
+        var criteria = criteriaParser.ParseRecordedTransactionCriteria(arg.Criteria ?? Enumerable.Empty<string>());
+        if (!criteria.Successful)
+        {
+            foreach (var error in criteria.Errors)
+            {
+                await Console.Error.WriteLineAsync(error);
+                return 1;
+            }
+        }
+
+        var flowConfig = new FlowConfig(arg.From.ToUniversalTime(), arg.Till.ToUniversalTime(), arg.Currency, criteria.Conditions);
+        var calendarConfig = parsingResult.Config! with { Depth = arg.Depth };
+
+        var (calendar, rejections) = await aggregator.GetCalendar(flowConfig, calendarConfig, ct);
 
         var rejectionsWithCount = new EnumerableWithCount<RejectedTransaction>(rejections);
         

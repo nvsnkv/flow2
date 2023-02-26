@@ -43,9 +43,10 @@ internal class BuildFlowArgs : ArgsBase
             format = GuessFormatFromPath(value) ?? Format;
         }
     }
-
     
-
     [Option('r', "output-rejected", Required = false, HelpText = "Path to write rejected transactions. If specified, app will use this path to write the list of transactions excluded from aggregation, otherwise it will either generate a new file or use standard output depending on configuration.")]
     public string? RejectedPath { get; [UsedImplicitly] set; }
+    
+    [Value(0, MetaName = "Criteria", Required = false, HelpText = "Criteria for items that should be returned.")]
+    public IEnumerable<string>? Criteria { get; [UsedImplicitly] set; }
 }

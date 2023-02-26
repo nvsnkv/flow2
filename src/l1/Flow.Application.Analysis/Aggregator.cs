@@ -42,10 +42,10 @@ internal class Aggregator : IAggregator
 
     public async Task<(IAsyncEnumerable<RecordedTransaction>, IEnumerable<RejectedTransaction>)> GetFlow(FlowConfig flowConfig, CancellationToken ct = default)
     {
-        var (from, till, currency, filter) = flowConfig;
+        var (from, till, currency, criteria) = flowConfig;
         from = from.ToUniversalTime();
         till = till.ToUniversalTime();
-        filter ??= Constants<RecordedTransaction>.Truth;
+        criteria ??= Constants<RecordedTransaction>.Truth;
 
         Expression<Func<RecordedTransaction, bool>> dateRange = t => from <= t.Timestamp && t.Timestamp < till;
         var transactions = await accountant.GetTransactions(dateRange, ct);
@@ -58,16 +58,6 @@ internal class Aggregator : IAggregator
             .WithRejectionsHandler(rejected.Add)
             .Build(ct);
 
-        return (flow.Where(filter.Compile()).OrderByDescending(t => t.Timestamp), rejected);
-    }
-
-    public Task<(Calendar, IReadOnlyCollection<RejectedTransaction>)> GetCalendar(DateTime from, DateTime till, string currency, CalendarConfig setup, int? depth, CancellationToken ct)
-    {
-        return GetCalendar(new(from, till, currency), new(setup.Series, setup.Dimensions, setup.Depth), ct);
-    }
-
-    public Task<(IAsyncEnumerable<RecordedTransaction>, IEnumerable<RejectedTransaction>)> GetFlow(DateTime from, DateTime till, string currency, CancellationToken ct)
-    {
-        return GetFlow(new(from, till, currency), ct);
+        return (flow.Where(criteria.Compile()).OrderByDescending(t => t.Timestamp), rejected);
     }
 }

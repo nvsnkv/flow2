@@ -42,15 +42,15 @@ public sealed class AggregatorShould
     /// </summary>
     /// <returns></returns>
     [Fact, IntegrationTest]
-    public async Task FilterOutTransaction_ThatDoesNotMatchInputFilter()
+    public async Task FilterOutTransaction_ThatDoesNotMatchCriteria()
     {
-        Expression<Func<RecordedTransaction, bool>> filter = t => t.Key != 13;
+        Expression<Func<RecordedTransaction, bool>> criteria = t => t.Key != 13;
 
-        var (flow, _) = await aggregator.GetFlow(new(DateTime.MinValue, DateTime.MaxValue, "RUR", filter));
+        var (flow, _) = await aggregator.GetFlow(new(DateTime.MinValue, DateTime.MaxValue, "RUR", criteria));
 
         flow.Should().NotBeNull();
         var results = await flow.ToListAsync();
 
-        results.Should().BeEquivalentTo(Transactions.Where(filter.Compile()));
+        results.Should().BeEquivalentTo(Transactions.Where(criteria.Compile()));
     }
 }
