@@ -59,7 +59,7 @@ Solution contains several test projects with unit tests.
 ## Plugins 
 If you want to create a plugin for __flow__, you need to to pack plugin dependencies into nuget packages using `build\_scripts\flow.plugin-deps.ps1` script.
 
-Then you can reference them from your project and implement a particular plugin interface. You can implement several plugins within a single project, if needed. Each plugin is isolated from main DI container by design, so you are responsible to properly initialize a plugin in constructor.
+Then you can reference them from your project and implement a particular plugin interface. You can implement several plugins within a single project, if needed. Each plugin is isolated from main DI container by design, so you are responsible for proper plugin initialization in constructor.
 
 # License
 MIT
