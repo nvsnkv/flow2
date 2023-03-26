@@ -13,3 +13,4 @@ appsettings.Development.json
 *.pubxml.user
 *.csproj.user
 /src/plugins/transactions/Flow.Plugins.Transactions.TKF/.vs
+.idea
