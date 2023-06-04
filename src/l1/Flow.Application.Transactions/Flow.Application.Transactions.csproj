@@ -4,14 +4,14 @@
     <TargetFramework>net7.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-	<Version>3.1.1</Version>
+	<Version>3.1.2</Version>
 	<AssemblyVersion>3.0.0.0</AssemblyVersion>
     <Authors>nvsnkv</Authors>
 	<Copyright>© 2021 nvsnkv</Copyright>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Autofac" Version="7.0.0" />
+    <PackageReference Include="Autofac" Version="7.0.1" />
     <PackageReference Include="FluentDateTime" Version="2.1.0" />
     <PackageReference Include="FluentValidation" Version="11.5.2" />
     <PackageReference Include="System.Linq.Async" Version="6.0.1" />
