@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Flow.Infrastructure.IO.Criteria;
+using Flow.Infrastructure.IO.Transactions.Criteria;
 using FluentAssertions;
 using Xunit;
 using Xunit.Categories;

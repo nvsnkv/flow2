@@ -6,12 +6,13 @@ using System.Threading.Tasks;
 using Flow.Domain.ExchangeRates;
 using Flow.Domain.Transactions;
 using Flow.Domain.Transactions.Transfers;
-using Flow.Infrastructure.IO.Json;
+using Flow.Infrastructure.IO.ExchangeRates;
+using Flow.Infrastructure.IO.Transactions;
 using FluentAssertions;
 using Newtonsoft.Json;
 using Xunit;
 using Xunit.Categories;
-using JsonSerializer = Flow.Infrastructure.IO.Json.JsonSerializer;
+using JsonSerializer = Flow.Infrastructure.IO.Generics.JsonSerializer;
 
 namespace Flow.Infrastructure.IO.UnitTests;
 
