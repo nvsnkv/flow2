@@ -11,11 +11,11 @@ namespace Flow.Hosts.Transactions.Cli.Commands;
 internal class ListTransactionsCommand : CommandBase
 {
     private readonly IAccountant accountant;
-    private readonly ITransactionsWriter writer;
+    private readonly ISchemaSpecificCollection<ITransactionsWriter> writers;
     private readonly ITransactionCriteriaParser parser;
-    public ListTransactionsCommand(IFlowConfiguration config, ITransactionsWriter writer, ITransactionCriteriaParser parser, IAccountant accountant) : base(config)
+    public ListTransactionsCommand(IFlowConfiguration config, ISchemaSpecificCollection<ITransactionsWriter> writers, ITransactionCriteriaParser parser, IAccountant accountant) : base(config)
     {
-        this.writer = writer;
+        this.writers = writers;
         this.parser = parser;
         this.accountant = accountant;
     }
@@ -31,13 +31,21 @@ internal class ListTransactionsCommand : CommandBase
                 return 1;
             }
         }
+
+        var writer = writers.FindFor(args.Format, SupportedDataSchema.Default);
+        if (writer == null)
+        {
+            await Console.Error.WriteLineAsync($"No writer registered for format {args.Format}");
+            return 2;
+        }
+
         var transactions = args.DuplicatesOnly 
             ? (await accountant.GuessDuplicates(criteria.Conditions, args.DuplicatesDaysRange, ct)).SelectMany(d => d)
             : await accountant.GetTransactions(criteria.Conditions, ct);
 
         var output = args.Output ?? (args.OpenEditor ? GetFallbackOutputPath(args.Format, "list", "transactions") : null);
         await using var streamWriter = CreateWriter(output);
-        await writer.WriteRecordedTransactions(streamWriter, transactions, args.Format, ct);
+        await writer.WriteRecordedTransactions(streamWriter, transactions, ct);
 
         if (args.OpenEditor) 
         { 

@@ -13,21 +13,21 @@ namespace Flow.Hosts.Analysis.Cli.Commands;
 internal class BuildFlowCommand : CommandBase 
 {
     private readonly IAggregator aggregator;
-    private readonly ITransactionsWriter transactionWriter;
+    private readonly ISchemaSpecificCollection<ITransactionsWriter> transactionWriters;
     private readonly IRejectionsWriter rejectionsWriter;
     private readonly ITransactionCriteriaParser parser;
 
-    public BuildFlowCommand(IFlowConfiguration config, IAggregator aggregator, IRejectionsWriter rejectionsWriter, ITransactionsWriter transactionWriter, ITransactionCriteriaParser parser) : base(config)
+    public BuildFlowCommand(IFlowConfiguration config, IAggregator aggregator, IRejectionsWriter rejectionsWriter, ISchemaSpecificCollection<ITransactionsWriter> transactionWriters, ITransactionCriteriaParser parser) : base(config)
     {
         this.aggregator = aggregator;
         this.rejectionsWriter = rejectionsWriter;
-        this.transactionWriter = transactionWriter;
+        this.transactionWriters = transactionWriters;
         this.parser = parser;
     }
 
-    public async Task<int> Execute(BuildFlowArgs arg, CancellationToken ct)
+    public async Task<int> Execute(BuildFlowArgs args, CancellationToken ct)
     {
-        var criteria = parser.ParseRecordedTransactionCriteria(arg.Criteria ?? Enumerable.Empty<string>());
+        var criteria = parser.ParseRecordedTransactionCriteria(args.Criteria ?? Enumerable.Empty<string>());
         if (!criteria.Successful)
         {
             foreach (var error in criteria.Errors)
@@ -37,30 +37,39 @@ internal class BuildFlowCommand : CommandBase
             }
         }
 
-        var config = new FlowConfig(arg.From.ToUniversalTime(), arg.Till.ToUniversalTime(), arg.Currency, criteria.Conditions);
+        var transactionWriter = transactionWriters.FindFor(args.Format, SupportedDataSchema.Default);
+        if (transactionWriter == null)
+        {
+            await Console.Error.WriteLineAsync($"No writer registered for format {args.Format}");
+            return 2;
+        }
+
+        var config = new FlowConfig(args.From.ToUniversalTime(), args.Till.ToUniversalTime(), args.Currency, criteria.Conditions);
 
         var (flow, rejections) = await aggregator.GetFlow(config, ct);
 
-        var outputPath = arg.OutputPath ?? GetFallbackOutputPath(SupportedFormat.CSV, "flow", "list");
+        var outputPath = args.OutputPath ?? GetFallbackOutputPath(SupportedFormat.CSV, "flow", "list");
+
+
         await using (var writer = CreateWriter(outputPath))
         {
-            await transactionWriter.WriteRecordedTransactions(writer, await flow.ToListAsync(ct), arg.Format, ct);
+            await transactionWriter.WriteRecordedTransactions(writer, await flow.ToListAsync(ct), ct);
         }
 
         var rejectionsWithCount = new EnumerableWithCount<RejectedTransaction>(rejections);
 
-        var rejectedPath = arg.RejectedPath ?? GetFallbackOutputPath(SupportedFormat.CSV, "flow", "rejected");
+        var rejectedPath = args.RejectedPath ?? GetFallbackOutputPath(SupportedFormat.CSV, "flow", "rejected");
         await using (var rejWriter = CreateWriter(rejectedPath))
         {
-            await rejectionsWriter.WriteRejections(rejWriter, rejectionsWithCount, arg.Format, ct);
+            await rejectionsWriter.WriteRejections(rejWriter, rejectionsWithCount, args.Format, ct);
         }
 
         if (rejectionsWithCount.Count > 0)
         {
-            await TryStartEditor(rejectedPath, arg.Format, false);
+            await TryStartEditor(rejectedPath, args.Format, false);
         }
 
-        await TryStartEditor(outputPath, arg.Format, false);
+        await TryStartEditor(outputPath, args.Format, false);
         return 0;
     }
 }

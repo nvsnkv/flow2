@@ -49,15 +49,18 @@ public class FlowIOComponents : Module
         #endregion
 
         #region transactions
-        builder.RegisterType<TransactionsIOFacade>().InstancePerLifetimeScope().AsImplementedInterfaces();
+        builder.RegisterType<DefaultJsonTransactionsSerializer>().InstancePerLifetimeScope().AsImplementedInterfaces();
 
         builder.RegisterType<CsvRejectionsWriter>().InstancePerLifetimeScope();
         builder.RegisterType<JsonRejectionsWriter>().InstancePerLifetimeScope();
         builder.RegisterType<RejectionsWriter>().InstancePerLifetimeScope().AsImplementedInterfaces();
 
         builder.RegisterType<TransfersWriter>().InstancePerLifetimeScope();
-        builder.RegisterType<TransfersIOFacade>().InstancePerLifetimeScope().AsImplementedInterfaces();
+        builder.RegisterType<DefaultCsvTransactionsSerializer>().InstancePerLifetimeScope().AsImplementedInterfaces();
+        builder.RegisterType<DefaultJsonTransactionsSerializer>().InstancePerLifetimeScope().AsImplementedInterfaces();
 
+        builder.RegisterType<SchemaSpecificCollection<ITransactionsReader>>().InstancePerLifetimeScope().AsImplementedInterfaces();
+        builder.RegisterType<SchemaSpecificCollection<ITransactionsWriter>>().InstancePerLifetimeScope().AsImplementedInterfaces();
 
         builder.Register(c =>
         {
