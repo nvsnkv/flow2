@@ -15,7 +15,7 @@ internal class TransactionsReaderAdapter : ITransactionsReader
     }
 
     public SupportedFormat Format => plugin.SupportedFormat;
-    public SupportedDataSchema Schema => plugin.SupportedSchema;
+    public IEnumerable<SupportedDataSchema> Schemas => plugin.SupportedSchemas;
     public Task<IEnumerable<(Transaction, Overrides?)>> ReadTransactions(StreamReader reader, CancellationToken ct)
     {
         return plugin.ReadTransactions(reader, ct);

@@ -12,7 +12,7 @@ internal class SchemaSpecificCollection<T> : ISchemaSpecificCollection<T> where 
         this.items = items.ToList();
     }
 
-    public T? FindFor(SupportedFormat format, SupportedDataSchema schema) => items.FirstOrDefault(i => i.Format == format && schema.Equals(i.Schema));
+    public T? FindFor(SupportedFormat format, SupportedDataSchema schema) => items.FirstOrDefault(i => i.Format == format && i.Schemas.Any(schema.Equals));
 
     public IEnumerable<T> GetKnown() => items;
 }
