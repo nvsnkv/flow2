@@ -13,17 +13,17 @@ namespace Flow.Hosts.Transactions.Cli.Commands;
 internal class EditTransactionsCommand : CommandBase
 {
     private readonly IAccountant accountant;
-    private readonly ITransactionsReader reader;
+    private readonly ISchemaSpecificCollection<ITransactionsReader> readers;
     private readonly ITransactionCriteriaParser criteriaParser;
-    private readonly ITransactionsWriter writer;
+    private readonly ISchemaSpecificCollection<ITransactionsWriter> writers;
     private readonly IRejectionsWriter rejectionsWriter;
 
-    public EditTransactionsCommand(IAccountant accountant, ITransactionsReader reader, ITransactionsWriter writer, IRejectionsWriter rejectionsWriter, IFlowConfiguration config, ITransactionCriteriaParser criteriaParser) : base(config)
+    public EditTransactionsCommand(IAccountant accountant, ISchemaSpecificCollection<ITransactionsReader> readers, ISchemaSpecificCollection<ITransactionsWriter> writers, IRejectionsWriter rejectionsWriter, IFlowConfiguration config, ITransactionCriteriaParser criteriaParser) : base(config)
     {
         this.accountant = accountant;
-        this.reader = reader;
+        this.readers = readers;
         this.rejectionsWriter = rejectionsWriter;
-        this.writer = writer;
+        this.writers = writers;
         this.criteriaParser = criteriaParser;
     }
 
@@ -32,9 +32,16 @@ internal class EditTransactionsCommand : CommandBase
         ItemsWithDateRange<(Transaction, Overrides?)> initial;
         EnumerableWithCount<RejectedTransaction> rejected;
 
+        var reader = readers.FindFor(args.Format, SupportedDataSchema.Default);
+        if (reader == null)
+        {
+            await Console.Error.WriteLineAsync($"No reader registered for format {args.Format}");
+            return 2;
+        }
+
         using (var streamReader = CreateReader(args.Input))
         {
-            initial = new ItemsWithDateRange<(Transaction, Overrides?)>(await reader.ReadTransactions(streamReader, args.Format, ct), x => x.Item1.Timestamp);
+            initial = new ItemsWithDateRange<(Transaction, Overrides?)>(await reader.ReadTransactions(streamReader, ct), x => x.Item1.Timestamp);
             rejected = new EnumerableWithCount<RejectedTransaction>(await accountant.CreateTransactions(initial, ct));
         }
 
@@ -96,10 +103,17 @@ internal class EditTransactionsCommand : CommandBase
             return -1;
         }
 
+        var writer = writers.FindFor(format, SupportedDataSchema.Default);
+        if (writer == null)
+        {
+            await Console.Error.WriteLineAsync($"No writer registered for format {format}");
+            return 2;
+        }
+
         var appended = await accountant.GetTransactions(conditions, ct);
         await using (var streamWriter = CreateWriter(interim))
         {
-            await writer.WriteRecordedTransactions(streamWriter, appended, format, ct);
+            await writer.WriteRecordedTransactions(streamWriter, appended, ct);
         }
 
         var exitCode = await TryStartEditor(interim, format, true);
@@ -115,9 +129,16 @@ internal class EditTransactionsCommand : CommandBase
     {
         rejected ??= new EnumerableWithCount<RejectedTransaction>(Enumerable.Empty<RejectedTransaction>());
 
+        var reader = readers.FindFor(format, SupportedDataSchema.Default);
+        if (reader == null)
+        {
+            await Console.Error.WriteLineAsync($"No reader registered for format {format}");
+            return 2;
+        }
+
         using var streamReader = CreateReader(interim);
 
-        var updated = await reader.ReadRecordedTransactions(streamReader, format, ct);
+        var updated = await reader.ReadRecordedTransactions(streamReader, ct);
         rejected = new EnumerableWithCount<RejectedTransaction>(rejected.Concat(await accountant.UpdateTransactions(updated, ct)));
 
         await using (var streamWriter = CreateWriter(errsPath))

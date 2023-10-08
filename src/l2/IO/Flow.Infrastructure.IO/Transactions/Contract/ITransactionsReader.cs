@@ -1,10 +1,9 @@
 ﻿using Flow.Domain.Transactions;
-using Flow.Infrastructure.Configuration.Contract;
 
 namespace Flow.Infrastructure.IO.Transactions.Contract;
-public interface ITransactionsReader
+public interface ITransactionsReader : ISchemaSpecific
 {
-    Task<IEnumerable<(Transaction, Overrides?)>> ReadTransactions(StreamReader reader, SupportedFormat format, CancellationToken ct);
+    Task<IEnumerable<(Transaction, Overrides?)>> ReadTransactions(StreamReader reader, CancellationToken ct);
 
-    Task<IEnumerable<RecordedTransaction>> ReadRecordedTransactions(StreamReader reader, SupportedFormat format, CancellationToken ct);
+    Task<IEnumerable<RecordedTransaction>> ReadRecordedTransactions(StreamReader reader, CancellationToken ct);
 }
