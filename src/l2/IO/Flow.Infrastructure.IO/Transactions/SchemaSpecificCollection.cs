@@ -1,5 +1,4 @@
 using Flow.Infrastructure.Configuration.Contract;
-using Flow.Infrastructure.IO.Contract;
 using Flow.Infrastructure.IO.Transactions.Contract;
 
 namespace Flow.Infrastructure.IO.Transactions;
