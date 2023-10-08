@@ -1,8 +1,8 @@
-namespace Flow.Infrastructure.IO.Contract;
+namespace Flow.Infrastructure.Configuration.Contract;
 
 public sealed class SupportedDataSchema
 {
-    public static SupportedDataSchema Default { get; } = new SupportedDataSchema("default");
+    public static readonly SupportedDataSchema Default = new("default");
 
     private readonly string name;
 

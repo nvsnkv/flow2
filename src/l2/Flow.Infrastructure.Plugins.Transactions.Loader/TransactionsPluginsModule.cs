@@ -17,7 +17,7 @@ namespace Flow.Infrastructure.Plugins.Transactions.Loader
             this.config = config;
         }
 
-        private IEnumerable<IPlugin> LoadTransferDetectionPlugins()
+        private IEnumerable<IPlugin> LoadSupportedPlugins(params Type[] supportedTypes)
         {
             if (string.IsNullOrEmpty(config.PluginsPath) || !Directory.Exists(config.PluginsPath))
             {
@@ -41,7 +41,7 @@ namespace Flow.Infrastructure.Plugins.Transactions.Loader
                         var ctx = new PluginLoadContext(path);
                         var assembly = ctx.LoadFromAssemblyName(new AssemblyName(Path.GetFileNameWithoutExtension(path)));
                         var plugins =
-                            assembly.ExportedTypes.Where(t => t.IsAssignableTo(typeof(ITransferDetectionPlugin)));
+                            assembly.ExportedTypes.Where(t => supportedTypes.Any(t.IsAssignableTo));
 
                         foreach (var plugin in plugins)
                         {
@@ -64,13 +64,18 @@ namespace Flow.Infrastructure.Plugins.Transactions.Loader
 
         protected override void Load(ContainerBuilder builder)
         {
-            var plugins = LoadTransferDetectionPlugins();
+            var plugins = LoadSupportedPlugins(typeof(ITransferDetectionPlugin), typeof(ITransactionsReaderPlugin));
 
             foreach (var plugin in plugins)
             {
-                if (plugin is ITransferDetectionPlugin detectionPlugin)
+                switch (plugin)
                 {
-                    builder.RegisterInstance(new TransferDetectorAdapter(detectionPlugin)).AsImplementedInterfaces();
+                    case ITransferDetectionPlugin detectionPlugin:
+                        builder.RegisterInstance(new TransferDetectorAdapter(detectionPlugin)).AsImplementedInterfaces();
+                        break;
+                    case ITransactionsReaderPlugin readerPlugin:
+                        builder.RegisterInstance(new TransactionsReaderAdapter(readerPlugin)).AsImplementedInterfaces();
+                        break;
                 }
             }
 
