@@ -29,6 +29,8 @@ namespace Flow.Infrastructure.Plugins.Transactions.Loader
                 return Enumerable.Empty<IPlugin>();
             }
 
+            supportedTypes = supportedTypes.Select(t => typeof(IPluginsBootstrapper<>).MakeGenericType(t)).ToArray();
+
             var result = new List<IPlugin>();
 
             try
@@ -40,14 +42,14 @@ namespace Flow.Infrastructure.Plugins.Transactions.Loader
                     {
                         var ctx = new PluginLoadContext(path);
                         var assembly = ctx.LoadFromAssemblyName(new AssemblyName(Path.GetFileNameWithoutExtension(path)));
-                        var plugins =
+                        var bootstrappers =
                             assembly.ExportedTypes.Where(t => supportedTypes.Any(t.IsAssignableTo));
 
-                        foreach (var plugin in plugins)
+                        foreach (var bootstrapper in bootstrappers)
                         {
-                            if (Activator.CreateInstance(plugin) is IPlugin instance)
+                            if (Activator.CreateInstance(bootstrapper) is IPluginsBootstrapper<IPlugin> instance)
                             {
-                                result.Add(instance);
+                                result.AddRange(instance.GetPlugins());
                             }
                         }
                     }
