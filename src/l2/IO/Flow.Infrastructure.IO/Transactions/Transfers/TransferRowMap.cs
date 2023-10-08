@@ -1,7 +1,7 @@
 ﻿using CsvHelper.Configuration;
 using JetBrains.Annotations;
 
-namespace Flow.Infrastructure.IO.Transactions;
+namespace Flow.Infrastructure.IO.Transactions.Transfers;
 
 [UsedImplicitly]
 internal sealed class TransferRowMap : ClassMap<TransferRow>

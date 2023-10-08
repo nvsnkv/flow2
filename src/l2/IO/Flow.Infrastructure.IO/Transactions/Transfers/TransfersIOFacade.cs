@@ -3,7 +3,7 @@ using Flow.Infrastructure.Configuration.Contract;
 using Flow.Infrastructure.IO.Generics;
 using Flow.Infrastructure.IO.Transactions.Contract;
 
-namespace Flow.Infrastructure.IO.Transactions;
+namespace Flow.Infrastructure.IO.Transactions.Transfers;
 
 internal class TransfersIOFacade : ITransferKeysReader, ITransfersWriter
 {

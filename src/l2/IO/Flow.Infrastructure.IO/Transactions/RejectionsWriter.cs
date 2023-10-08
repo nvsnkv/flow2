@@ -3,6 +3,7 @@ using Flow.Domain.Transactions.Transfers;
 using Flow.Infrastructure.Configuration.Contract;
 using Flow.Infrastructure.IO.Generics;
 using Flow.Infrastructure.IO.Transactions.Contract;
+using Flow.Infrastructure.IO.Transactions.Transfers;
 
 namespace Flow.Infrastructure.IO.Transactions;
 
