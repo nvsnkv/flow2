@@ -4,7 +4,15 @@ using Flow.Infrastructure.Plugins.Transactions.Contract;
 
 namespace Flow.Plugins.Transactions.TKF;
 
-public sealed class TransfersDetector : ITransferDetectionPlugin
+public sealed class Bootstrapper : IPluginsBootstrapper<ITransferDetectionPlugin>
+{
+    public IEnumerable<ITransferDetectionPlugin> GetPlugins()
+    {
+        yield return new TransfersDetector();
+    }
+}
+
+internal sealed class TransfersDetector : ITransferDetectionPlugin
 {
     public bool CheckIsTransfer(RecordedTransaction left, RecordedTransaction right)
     {
