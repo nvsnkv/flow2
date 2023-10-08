@@ -59,7 +59,7 @@ public class ExchangeRatesProviderShould
     }
 
     [Fact, UnitTest]
-    public void ReadRatesFromStorageOnce()
+    public async Task ReadRatesFromStorageOnce()
     {
         var tasks = new Task[]
         {
@@ -67,7 +67,7 @@ public class ExchangeRatesProviderShould
             provider.GetRate(("MNT", "RUR", DateTime.Parse("2021-11-13")), CancellationToken.None),
         };
 
-        Task.WaitAll(tasks);
+        await Task.WhenAll(tasks);
 
         storageMock.Verify(s => s.Read(It.IsAny<CancellationToken>()), Times.Once);
     }
