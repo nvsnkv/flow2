@@ -4,14 +4,14 @@
     <TargetFramework>net7.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <Version>2.0.3</Version>
+    <Version>2.0.4</Version>
 	<AssemblyVersion>2.0.0.0</AssemblyVersion>
     <Authors>nvsnkv</Authors>
 	<Copyright>© 2021 nvsnkv</Copyright>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Autofac" Version="7.0.1" />
+    <PackageReference Include="Autofac" Version="7.1.0" />
   </ItemGroup>
 
   <ItemGroup>
