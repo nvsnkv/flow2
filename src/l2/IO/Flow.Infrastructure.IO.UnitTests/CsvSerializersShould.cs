@@ -10,6 +10,7 @@ using Flow.Domain.Transactions.Transfers;
 using Flow.Infrastructure.IO.ExchangeRates;
 using Flow.Infrastructure.IO.Generics;
 using Flow.Infrastructure.IO.Transactions;
+using Flow.Infrastructure.IO.Transactions.Transfers;
 using FluentAssertions;
 using Xunit;
 using Xunit.Categories;

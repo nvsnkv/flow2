@@ -9,6 +9,7 @@ using Flow.Infrastructure.IO.Generics;
 using Flow.Infrastructure.IO.Transactions;
 using Flow.Infrastructure.IO.Transactions.Contract;
 using Flow.Infrastructure.IO.Transactions.Criteria;
+using Flow.Infrastructure.IO.Transactions.Transfers;
 using Newtonsoft.Json;
 using JsonSerializer = Flow.Infrastructure.IO.Generics.JsonSerializer;
 

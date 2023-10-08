@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using Flow.Domain.Transactions.Transfers;
 
-namespace Flow.Infrastructure.IO.Transactions;
+namespace Flow.Infrastructure.IO.Transactions.Transfers;
 
 [SuppressMessage("ReSharper", "InconsistentNaming")]
 [SuppressMessage("ReSharper", "MemberCanBePrivate.Global")]
