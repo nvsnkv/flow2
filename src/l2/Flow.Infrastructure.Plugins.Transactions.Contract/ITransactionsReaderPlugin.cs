@@ -5,7 +5,7 @@ namespace Flow.Infrastructure.Plugins.Transactions.Contract;
 
 public interface ITransactionsReaderPlugin : IPlugin
 {
-    SupportedDataSchema SupportedSchema { get; }
+    IEnumerable<SupportedDataSchema> SupportedSchemas { get; }
 
     SupportedFormat SupportedFormat { get; }
 

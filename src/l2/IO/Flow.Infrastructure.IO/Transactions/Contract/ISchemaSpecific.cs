@@ -6,5 +6,5 @@ public interface ISchemaSpecific
 {
     public SupportedFormat Format { get; }
 
-    public SupportedDataSchema Schema { get; }
+    public IEnumerable<SupportedDataSchema> Schemas { get; }
 }

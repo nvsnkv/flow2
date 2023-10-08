@@ -7,6 +7,8 @@ namespace Flow.Infrastructure.IO.Transactions;
 
 internal class DefaultCsvTransactionsSerializer : ITransactionsReader, ITransactionsWriter
 {
+    private static readonly SupportedDataSchema[] supportedSchemas = { SupportedDataSchema.Default };
+
     private readonly CsvSerializer csv;
 
     public DefaultCsvTransactionsSerializer(CsvSerializer csv)
@@ -15,7 +17,7 @@ internal class DefaultCsvTransactionsSerializer : ITransactionsReader, ITransact
     }
 
     public SupportedFormat Format => SupportedFormat.CSV;
-    public SupportedDataSchema Schema => SupportedDataSchema.Default;
+    public IEnumerable<SupportedDataSchema> Schemas => supportedSchemas;
     public Task<IEnumerable<(Transaction, Overrides?)>> ReadTransactions(StreamReader reader, CancellationToken ct)
     {
         return csv.Read(reader, (TransactionRow r) =>
