@@ -3,6 +3,7 @@ using Flow.Domain.ExchangeRates;
 using Flow.Hosts.Common.Commands;
 using Flow.Infrastructure.Configuration.Contract;
 using Flow.Infrastructure.IO.Contract;
+using Flow.Infrastructure.IO.ExchangeRates.Contract;
 using JetBrains.Annotations;
 
 namespace Flow.Hosts.ExchangeRates.Cli.Commands;

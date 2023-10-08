@@ -4,11 +4,13 @@ using Autofac;
 using CsvHelper.Configuration;
 using Flow.Infrastructure.Configuration.Contract;
 using Flow.Infrastructure.IO.Calendar;
-using Flow.Infrastructure.IO.Criteria;
-using Flow.Infrastructure.IO.Csv;
-using Flow.Infrastructure.IO.Json;
+using Flow.Infrastructure.IO.ExchangeRates;
+using Flow.Infrastructure.IO.Generics;
+using Flow.Infrastructure.IO.Transactions;
+using Flow.Infrastructure.IO.Transactions.Contract;
+using Flow.Infrastructure.IO.Transactions.Criteria;
 using Newtonsoft.Json;
-using JsonSerializer = Flow.Infrastructure.IO.Json.JsonSerializer;
+using JsonSerializer = Flow.Infrastructure.IO.Generics.JsonSerializer;
 
 [assembly: InternalsVisibleTo("Flow.Infrastructure.IO.UnitTests")]
 
@@ -18,64 +20,43 @@ public class FlowIOComponents : Module
 {
     protected override void Load(ContainerBuilder builder)
     {
+        #region generics
         builder.Register(c =>
         {
             var config = c.Resolve<IFlowConfiguration>();
-
             var culture = CultureInfo
                               .GetCultures(CultureTypes.AllCultures)
                               .FirstOrDefault(ci => ci.Name == config.CultureCode)
                           ?? CultureInfo.CurrentCulture;
 
-            var csv = new CsvSerializer(new CsvConfiguration(culture) { HeaderValidated = null  });
-            var json = new JsonSerializer(new JsonSerializerSettings { Culture = culture, Formatting = Formatting.Indented });
-            return new TransactionsIOFacade(csv, json);
-        }).InstancePerLifetimeScope().AsImplementedInterfaces();
-        
+            return new CsvConfiguration(culture) { HeaderValidated = null };
+        });
+
+        builder.RegisterType<CsvSerializer>().InstancePerLifetimeScope();
+
         builder.Register(c =>
         {
             var config = c.Resolve<IFlowConfiguration>();
-
             var culture = CultureInfo
                               .GetCultures(CultureTypes.AllCultures)
                               .FirstOrDefault(ci => ci.Name == config.CultureCode)
                           ?? CultureInfo.CurrentCulture;
 
-            var csv = new CsvRejectionsWriter(new CsvConfiguration(culture) { HeaderValidated = null });
-            var json = new JsonRejectionsWriter(new JsonSerializerSettings { Culture = culture, Formatting = Formatting.Indented });
-            return new RejectionsWriter(csv, json);
-        }).InstancePerLifetimeScope().AsImplementedInterfaces();
-        
-        builder.Register(c =>
-        {
-            var config = c.Resolve<IFlowConfiguration>();
+            return new JsonSerializerSettings { Culture = culture, Formatting = Formatting.Indented };
+        });
+        builder.RegisterType<JsonSerializer>().InstancePerLifetimeScope();
+        #endregion
 
-            var culture = CultureInfo
-                              .GetCultures(CultureTypes.AllCultures)
-                              .FirstOrDefault(ci => ci.Name == config.CultureCode)
-                          ?? CultureInfo.CurrentCulture;
+        #region transactions
+        builder.RegisterType<TransactionsIOFacade>().InstancePerLifetimeScope().AsImplementedInterfaces();
 
-            var csvConfiguration = new CsvConfiguration(culture) { HeaderValidated = null };
-            var csv = new CsvSerializer(csvConfiguration);
-            var json = new JsonSerializer(new JsonSerializerSettings { Culture = culture, Formatting = Formatting.Indented });
-            var transfersWriter = new TransfersWriter(csvConfiguration);
+        builder.RegisterType<CsvRejectionsWriter>().InstancePerLifetimeScope();
+        builder.RegisterType<JsonRejectionsWriter>().InstancePerLifetimeScope();
+        builder.RegisterType<RejectionsWriter>().InstancePerLifetimeScope().AsImplementedInterfaces();
 
-            return new TransfersIOFacade(csv, json, transfersWriter);
-        }).InstancePerLifetimeScope().AsImplementedInterfaces();
-        
-        builder.Register(c =>
-        {
-            var config = c.Resolve<IFlowConfiguration>();
+        builder.RegisterType<TransfersWriter>().InstancePerLifetimeScope();
+        builder.RegisterType<TransfersIOFacade>().InstancePerLifetimeScope().AsImplementedInterfaces();
 
-            var culture = CultureInfo
-                              .GetCultures(CultureTypes.AllCultures)
-                              .FirstOrDefault(ci => ci.Name == config.CultureCode)
-                          ?? CultureInfo.CurrentCulture;
-
-            var csv = new CsvSerializer(new CsvConfiguration(culture) { HeaderValidated = null });
-            var json = new JsonSerializer(new JsonSerializerSettings { Culture = culture, Formatting = Formatting.Indented });
-            return new ExchangeRatesSerializer(csv, json);
-        }).InstancePerLifetimeScope().AsImplementedInterfaces();
 
         builder.Register(c =>
         {
@@ -91,8 +72,9 @@ public class FlowIOComponents : Module
 
             return new TransactionCriteriaParser(new GenericParser(culture, dateStyle, numberStyle));
         }).InstancePerLifetimeScope().AsImplementedInterfaces();
+        #endregion
 
-
+        #region calendar
         builder.Register(c =>
         {
             var config = c.Resolve<IFlowConfiguration>();
@@ -122,6 +104,12 @@ public class FlowIOComponents : Module
             var criteriaParser = c.Resolve<ITransactionCriteriaParser>();
             return new JsonCalendarConfigParser(json, criteriaParser);
         }).InstancePerLifetimeScope().AsImplementedInterfaces();
+        #endregion
+
+        #region exchange rates
+        builder.RegisterType<ExchangeRatesSerializer>().InstancePerLifetimeScope().AsImplementedInterfaces();
+        builder.RegisterType<RateRejectionsWriter>().InstancePerLifetimeScope().AsImplementedInterfaces();
+        #endregion
 
         base.Load(builder);
     }

@@ -6,6 +6,7 @@ using Flow.Domain.Transactions.Collections;
 using Flow.Hosts.Common.Commands;
 using Flow.Infrastructure.Configuration.Contract;
 using Flow.Infrastructure.IO.Contract;
+using Flow.Infrastructure.IO.Transactions.Contract;
 
 namespace Flow.Hosts.Transactions.Cli.Commands;
 
