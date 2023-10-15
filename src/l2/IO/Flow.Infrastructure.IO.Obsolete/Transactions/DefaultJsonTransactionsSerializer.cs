@@ -34,5 +34,5 @@ internal class DefaultJsonTransactionsSerializer : ITransactionsReader, ITransac
         return json.Write(writer, transactions, ct);
     }
 
-    public SupportedFormat Format => SupportedFormat.JSON;
+    public OldSupportedFormat Format => OldSupportedFormat.JSON;
 }

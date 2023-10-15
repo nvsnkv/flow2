@@ -40,7 +40,7 @@ internal class ListCommand : CommandBase
         return await WriteRates(rates, args.Format, args.Output, ct);
     }
 
-    private async Task<int> WriteRates(IEnumerable<ExchangeRate> rates, SupportedFormat format, string? output, CancellationToken ct)
+    private async Task<int> WriteRates(IEnumerable<ExchangeRate> rates, OldSupportedFormat format, string? output, CancellationToken ct)
     {
         await using var streamWriter = CreateWriter(output);
         await writer.WriteRates(streamWriter, rates, format, ct);

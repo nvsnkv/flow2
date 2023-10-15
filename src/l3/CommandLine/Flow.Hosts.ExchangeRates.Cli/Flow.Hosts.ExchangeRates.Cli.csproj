@@ -22,7 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\l2\IO\Flow.Infrastructure.IO\Flow.Infrastructure.IO.csproj" />
+    <ProjectReference Include="..\..\..\l2\IO\Flow.Infrastructure.IO.Obsolete\Flow.Infrastructure.IO.Obsolete.csproj" />
     <ProjectReference Include="..\..\..\l2\Flow.Infrastructure.Rates.CBRF\Flow.Infrastructure.Rates.CBRF.csproj" />
     <ProjectReference Include="..\..\..\l2\Flow.Infrastructure.Storage\Flow.Infrastructure.Storage.csproj" />
     <ProjectReference Include="..\Flow.Hosts.Common\Flow.Hosts.Common.csproj" />

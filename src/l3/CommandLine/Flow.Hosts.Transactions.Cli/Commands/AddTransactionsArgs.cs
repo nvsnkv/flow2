@@ -21,8 +21,8 @@ internal class AddTransactionsArgs : ArgsBase
         }
     }
 
-    [Option('f', "input-format", Required = false, Default = SupportedFormat.CSV, HelpText = "Input format.If input-file is set, input format will be defined by extension of the file and this option will be ignored.")]
-    public SupportedFormat Format { get; [UsedImplicitly] set; }
+    [Option('f', "input-format", Required = false, Default = OldSupportedFormat.CSV, HelpText = "Input format.If input-file is set, input format will be defined by extension of the file and this option will be ignored.")]
+    public OldSupportedFormat Format { get; [UsedImplicitly] set; }
 
     [Option('e', "edit-in-editor", Required = false, Default = false, HelpText = "Use external editor to update successfully appended transactions.")]
     public bool EditInEdior { get; [UsedImplicitly] set; }

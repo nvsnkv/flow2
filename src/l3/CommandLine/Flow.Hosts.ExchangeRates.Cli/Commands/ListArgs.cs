@@ -10,8 +10,8 @@ internal class ListArgs : ArgsBase
 {
     private string? output;
 
-    [Option('f', "output-format", Default = SupportedFormat.CSV, HelpText = "Output format. If output-file is set, output format will be defined by extension of output-file and this option will be ignored.")]
-    public SupportedFormat Format { get; [UsedImplicitly] set; }
+    [Option('f', "output-format", Default = OldSupportedFormat.CSV, HelpText = "Output format. If output-file is set, output format will be defined by extension of output-file and this option will be ignored.")]
+    public OldSupportedFormat Format { get; [UsedImplicitly] set; }
 
     [Option('o', "output-file", HelpText = "Output file path. If specified, app will this path to write the list of exchange rates stored in the database, otherwise it will either generate a new file or use standard output depending on configuration.")]
     public string? Output

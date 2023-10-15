@@ -8,6 +8,7 @@
 	<AssemblyVersion>4.0.0.0</AssemblyVersion>
     <Authors>nvsnkv</Authors>
 	<Copyright>© 2021 nvsnkv</Copyright>
+	<RootNamespace>Flow.Infrastructure.IO</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

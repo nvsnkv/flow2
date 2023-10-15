@@ -4,13 +4,13 @@ namespace Flow.Hosts.Common.Commands;
 
 public class ArgsBase
 {
-    protected static SupportedFormat? GuessFormatFromPath(string? input)
+    protected static OldSupportedFormat? GuessFormatFromPath(string? input)
     {
         var ext = Path.GetExtension(input)?.ToLower();
         return ext switch
         {
-            ".csv" => SupportedFormat.CSV,
-            ".json" => SupportedFormat.JSON,
+            ".csv" => OldSupportedFormat.CSV,
+            ".json" => OldSupportedFormat.JSON,
             null => null,
             _ => throw new NotSupportedException("File type is not supported!")
         };

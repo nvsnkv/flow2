@@ -9,7 +9,7 @@ namespace Flow.Hosts.Analysis.Cli.Commands;
 internal class BuildFlowArgs : ArgsBase
 {
     private string? output;
-    private SupportedFormat format;
+    private OldSupportedFormat format;
 
     [Option('f', "from", Required = true, HelpText = "Left boundary of date range to aggregate. Transactions with date greater or equal to this value will be included to aggregation.")]
     public DateTime From { get; [UsedImplicitly] set; }
@@ -20,8 +20,8 @@ internal class BuildFlowArgs : ArgsBase
     [Option('c', "currency", Required = true, HelpText = "Target currency. Transactions in different currency will be converted to target currency for proper aggregation.")]
     public string Currency { get; [UsedImplicitly] set; } = null!;
 
-    [Option("output-format", Default = SupportedFormat.CSV, HelpText = "Output format. If output-file is set, output format will be defined by extension of output-file and this option will be ignored.")]
-    public SupportedFormat Format
+    [Option("output-format", Default = OldSupportedFormat.CSV, HelpText = "Output format. If output-file is set, output format will be defined by extension of output-file and this option will be ignored.")]
+    public OldSupportedFormat Format
     {
         get => format;
         [UsedImplicitly]

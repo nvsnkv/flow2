@@ -95,7 +95,7 @@ internal class EditTransactionsCommand : CommandBase
     }
 
 
-    private async Task<int> Edit(Expression<Func<RecordedTransaction, bool>>? conditions, SupportedFormat format, string? interim, string? errsPath, CancellationToken ct, EnumerableWithCount<RejectedTransaction>? rejected = null)
+    private async Task<int> Edit(Expression<Func<RecordedTransaction, bool>>? conditions, OldSupportedFormat format, string? interim, string? errsPath, CancellationToken ct, EnumerableWithCount<RejectedTransaction>? rejected = null)
     {
         if (interim == null)
         {
@@ -124,7 +124,7 @@ internal class EditTransactionsCommand : CommandBase
         return await Update(interim, format, errsPath, ct, rejected);
     }
 
-    private async Task<int> Update(string? interim, SupportedFormat format, string? errsPath, CancellationToken ct, EnumerableWithCount<RejectedTransaction>? rejected = null)
+    private async Task<int> Update(string? interim, OldSupportedFormat format, string? errsPath, CancellationToken ct, EnumerableWithCount<RejectedTransaction>? rejected = null)
     {
         rejected ??= new EnumerableWithCount<RejectedTransaction>(Enumerable.Empty<RejectedTransaction>());
 
