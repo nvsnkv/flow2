@@ -47,7 +47,7 @@ internal class BuildFlowCommand : CommandBase
 
         var (flow, rejections) = await aggregator.GetFlow(config, ct);
 
-        var outputPath = args.OutputPath ?? GetFallbackOutputPath(SupportedFormat.CSV, "flow", "list");
+        var outputPath = args.OutputPath ?? GetFallbackOutputPath(OldSupportedFormat.CSV, "flow", "list");
 
 
         await using (var writer = CreateWriter(outputPath))
@@ -57,7 +57,7 @@ internal class BuildFlowCommand : CommandBase
 
         var rejectionsWithCount = new EnumerableWithCount<RejectedTransaction>(rejections);
 
-        var rejectedPath = args.RejectedPath ?? GetFallbackOutputPath(SupportedFormat.CSV, "flow", "rejected");
+        var rejectedPath = args.RejectedPath ?? GetFallbackOutputPath(OldSupportedFormat.CSV, "flow", "rejected");
         await using (var rejWriter = CreateWriter(rejectedPath))
         {
             await rejectionsWriter.WriteRejections(rejWriter, rejectionsWithCount, args.Format, ct);

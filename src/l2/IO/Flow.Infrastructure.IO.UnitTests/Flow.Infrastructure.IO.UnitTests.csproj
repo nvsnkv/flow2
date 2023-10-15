@@ -23,7 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Flow.Infrastructure.IO\Flow.Infrastructure.IO.csproj" />
+    <ProjectReference Include="..\Flow.Infrastructure.IO.Obsolete\Flow.Infrastructure.IO.Obsolete.csproj" />
   </ItemGroup>
 
 </Project>

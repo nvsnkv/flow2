@@ -76,7 +76,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Flow.Infrastructure.Plugins
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "IO", "IO", "{A15852F3-21E3-42F3-B344-1358881DAF77}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Flow.Infrastructure.IO", "l2\IO\Flow.Infrastructure.IO\Flow.Infrastructure.IO.csproj", "{3E0B7253-FA7C-4E34-AD84-EE58226A91F3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Flow.Infrastructure.IO.Obsolete", "l2\IO\Flow.Infrastructure.IO.Obsolete\Flow.Infrastructure.IO.Obsolete.csproj", "{3E0B7253-FA7C-4E34-AD84-EE58226A91F3}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Flow.Infrastructure.IO.UnitTests", "l2\IO\Flow.Infrastructure.IO.UnitTests\Flow.Infrastructure.IO.UnitTests.csproj", "{C68B1128-8BC7-474D-8183-F6FC0F39C70D}"
 EndProject

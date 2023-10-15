@@ -16,25 +16,25 @@ internal class ExchangeRatesSerializer : IExchangeRatesReader, IExchangeRatesWri
         this.json = json;
     }
 
-    public async Task<IEnumerable<ExchangeRate>> ReadExchangeRates(StreamReader reader, SupportedFormat format, CancellationToken ct)
+    public async Task<IEnumerable<ExchangeRate>> ReadExchangeRates(StreamReader reader, OldSupportedFormat format, CancellationToken ct)
     {
         return format switch
         {
-            SupportedFormat.CSV => await csv.Read(reader, (ExchangeRateRow r) => (ExchangeRate)r, ct),
-            SupportedFormat.JSON => await json.Read(reader, (JsonExchangeRate j) => (ExchangeRate)j),
+            OldSupportedFormat.CSV => await csv.Read(reader, (ExchangeRateRow r) => (ExchangeRate)r, ct),
+            OldSupportedFormat.JSON => await json.Read(reader, (JsonExchangeRate j) => (ExchangeRate)j),
             _ => throw new ArgumentOutOfRangeException(nameof(format), format, null),
         };
     }
 
-    public async Task WriteRates(StreamWriter writer, IEnumerable<ExchangeRate> rates, SupportedFormat format, CancellationToken ct)
+    public async Task WriteRates(StreamWriter writer, IEnumerable<ExchangeRate> rates, OldSupportedFormat format, CancellationToken ct)
     {
         switch (format)
         {
-            case SupportedFormat.CSV:
+            case OldSupportedFormat.CSV:
                 await csv.Write<ExchangeRate, ExchangeRateRow, ExchangeRateRowMap>(writer, rates, r => (ExchangeRateRow)r, ct);
                 break;
 
-            case SupportedFormat.JSON:
+            case OldSupportedFormat.JSON:
                 await json.Write(writer, rates, ct);
                 break;
 

@@ -5,5 +5,5 @@ namespace Flow.Infrastructure.IO.ExchangeRates.Contract;
 
 public interface IRateRejectionsWriter
 {
-    Task WriteRejections(StreamWriter writer, IEnumerable<RejectedRate> rejections, SupportedFormat format, CancellationToken ct);
+    Task WriteRejections(StreamWriter writer, IEnumerable<RejectedRate> rejections, OldSupportedFormat format, CancellationToken ct);
 }

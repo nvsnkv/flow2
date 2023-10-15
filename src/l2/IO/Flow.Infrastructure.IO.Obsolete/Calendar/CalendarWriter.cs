@@ -14,15 +14,15 @@ internal class CalendarWriter : ICalendarWriter
         this.json = json;
     }
 
-    public async Task WriteCalendar(StreamWriter writer, Domain.Analysis.Calendar calendar, SupportedFormat format, CancellationToken ct)
+    public async Task WriteCalendar(StreamWriter writer, Domain.Analysis.Calendar calendar, OldSupportedFormat format, CancellationToken ct)
     {
         switch (format)
         {
-            case SupportedFormat.CSV:
+            case OldSupportedFormat.CSV:
                 await csv.Write(writer, calendar, ct);
                 return;
 
-            case SupportedFormat.JSON:
+            case OldSupportedFormat.JSON:
                 await json.Write(writer, calendar, ct);
                 return;
 

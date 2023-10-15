@@ -14,7 +14,7 @@ internal class DefaultCsvTransactionsSerializer : ITransactionsReader, ITransact
         this.csv = csv;
     }
 
-    public SupportedFormat Format => SupportedFormat.CSV;
+    public OldSupportedFormat Format => OldSupportedFormat.CSV;
 
     public Task<IEnumerable<(Transaction, Overrides?)>> ReadTransactions(StreamReader reader, CancellationToken ct)
     {

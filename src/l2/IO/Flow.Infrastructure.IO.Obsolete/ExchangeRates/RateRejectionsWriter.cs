@@ -14,11 +14,11 @@ internal class RateRejectionsWriter
         this.json = json;
     }
 
-    public async Task WriteRejections(StreamWriter writer, IEnumerable<RejectedRate> rejections, SupportedFormat format, CancellationToken ct)
+    public async Task WriteRejections(StreamWriter writer, IEnumerable<RejectedRate> rejections, OldSupportedFormat format, CancellationToken ct)
     {
         switch (format)
         {
-            case SupportedFormat.CSV:
+            case OldSupportedFormat.CSV:
                 await csv.Write<RejectedRate, ExchangeRate, ExchangeRateRow>(
                     writer,
                     rejections,
@@ -26,7 +26,7 @@ internal class RateRejectionsWriter
                     ct);
                 return;
 
-            case SupportedFormat.JSON:
+            case OldSupportedFormat.JSON:
                 await json.WriteRejections(writer, rejections, ct);
                 return;
 

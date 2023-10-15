@@ -5,7 +5,7 @@ namespace Flow.Infrastructure.Plugins.Transactions.Contract;
 
 public interface ITransactionsReaderPlugin : IPlugin
 {
-    SupportedFormat SupportedFormat { get; }
+    OldSupportedFormat OldSupportedFormat { get; }
 
     Task<IEnumerable<(Transaction, Overrides?)>> ReadTransactions(StreamReader reader, CancellationToken ct);
 

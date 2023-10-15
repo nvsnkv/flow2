@@ -9,7 +9,7 @@ public interface IFlowConfiguration
 
     string? DateStyle { get; }
 
-    IDictionary<SupportedFormat, string>? Editor { get; }
+    IDictionary<OldSupportedFormat, string>? Editor { get; }
 
     string? PluginsPath { get; }
 }

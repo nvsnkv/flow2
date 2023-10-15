@@ -18,11 +18,11 @@ internal class RejectionsWriter : IRejectionsWriter
         this.json = json;
     }
 
-    public async Task WriteRejections(StreamWriter writer, IEnumerable<RejectedTransaction> rejections, SupportedFormat format, CancellationToken ct)
+    public async Task WriteRejections(StreamWriter writer, IEnumerable<RejectedTransaction> rejections, OldSupportedFormat format, CancellationToken ct)
     {
         switch (format)
         {
-            case SupportedFormat.CSV:
+            case OldSupportedFormat.CSV:
                 await csv.Write<RejectedTransaction, Transaction, TransactionRow>(
                     writer,
                     rejections,
@@ -30,7 +30,7 @@ internal class RejectionsWriter : IRejectionsWriter
                     ct);
                 return;
 
-            case SupportedFormat.JSON:
+            case OldSupportedFormat.JSON:
                 await json.WriteRejections(writer, rejections, ct);
                 return;
 
@@ -39,11 +39,11 @@ internal class RejectionsWriter : IRejectionsWriter
         }
     }
 
-    public async Task WriteRejections(StreamWriter writer, IEnumerable<RejectedTransferKey> rejections, SupportedFormat format, CancellationToken ct)
+    public async Task WriteRejections(StreamWriter writer, IEnumerable<RejectedTransferKey> rejections, OldSupportedFormat format, CancellationToken ct)
     {
         switch (format)
         {
-            case SupportedFormat.CSV:
+            case OldSupportedFormat.CSV:
                 await csv.Write<RejectedTransferKey, TransferKey, TransferKeyRow>(
                     writer,
                     rejections,
@@ -51,7 +51,7 @@ internal class RejectionsWriter : IRejectionsWriter
                     ct);
                 return;
 
-            case SupportedFormat.JSON:
+            case OldSupportedFormat.JSON:
                 await json.WriteRejections(writer, rejections, ct);
                 return;
 
