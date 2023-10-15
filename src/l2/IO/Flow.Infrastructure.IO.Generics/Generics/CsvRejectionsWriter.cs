@@ -4,7 +4,7 @@ using Flow.Domain.Common;
 
 namespace Flow.Infrastructure.IO.Generics;
 
-internal class CsvRejectionsWriter
+public sealed class CsvRejectionsWriter
 {
     private readonly CsvConfiguration config;
 

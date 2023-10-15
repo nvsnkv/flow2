@@ -2,7 +2,7 @@
 
 namespace Flow.Infrastructure.IO.Generics;
 
-internal class GenericParser
+public sealed class GenericParser
 {
     private readonly CultureInfo culture;
     private readonly NumberStyles numberStyles;
