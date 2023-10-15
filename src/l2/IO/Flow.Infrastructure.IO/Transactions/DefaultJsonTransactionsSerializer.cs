@@ -7,8 +7,6 @@ namespace Flow.Infrastructure.IO.Transactions;
 
 internal class DefaultJsonTransactionsSerializer : ITransactionsReader, ITransactionsWriter
 {
-    private static readonly SupportedDataSchema[] supportedSchemas = { SupportedDataSchema.Default };
-
     private readonly JsonSerializer json;
 
     public DefaultJsonTransactionsSerializer(JsonSerializer json)
@@ -37,6 +35,4 @@ internal class DefaultJsonTransactionsSerializer : ITransactionsReader, ITransac
     }
 
     public SupportedFormat Format => SupportedFormat.JSON;
-
-    public IEnumerable<SupportedDataSchema> Schemas => supportedSchemas;
 }

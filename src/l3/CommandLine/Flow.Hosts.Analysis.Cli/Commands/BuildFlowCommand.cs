@@ -36,7 +36,7 @@ internal class BuildFlowCommand : CommandBase
             }
         }
 
-        var transactionWriter = transactionWriters.FindFor(args.Format, SupportedDataSchema.Default);
+        var transactionWriter = transactionWriters.FindFor(args.Format);
         if (transactionWriter == null)
         {
             await Console.Error.WriteLineAsync($"No writer registered for format {args.Format}");

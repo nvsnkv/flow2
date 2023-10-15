@@ -4,7 +4,7 @@ namespace Flow.Infrastructure.IO.Transactions.Contract;
 
 public interface ISchemaSpecificCollection<out T> where T:ISchemaSpecific
 {
-    T? FindFor(SupportedFormat format, SupportedDataSchema schema);
+    T? FindFor(SupportedFormat format);
 
     IEnumerable<T> GetKnown();
 }

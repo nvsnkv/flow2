@@ -5,6 +5,4 @@ namespace Flow.Infrastructure.IO.Transactions.Contract;
 public interface ISchemaSpecific
 {
     public SupportedFormat Format { get; }
-
-    public IEnumerable<SupportedDataSchema> Schemas { get; }
 }

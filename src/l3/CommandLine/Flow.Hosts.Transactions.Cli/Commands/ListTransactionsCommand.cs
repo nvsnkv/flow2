@@ -31,7 +31,7 @@ internal class ListTransactionsCommand : CommandBase
             }
         }
 
-        var writer = writers.FindFor(args.Format, SupportedDataSchema.Default);
+        var writer = writers.FindFor(args.Format);
         if (writer == null)
         {
             await Console.Error.WriteLineAsync($"No writer registered for format {args.Format}");
