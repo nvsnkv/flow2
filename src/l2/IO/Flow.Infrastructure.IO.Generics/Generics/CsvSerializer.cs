@@ -3,7 +3,7 @@ using CsvHelper.Configuration;
 
 namespace Flow.Infrastructure.IO.Generics;
 
-internal class CsvSerializer
+public sealed class CsvSerializer
 {
     private readonly CsvConfiguration config;
 

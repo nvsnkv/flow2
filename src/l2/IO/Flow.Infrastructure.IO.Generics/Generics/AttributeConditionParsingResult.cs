@@ -2,7 +2,7 @@
 
 namespace Flow.Infrastructure.IO.Generics;
 
-internal class ParsingResult<TProp> : ParsingResult
+public class ParsingResult<TProp> : ParsingResult
 {
     public ParsingResult(Expression<Func<TProp, bool>>? condition) : base(true, string.Empty)
     {

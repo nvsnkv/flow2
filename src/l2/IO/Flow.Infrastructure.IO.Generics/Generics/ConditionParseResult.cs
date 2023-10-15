@@ -2,7 +2,7 @@
 
 namespace Flow.Infrastructure.IO.Generics;
 
-internal class ConditionParseResult<T, TProp> :ParsingResult<TProp>
+public class ConditionParseResult<T, TProp> :ParsingResult<TProp>
 {
     public ConditionParseResult(Expression<Func<T, TProp>>? selector, Expression<Func<TProp, bool>>? condition):base(condition)
     {

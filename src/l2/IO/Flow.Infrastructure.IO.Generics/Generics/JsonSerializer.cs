@@ -2,7 +2,7 @@
 
 namespace Flow.Infrastructure.IO.Generics;
 
-internal class JsonSerializer
+public class JsonSerializer
 {
     private readonly Newtonsoft.Json.JsonSerializer serializer;
 

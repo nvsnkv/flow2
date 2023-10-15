@@ -1,6 +1,6 @@
 ﻿namespace Flow.Infrastructure.IO.Generics;
 
-internal class ParsingResult
+public class ParsingResult
 {
     protected ParsingResult(bool successful, string error)
     {
