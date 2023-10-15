@@ -9,7 +9,6 @@ namespace Flow.Hosts.Transactions.Cli.Commands;
 internal class AddTransactionsArgs : ArgsBase
 {
     private string? input;
-    private SupportedDataSchema? schema;
 
     [Option('i', "input-file", Required = false, HelpText = "Input file path. If specified, app will use the file instead of standard input.")]
     public string? Input
@@ -30,11 +29,4 @@ internal class AddTransactionsArgs : ArgsBase
 
     [Option("output-errors", Required = false, HelpText = "Errors file path. If specified, app will write list of rejected transactions to this file, otherwise it will either generate a new file or use standard output depending on configuration.")]
     public string? Errors { get; [UsedImplicitly] set; }
-
-    [Option('s', "schema", Required = false, HelpText = "Supported Data Schema. Used in conjunction with plugins that read non-default CSV sheets or JSON files")]
-    public SupportedDataSchema Schema
-    {
-        get => schema ?? SupportedDataSchema.Default;
-        [UsedImplicitly] set => schema = value;
-    }
 }
