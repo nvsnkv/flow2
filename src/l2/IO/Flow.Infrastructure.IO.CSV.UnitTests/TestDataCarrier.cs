@@ -1,19 +1,18 @@
-using System;
 using Flow.Domain.ExchangeRates;
 using Flow.Domain.Transactions;
 using Flow.Domain.Transactions.Transfers;
 
-namespace Flow.Infrastructure.IO.UnitTests;
+namespace Flow.Infrastructure.IO.CSV.UnitTests;
 
 public abstract class TestDataCarrier
 {
     private static readonly AccountInfo Account = new("Account", "The Bank");
-    private static readonly AccountInfo CyrillicAccount = new("Счёт", "Банк");
+    private static readonly AccountInfo CyrillicAccount = new("РЎС‡С‘С‚", "Р‘Р°РЅРє");
 
     protected static readonly Transaction[] Transactions = {
         new(DateTime.UtcNow.Date, -150, "RUB", null, "local store", Account),
         new(DateTime.UtcNow.Date, -150.5M, "RUB", "famous", "local store", Account),
-        new(DateTime.UtcNow.Date, -150.5M, "RUB", "Тест", "Кириллицы", CyrillicAccount),
+        new(DateTime.UtcNow.Date, -150.5M, "RUB", "РўРµСЃС‚", "РљРёСЂРёР»Р»РёС†С‹", CyrillicAccount),
         new(new(2021, 11, 06, 11, 30, 00), 2, "EUR", null, "'\"Quotes\" test", Account),
         new(new(2021, 11, 05), 0.333M, "RUR", "Special symbols", "\',.;\" test", Account)
     };
