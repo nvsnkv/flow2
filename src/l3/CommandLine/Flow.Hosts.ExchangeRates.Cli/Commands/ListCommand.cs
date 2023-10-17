@@ -2,7 +2,8 @@
 using Flow.Domain.ExchangeRates;
 using Flow.Hosts.Common.Commands;
 using Flow.Infrastructure.Configuration.Contract;
-using Flow.Infrastructure.IO.ExchangeRates.Contract;
+using Flow.Infrastructure.IO.Collections;
+using Flow.Infrastructure.IO.Contract;
 using JetBrains.Annotations;
 
 namespace Flow.Hosts.ExchangeRates.Cli.Commands;
@@ -11,12 +12,12 @@ namespace Flow.Hosts.ExchangeRates.Cli.Commands;
 internal class ListCommand : CommandBase
 {
     private readonly IExchangeRatesManager manager;
-    private readonly IExchangeRatesWriter writer;
+    private readonly IWriters<ExchangeRate> writers;
 
-    public ListCommand(IFlowConfiguration config, IExchangeRatesManager manager, IExchangeRatesWriter writer) : base(config)
+    public ListCommand(IFlowConfiguration config, IExchangeRatesManager manager, IWriters<ExchangeRate> writers) : base(config)
     {
         this.manager = manager;
-        this.writer = writer;
+        this.writers = writers;
     }
 
     public async Task<int> Execute(RequestArgs args, CancellationToken ct)
@@ -40,10 +41,10 @@ internal class ListCommand : CommandBase
         return await WriteRates(rates, args.Format, args.Output, ct);
     }
 
-    private async Task<int> WriteRates(IEnumerable<ExchangeRate> rates, OldSupportedFormat format, string? output, CancellationToken ct)
+    private async Task<int> WriteRates(IEnumerable<ExchangeRate> rates, SupportedFormat format, string? output, CancellationToken ct)
     {
         await using var streamWriter = CreateWriter(output);
-        await writer.WriteRates(streamWriter, rates, format, ct);
+        await writers.GetFor(format).Write(streamWriter, rates, ct);
 
         return await TryStartEditor(output, format, false);
     }

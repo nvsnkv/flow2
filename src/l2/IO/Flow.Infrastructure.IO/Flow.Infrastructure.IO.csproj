@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net7.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Flow.Infrastructure.IO.Calendar\Flow.Infrastructure.IO.Calendar.csproj" />
+      <ProjectReference Include="..\Flow.Infrastructure.IO.Contract\Flow.Infrastructure.IO.Contract.csproj" />
+      <ProjectReference Include="..\Flow.Infrastructure.IO.Criteria\Flow.Infrastructure.IO.Criteria.csproj" />
+      <ProjectReference Include="..\Flow.Infrastructure.IO.CSV\Flow.Infrastructure.IO.CSV.csproj" />
+      <ProjectReference Include="..\Flow.Infrastructure.IO.JSON\Flow.Infrastructure.IO.JSON.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Autofac" Version="7.1.0" />
+    </ItemGroup>
+
+</Project>

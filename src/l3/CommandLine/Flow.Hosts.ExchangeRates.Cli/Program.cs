@@ -12,7 +12,7 @@ var builder = new ContainerBuilder();
 
 builder.RegisterModule(new FlowConfiguration())
     .RegisterModule(new FlowDatabase())
-    .RegisterModule(new FlowIOComponents())
+    .RegisterModule(new FlowIOModule())
     .RegisterModule(new CBRFData())
     .RegisterModule(new MoneyExchange());
 
@@ -29,4 +29,3 @@ return await arguments.MapResult(
     async (RequestArgs arg) => await container.Resolve<ListCommand>().Execute(arg, cancellationHandler.Token),
     async (ListArgs arg) => await container.Resolve<ListCommand>().Execute(arg, cancellationHandler.Token),
     async errs => await ParserHelper.HandleUnparsed(errs, arguments));
-

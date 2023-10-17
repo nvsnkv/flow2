@@ -1,4 +1,6 @@
-﻿namespace Flow.Infrastructure.Configuration.Contract;
+﻿using Flow.Infrastructure.IO.Contract;
+
+namespace Flow.Infrastructure.Configuration.Contract;
 public interface IFlowConfiguration
 {
     public string? ConnectionString { get; }
@@ -9,7 +11,7 @@ public interface IFlowConfiguration
 
     string? DateStyle { get; }
 
-    IDictionary<OldSupportedFormat, string>? Editor { get; }
+    IDictionary<SupportedFormat, string>? Editor { get; }
 
     string? PluginsPath { get; }
 }

@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net7.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\..\l0\Flow.Domain.Analysis\Flow.Domain.Analysis.csproj" />
+      <ProjectReference Include="..\..\Flow.Infrastructure.Configuration\Flow.Infrastructure.Configuration.csproj" />
+      <ProjectReference Include="..\Flow.Infrastructure.IO.Contract\Flow.Infrastructure.IO.Contract.csproj" />
+      <ProjectReference Include="..\Flow.Infrastructure.IO.Criteria\Flow.Infrastructure.IO.Criteria.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Autofac" Version="7.1.0" />
+      <PackageReference Include="CsvHelper" Version="30.0.1" />
+      <PackageReference Include="JetBrains.Annotations" Version="2023.2.0" />
+      <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    </ItemGroup>
+
+</Project>

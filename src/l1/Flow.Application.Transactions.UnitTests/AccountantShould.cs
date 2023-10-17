@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Flow.Application.ExchangeRates.Contract;
+using Flow.Application.Transactions.Contract;
 using Flow.Application.Transactions.Infrastructure;
 using Flow.Application.Transactions.Transfers;
 using Flow.Domain.Patterns;

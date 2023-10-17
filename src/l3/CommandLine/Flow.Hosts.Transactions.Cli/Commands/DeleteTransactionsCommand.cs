@@ -1,7 +1,7 @@
 ﻿using Flow.Application.Transactions.Contract;
 using Flow.Hosts.Common.Commands;
 using Flow.Infrastructure.Configuration.Contract;
-using Flow.Infrastructure.IO.Transactions.Contract;
+using Flow.Infrastructure.IO.Criteria.Contract;
 
 namespace Flow.Hosts.Transactions.Cli.Commands;
 

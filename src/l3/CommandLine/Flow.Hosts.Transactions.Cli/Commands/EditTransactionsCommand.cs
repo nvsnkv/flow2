@@ -5,25 +5,31 @@ using Flow.Domain.Transactions;
 using Flow.Domain.Transactions.Collections;
 using Flow.Hosts.Common.Commands;
 using Flow.Infrastructure.Configuration.Contract;
-using Flow.Infrastructure.IO.Transactions.Contract;
+using Flow.Infrastructure.IO.Collections;
+using Flow.Infrastructure.IO.Contract;
+using Flow.Infrastructure.IO.Criteria.Contract;
 
 namespace Flow.Hosts.Transactions.Cli.Commands;
 
 internal class EditTransactionsCommand : CommandBase
 {
     private readonly IAccountant accountant;
-    private readonly ISchemaSpecificCollection<ITransactionsReader> readers;
     private readonly ITransactionCriteriaParser criteriaParser;
-    private readonly ISchemaSpecificCollection<ITransactionsWriter> writers;
-    private readonly IRejectionsWriter rejectionsWriter;
+    private readonly IReaders<(Transaction, Overrides)> transactionReaders;
+    private readonly IWriters<Transaction> transactionWriters;
+    private readonly IReaders<RecordedTransaction> recordedTransactionReaders;
+    private readonly IWriters<RecordedTransaction> recorderTransactionWriters;
+    private readonly IWriters<RejectedTransaction> rejectionsWriter;
 
-    public EditTransactionsCommand(IAccountant accountant, ISchemaSpecificCollection<ITransactionsReader> readers, ISchemaSpecificCollection<ITransactionsWriter> writers, IRejectionsWriter rejectionsWriter, IFlowConfiguration config, ITransactionCriteriaParser criteriaParser) : base(config)
+    public EditTransactionsCommand(IAccountant accountant, IFlowConfiguration config, ITransactionCriteriaParser criteriaParser, IReaders<(Transaction, Overrides)> transactionReaders, IWriters<Transaction> transactionWriters, IReaders<RecordedTransaction> recordedTransactionReaders, IWriters<RecordedTransaction> recorderTransactionWriters, IWriters<RejectedTransaction> rejectionsWriter) : base(config)
     {
         this.accountant = accountant;
-        this.readers = readers;
-        this.rejectionsWriter = rejectionsWriter;
-        this.writers = writers;
         this.criteriaParser = criteriaParser;
+        this.transactionReaders = transactionReaders;
+        this.transactionWriters = transactionWriters;
+        this.recordedTransactionReaders = recordedTransactionReaders;
+        this.recorderTransactionWriters = recorderTransactionWriters;
+        this.rejectionsWriter = rejectionsWriter;
     }
 
     public async Task<int> Execute(AddTransactionsArgs args, CancellationToken ct)
@@ -31,16 +37,12 @@ internal class EditTransactionsCommand : CommandBase
         ItemsWithDateRange<(Transaction, Overrides?)> initial;
         EnumerableWithCount<RejectedTransaction> rejected;
 
-        var reader = readers.FindFor(args.Format);
-        if (reader == null)
-        {
-            await Console.Error.WriteLineAsync($"No reader registered for format {args.Format}");
-            return 2;
-        }
+        var reader = transactionReaders.GetFor(args.Format);
+
 
         using (var streamReader = CreateReader(args.Input))
         {
-            initial = new ItemsWithDateRange<(Transaction, Overrides?)>(await reader.ReadTransactions(streamReader, ct), x => x.Item1.Timestamp);
+            initial = new ItemsWithDateRange<(Transaction, Overrides?)>(await reader.Read(streamReader, ct), x => x.Item1.Timestamp);
             rejected = new EnumerableWithCount<RejectedTransaction>(await accountant.CreateTransactions(initial, ct));
         }
 
@@ -49,7 +51,7 @@ internal class EditTransactionsCommand : CommandBase
         { 
             await using (var streamWriter = CreateWriter(errsPath))
             {
-                await rejectionsWriter.WriteRejections(streamWriter, rejected, args.Format, ct);
+                await rejectionsWriter.GetFor(args.Format).Write(streamWriter, rejected, ct);
             }
 
             if (rejected.Count > 0)
@@ -95,24 +97,19 @@ internal class EditTransactionsCommand : CommandBase
     }
 
 
-    private async Task<int> Edit(Expression<Func<RecordedTransaction, bool>>? conditions, OldSupportedFormat format, string? interim, string? errsPath, CancellationToken ct, EnumerableWithCount<RejectedTransaction>? rejected = null)
+    private async Task<int> Edit(Expression<Func<RecordedTransaction, bool>>? conditions, SupportedFormat format, string? interim, string? errsPath, CancellationToken ct, EnumerableWithCount<RejectedTransaction>? rejected = null)
     {
         if (interim == null)
         {
             return -1;
         }
 
-        var writer = writers.FindFor(format);
-        if (writer == null)
-        {
-            await Console.Error.WriteLineAsync($"No writer registered for format {format}");
-            return 2;
-        }
+        var writer = recorderTransactionWriters.GetFor(format);
 
         var appended = await accountant.GetTransactions(conditions, ct);
         await using (var streamWriter = CreateWriter(interim))
         {
-            await writer.WriteRecordedTransactions(streamWriter, appended, ct);
+            await writer.Write(streamWriter, appended, ct);
         }
 
         var exitCode = await TryStartEditor(interim, format, true);
@@ -124,25 +121,20 @@ internal class EditTransactionsCommand : CommandBase
         return await Update(interim, format, errsPath, ct, rejected);
     }
 
-    private async Task<int> Update(string? interim, OldSupportedFormat format, string? errsPath, CancellationToken ct, EnumerableWithCount<RejectedTransaction>? rejected = null)
+    private async Task<int> Update(string? interim, SupportedFormat format, string? errsPath, CancellationToken ct, EnumerableWithCount<RejectedTransaction>? rejected = null)
     {
         rejected ??= new EnumerableWithCount<RejectedTransaction>(Enumerable.Empty<RejectedTransaction>());
 
-        var reader = readers.FindFor(format);
-        if (reader == null)
-        {
-            await Console.Error.WriteLineAsync($"No reader registered for format {format}");
-            return 2;
-        }
+        var reader = recordedTransactionReaders.GetFor(format);
 
         using var streamReader = CreateReader(interim);
 
-        var updated = await reader.ReadRecordedTransactions(streamReader, ct);
+        var updated = await reader.Read(streamReader, ct);
         rejected = new EnumerableWithCount<RejectedTransaction>(rejected.Concat(await accountant.UpdateTransactions(updated, ct)));
 
         await using (var streamWriter = CreateWriter(errsPath))
         {
-            await rejectionsWriter.WriteRejections(streamWriter, rejected, format, ct);
+            await rejectionsWriter.GetFor(format).Write(streamWriter, rejected, ct);
         }
 
         if (rejected.Count > 0)

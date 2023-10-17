@@ -16,6 +16,9 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\l2\Flow.Infrastructure.Configuration\Flow.Infrastructure.Configuration.csproj" />
+    <ProjectReference Include="..\..\..\l2\IO\Flow.Infrastructure.IO.Contract\Flow.Infrastructure.IO.Contract.csproj" />
+    <ProjectReference Include="..\..\..\l2\IO\Flow.Infrastructure.IO.CSV\Flow.Infrastructure.IO.CSV.csproj" />
+    <ProjectReference Include="..\..\..\l2\IO\Flow.Infrastructure.IO.JSON\Flow.Infrastructure.IO.JSON.csproj" />
   </ItemGroup>
 
   <ItemGroup>

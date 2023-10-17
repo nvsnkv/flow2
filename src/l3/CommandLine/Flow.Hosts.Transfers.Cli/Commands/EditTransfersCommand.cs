@@ -3,7 +3,7 @@ using Flow.Domain.Common.Collections;
 using Flow.Domain.Transactions.Transfers;
 using Flow.Hosts.Common.Commands;
 using Flow.Infrastructure.Configuration.Contract;
-using Flow.Infrastructure.IO.Transactions.Contract;
+using Flow.Infrastructure.IO.Collections;
 using JetBrains.Annotations;
 
 namespace Flow.Hosts.Transfers.Cli.Commands;
@@ -11,15 +11,15 @@ namespace Flow.Hosts.Transfers.Cli.Commands;
 [UsedImplicitly]
 internal class EditTransfersCommand : CommandBase
 {
-    private readonly ITransferKeysReader reader;
-    private readonly IRejectionsWriter writer;
+    private readonly IReaders<TransferKey> reader;
+    private readonly IWriters<RejectedTransferKey> writer;
     private readonly IAccountant accountant;
 
-    public EditTransfersCommand(IFlowConfiguration config, IAccountant accountant, IRejectionsWriter writer, ITransferKeysReader reader) : base(config)
+    public EditTransfersCommand(IFlowConfiguration config, IAccountant accountant, IReaders<TransferKey> reader, IWriters<RejectedTransferKey> writer) : base(config)
     {
         this.accountant = accountant;
-        this.writer = writer;
         this.reader = reader;
+        this.writer = writer;
     }
 
     public async Task<int> Execute(EnforceTransfersArgs args, CancellationToken ct)
@@ -28,14 +28,14 @@ internal class EditTransfersCommand : CommandBase
 
         using (var streamReader = CreateReader(args.Input))
         {
-            var keys = await reader.ReadTransferKeys(streamReader, args.Format, ct);
+            var keys = await reader.GetFor(args.Format).Read(streamReader, ct);
             rejections = new EnumerableWithCount<RejectedTransferKey>(await accountant.EnforceTransfers(keys, ct));
         }
 
         var errsPath = args.Errors ?? GetFallbackOutputPath(args.Format, "enforce", "rejected-transfers");
         await using (var streamWriter = CreateWriter(args.Errors))
         {
-            await writer.WriteRejections(streamWriter, rejections, args.Format, ct);
+            await writer.GetFor(args.Format).Write(streamWriter, rejections, ct);
         }
 
         if (rejections.Count > 0)
@@ -52,14 +52,14 @@ internal class EditTransfersCommand : CommandBase
 
         using (var streamReader = CreateReader(args.Input))
         {
-            var keys = await reader.ReadTransferKeys(streamReader, args.Format, ct);
+            var keys = await reader.GetFor(args.Format).Read(streamReader, ct);
             rejections = new EnumerableWithCount<RejectedTransferKey>(await accountant.AbandonTransfers(keys, ct));
         }
 
         var errsPath = args.Errors ?? GetFallbackOutputPath(args.Format, "abandon", "rejected-transfers");
         await using (var streamWriter = CreateWriter(args.Errors))
         {
-            await writer.WriteRejections(streamWriter, rejections, args.Format, ct);
+            await writer.GetFor(args.Format).Write(streamWriter, rejections, ct);
         }
 
         if (rejections.Count > 0)
