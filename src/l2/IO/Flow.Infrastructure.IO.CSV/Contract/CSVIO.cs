@@ -12,19 +12,16 @@ public sealed class CSVIO : Module
 {
     public static readonly SupportedFormat SupportedFormat = new("CSV");
 
+    private readonly CultureInfo culture;
+
+    public CSVIO(CultureInfo culture)
+    {
+        this.culture = culture;
+    }
+
     protected override void Load(ContainerBuilder builder)
     {
-        builder.Register(c =>
-        {
-            var config = c.Resolve<IFlowConfiguration>();
-            var culture = CultureInfo
-                              .GetCultures(CultureTypes.AllCultures)
-                              .FirstOrDefault(ci => ci.Name == config.CultureCode)
-                          ?? CultureInfo.CurrentCulture;
-
-            return new CsvConfiguration(culture) { HeaderValidated = null };
-        }).SingleInstance();
-
+        builder.RegisterInstance(new CsvConfiguration(culture) { HeaderValidated = null });
         builder.RegisterAssemblyTypes().AsImplementedInterfaces();
 
         base.Load(builder);

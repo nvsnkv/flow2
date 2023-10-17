@@ -9,17 +9,22 @@ using Flow.Infrastructure.Rates.CBRF.Contract;
 using Flow.Infrastructure.Storage.Contract;
 
 var builder = new ContainerBuilder();
+builder.RegisterModule(new FlowConfiguration());
+var configContainer = builder.Build();
+
+var config = configContainer.Resolve<IFlowConfiguration>();
+
+builder = new ContainerBuilder();
 
 builder.RegisterModule(new FlowConfiguration())
     .RegisterModule(new FlowDatabase())
-    .RegisterModule(new FlowIOModule())
+    .RegisterModule(new FlowIO(config))
     .RegisterModule(new CBRFData())
     .RegisterModule(new MoneyExchange());
 
 builder.RegisterType<ListCommand>();
 
 var container = builder.Build();
-var config = container.Resolve<IFlowConfiguration>();
 
 var cancellationHandler = new ConsoleCancellationHandler();
 var parser = ParserHelper.Create(config);
