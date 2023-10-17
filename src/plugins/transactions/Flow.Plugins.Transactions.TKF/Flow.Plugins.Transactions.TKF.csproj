@@ -4,14 +4,15 @@
     <TargetFramework>net7.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-	  <EnableDynamicLoading>true</EnableDynamicLoading>
+    <EnableDynamicLoading>true</EnableDynamicLoading>
+    <Copyright>(c) nvsnkv 2023</Copyright>
+    <Version>2.0.0</Version>
+    <AssemblyVersion>2.0.0.0</AssemblyVersion>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Flow.Domain.Common" Version="3.0.0" ExcludeAssets="runtime" />
-    <PackageReference Include="Flow.Domain.Patterns" Version="3.0.0" ExcludeAssets="runtime" />
-    <PackageReference Include="Flow.Domain.Transactions" Version="3.0.1" ExcludeAssets="runtime" />
-    <PackageReference Include="Flow.Infrastructure.Plugins.Transactions.Contract" Version="3.0.0" />
+    <PackageReference Include="Flow.Application.Transactions.Contract" Version="1.0.0" />
+    <PackageReference Include="Flow.Infrastructure.Plugins.Contract" Version="3.0.0" />
   </ItemGroup>
 
 </Project>
