@@ -6,7 +6,7 @@ using Flow.Infrastructure.IO.CSV.Transactions.Transfers;
 using FluentAssertions;
 using Xunit.Categories;
 
-namespace Flow.Infrastructure.IO.UnitTests;
+namespace Flow.Infrastructure.IO.CSV.UnitTests;
 
 public class CsvSerializersShould : TestDataCarrier
 {

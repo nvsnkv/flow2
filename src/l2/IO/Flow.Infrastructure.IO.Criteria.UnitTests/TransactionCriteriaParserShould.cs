@@ -1,11 +1,10 @@
 ﻿using System.Globalization;
 using System.Linq.Expressions;
 using Flow.Domain.Transactions;
-using Flow.Infrastructure.IO.Criteria;
 using FluentAssertions;
 using Xunit.Categories;
 
-namespace Flow.Infrastructure.IO.UnitTests;
+namespace Flow.Infrastructure.IO.Criteria.UnitTests;
 
 public class TransactionCriteriaParserShould : TestDataCarrier
 {

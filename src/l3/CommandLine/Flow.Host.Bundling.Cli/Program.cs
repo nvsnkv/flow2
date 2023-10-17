@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 using System.Globalization;
 using CommandLine;
+using Flow.Hosts.Bundling.Cli;
 using Flow.Hosts.Common;
 using Flow.Infrastructure.Configuration.Contract;
 using JetBrains.Annotations;
@@ -65,24 +66,26 @@ return await arguments.MapResult(
     async errs => await ParserHelper.HandleUnparsed(errs, arguments)
 );
 
-
-[Verb("register", HelpText = "Adds application folder to PATH to make flow tools available in CLI and registers the settings file"), UsedImplicitly]
-internal class RegisterArgs
+namespace Flow.Hosts.Bundling.Cli
 {
-    [Option('v', "verbose", Required = false, Default = false, HelpText = "Verbose output")]
-    public bool Verbose { get; [UsedImplicitly] set; }
-}
+    [Verb("register", HelpText = "Adds application folder to PATH to make flow tools available in CLI and registers the settings file"), UsedImplicitly]
+    internal class RegisterArgs
+    {
+        [Option('v', "verbose", Required = false, Default = false, HelpText = "Verbose output")]
+        public bool Verbose { get; [UsedImplicitly] set; }
+    }
 
-[Verb("unregister", HelpText = "Removes application folder from PATH and removes settings file registration"), UsedImplicitly]
-internal class UnregisterArgs
-{
-    [Option('v', "verbose", Required = false, Default = false, HelpText = "Verbose output")]
-    public bool Verbose { get; [UsedImplicitly] set; }
-}
+    [Verb("unregister", HelpText = "Removes application folder from PATH and removes settings file registration"), UsedImplicitly]
+    internal class UnregisterArgs
+    {
+        [Option('v', "verbose", Required = false, Default = false, HelpText = "Verbose output")]
+        public bool Verbose { get; [UsedImplicitly] set; }
+    }
 
-[Verb("configure", HelpText = "Opens editor to edit configuration file. Bundle must be registered before using this option"), UsedImplicitly]
-internal class ConfigureArgs
-{
-    [Option('v', "verbose", Required = false, Default = false, HelpText = "Verbose output")]
-    public bool Verbose { get; [UsedImplicitly] set; }
+    [Verb("configure", HelpText = "Opens editor to edit configuration file. Bundle must be registered before using this option"), UsedImplicitly]
+    internal class ConfigureArgs
+    {
+        [Option('v', "verbose", Required = false, Default = false, HelpText = "Verbose output")]
+        public bool Verbose { get; [UsedImplicitly] set; }
+    }
 }

@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using Flow.Domain.ExchangeRates;
 using Flow.Domain.Transactions;
 using Flow.Domain.Transactions.Transfers;
-using Flow.Infrastructure.IO.JSON;
 using Flow.Infrastructure.IO.JSON.ExchangeRates;
 using Flow.Infrastructure.IO.JSON.Transactions;
 using Flow.Infrastructure.IO.JSON.Transactions.Transfers;
@@ -15,7 +14,7 @@ using Newtonsoft.Json;
 using Xunit;
 using Xunit.Categories;
 
-namespace Flow.Infrastructure.IO.UnitTests;
+namespace Flow.Infrastructure.IO.JSON.UnitTests;
 
 public class JsonSerializersShould : TestDataCarrier
 {
