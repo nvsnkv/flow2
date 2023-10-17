@@ -1,18 +1,21 @@
-﻿using Flow.Domain.Transactions;
+﻿using System.Diagnostics.CodeAnalysis;
+using Flow.Application.Transactions.Contract;
+using Flow.Domain.Transactions;
 using Flow.Domain.Transactions.Transfers;
-using Flow.Infrastructure.Plugins.Transactions.Contract;
+using Flow.Infrastructure.Plugins.Contract;
 
 namespace Flow.Plugins.Transactions.TKF;
 
-public sealed class Bootstrapper : IPluginsBootstrapper<ITransferDetectionPlugin>
+[SuppressMessage("ReSharper", "UnusedType.Global")]
+public sealed class Bootstrapper : IPluginsBootstrapper<TransfersDetector>
 {
-    public IEnumerable<ITransferDetectionPlugin> GetPlugins()
+    public IEnumerable<TransfersDetector> GetPlugins()
     {
         yield return new TransfersDetector();
     }
 }
 
-internal sealed class TransfersDetector : ITransferDetectionPlugin
+public sealed class TransfersDetector : ITransferDetector, IPlugin
 {
     public bool CheckIsTransfer(RecordedTransaction left, RecordedTransaction right)
     {
