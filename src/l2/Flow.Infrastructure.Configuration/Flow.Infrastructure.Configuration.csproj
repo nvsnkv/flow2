@@ -18,4 +18,8 @@
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="7.0.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\IO\Flow.Infrastructure.IO.Contract\Flow.Infrastructure.IO.Contract.csproj" />
+  </ItemGroup>
+
 </Project>

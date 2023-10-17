@@ -4,7 +4,9 @@ using Flow.Domain.Common.Collections;
 using Flow.Domain.Transactions;
 using Flow.Hosts.Common.Commands;
 using Flow.Infrastructure.Configuration.Contract;
-using Flow.Infrastructure.IO.Transactions.Contract;
+using Flow.Infrastructure.IO.Collections;
+using Flow.Infrastructure.IO.Criteria.Contract;
+using Flow.Infrastructure.IO.CSV.Contract;
 
 namespace Flow.Hosts.Analysis.Cli.Commands;
 
@@ -12,16 +14,16 @@ namespace Flow.Hosts.Analysis.Cli.Commands;
 internal class BuildFlowCommand : CommandBase 
 {
     private readonly IAggregator aggregator;
-    private readonly ISchemaSpecificCollection<ITransactionsWriter> transactionWriters;
-    private readonly IRejectionsWriter rejectionsWriter;
+    private readonly IWriters<RecordedTransaction> transactionWriters;
+    private readonly IWriters<RejectedTransaction> rejectionsWriters;
     private readonly ITransactionCriteriaParser parser;
 
-    public BuildFlowCommand(IFlowConfiguration config, IAggregator aggregator, IRejectionsWriter rejectionsWriter, ISchemaSpecificCollection<ITransactionsWriter> transactionWriters, ITransactionCriteriaParser parser) : base(config)
+    public BuildFlowCommand(IFlowConfiguration config, IAggregator aggregator, ITransactionCriteriaParser parser, IWriters<RejectedTransaction> rejectionsWriters, IWriters<RecordedTransaction> transactionWriters) : base(config)
     {
         this.aggregator = aggregator;
-        this.rejectionsWriter = rejectionsWriter;
-        this.transactionWriters = transactionWriters;
         this.parser = parser;
+        this.rejectionsWriters = rejectionsWriters;
+        this.transactionWriters = transactionWriters;
     }
 
     public async Task<int> Execute(BuildFlowArgs args, CancellationToken ct)
@@ -36,31 +38,26 @@ internal class BuildFlowCommand : CommandBase
             }
         }
 
-        var transactionWriter = transactionWriters.FindFor(args.Format);
-        if (transactionWriter == null)
-        {
-            await Console.Error.WriteLineAsync($"No writer registered for format {args.Format}");
-            return 2;
-        }
+        var transactionWriter = transactionWriters.GetFor(args.Format);
 
         var config = new FlowConfig(args.From.ToUniversalTime(), args.Till.ToUniversalTime(), args.Currency, criteria.Conditions);
 
         var (flow, rejections) = await aggregator.GetFlow(config, ct);
 
-        var outputPath = args.OutputPath ?? GetFallbackOutputPath(OldSupportedFormat.CSV, "flow", "list");
+        var outputPath = args.OutputPath ?? GetFallbackOutputPath(CSVIO.SupportedFormat, "flow", "list");
 
 
         await using (var writer = CreateWriter(outputPath))
         {
-            await transactionWriter.WriteRecordedTransactions(writer, await flow.ToListAsync(ct), ct);
+            await transactionWriter.Write(writer, await flow.ToListAsync(ct), ct);
         }
 
         var rejectionsWithCount = new EnumerableWithCount<RejectedTransaction>(rejections);
 
-        var rejectedPath = args.RejectedPath ?? GetFallbackOutputPath(OldSupportedFormat.CSV, "flow", "rejected");
+        var rejectedPath = args.RejectedPath ?? GetFallbackOutputPath(CSVIO.SupportedFormat, "flow", "rejected");
         await using (var rejWriter = CreateWriter(rejectedPath))
         {
-            await rejectionsWriter.WriteRejections(rejWriter, rejectionsWithCount, args.Format, ct);
+            await rejectionsWriters.GetFor(args.Format).Write(rejWriter, rejectionsWithCount, ct);
         }
 
         if (rejectionsWithCount.Count > 0)

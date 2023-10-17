@@ -4,14 +4,7 @@ namespace Flow.Infrastructure.IO.Generics;
 
 public class JsonSerializer
 {
-    private readonly Newtonsoft.Json.JsonSerializer serializer;
 
-    public JsonSerializer(JsonSerializerSettings? settings)
-    {
-        serializer = settings is null 
-            ? Newtonsoft.Json.JsonSerializer.CreateDefault() 
-            : Newtonsoft.Json.JsonSerializer.Create(settings);
-    }
 
     public Task<IEnumerable<T>> Read<T, TJson>(StreamReader reader, Func<TJson, T> convertFunc)
     {

@@ -79,35 +79,7 @@ public class FlowIOComponents : Module
         #endregion
 
         #region calendar
-        builder.Register(c =>
-        {
-            var config = c.Resolve<IFlowConfiguration>();
 
-            var culture = CultureInfo
-                              .GetCultures(CultureTypes.AllCultures)
-                              .FirstOrDefault(ci => ci.Name == config.CultureCode)
-                          ?? CultureInfo.CurrentCulture;
-
-            var csv = new CsvCalendarWriter(new CsvConfiguration(culture) { HeaderValidated = null });
-            var json = new JsonCalendarWriter(new JsonSerializerSettings() { Culture = culture, Formatting = Formatting.Indented });
-
-            return new CalendarWriter(csv, json);
-        }).InstancePerLifetimeScope().AsImplementedInterfaces();
-
-        builder.Register(c =>
-        {
-            var config = c.Resolve<IFlowConfiguration>();
-
-            var culture = CultureInfo
-                              .GetCultures(CultureTypes.AllCultures)
-                              .FirstOrDefault(ci => ci.Name == config.CultureCode)
-                          ?? CultureInfo.CurrentCulture;
-
-            var json = new JsonSerializer(new JsonSerializerSettings() { Culture = culture, Formatting = Formatting.Indented });
-
-            var criteriaParser = c.Resolve<ITransactionCriteriaParser>();
-            return new JsonCalendarConfigParser(json, criteriaParser);
-        }).InstancePerLifetimeScope().AsImplementedInterfaces();
         #endregion
 
         #region exchange rates

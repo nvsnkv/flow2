@@ -1,4 +1,5 @@
 ﻿using Flow.Infrastructure.Configuration.Contract;
+using Flow.Infrastructure.IO.Contract;
 
 namespace Flow.Infrastructure.Configuration;
 
@@ -12,7 +13,7 @@ internal class FlowConfigurationDto : IFlowConfiguration
 
     public string? DateStyle { get; set; }
 
-    public IDictionary<OldSupportedFormat, string>? Editor { get; set; }
+    public IDictionary<SupportedFormat, string>? Editor { get; set; }
 
     public string? PluginsPath { get; set; }
 }

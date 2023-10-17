@@ -1,6 +1,7 @@
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Flow.Application.Transactions.Contract;
 using Flow.Application.Transactions.Transfers;
 using Flow.Domain.Transactions;
 using Flow.Domain.Transactions.Transfers;

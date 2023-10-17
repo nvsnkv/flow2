@@ -20,7 +20,6 @@
     <ProjectReference Include="..\..\..\l0\Flow.Domain.ExchangeRates\Flow.Domain.ExchangeRates.csproj" />
     <ProjectReference Include="..\..\..\l0\Flow.Domain.Transactions\Flow.Domain.Transactions.csproj" />
     <ProjectReference Include="..\..\Flow.Infrastructure.Configuration\Flow.Infrastructure.Configuration.csproj" />
-    <ProjectReference Include="..\Flow.Infrastructure.IO.Generics\Flow.Infrastructure.IO.Generics.csproj" />
   </ItemGroup>
 
 </Project>

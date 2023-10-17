@@ -1,4 +1,5 @@
 ﻿using System.Runtime.CompilerServices;
+using Flow.Application.Transactions.Contract;
 using Flow.Domain.Transactions;
 using Flow.Domain.Transactions.Transfers;
 

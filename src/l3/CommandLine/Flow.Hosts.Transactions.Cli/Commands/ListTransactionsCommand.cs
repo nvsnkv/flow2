@@ -1,7 +1,9 @@
 ﻿using Flow.Application.Transactions.Contract;
+using Flow.Domain.Transactions;
 using Flow.Hosts.Common.Commands;
 using Flow.Infrastructure.Configuration.Contract;
-using Flow.Infrastructure.IO.Transactions.Contract;
+using Flow.Infrastructure.IO.Collections;
+using Flow.Infrastructure.IO.Criteria.Contract;
 using JetBrains.Annotations;
 
 namespace Flow.Hosts.Transactions.Cli.Commands;
@@ -10,9 +12,9 @@ namespace Flow.Hosts.Transactions.Cli.Commands;
 internal class ListTransactionsCommand : CommandBase
 {
     private readonly IAccountant accountant;
-    private readonly ISchemaSpecificCollection<ITransactionsWriter> writers;
+    private readonly IWriters<RecordedTransaction> writers;
     private readonly ITransactionCriteriaParser parser;
-    public ListTransactionsCommand(IFlowConfiguration config, ISchemaSpecificCollection<ITransactionsWriter> writers, ITransactionCriteriaParser parser, IAccountant accountant) : base(config)
+    public ListTransactionsCommand(IFlowConfiguration config, IWriters<RecordedTransaction> writers, ITransactionCriteriaParser parser, IAccountant accountant) : base(config)
     {
         this.writers = writers;
         this.parser = parser;
@@ -31,12 +33,7 @@ internal class ListTransactionsCommand : CommandBase
             }
         }
 
-        var writer = writers.FindFor(args.Format);
-        if (writer == null)
-        {
-            await Console.Error.WriteLineAsync($"No writer registered for format {args.Format}");
-            return 2;
-        }
+        var writer = writers.GetFor(args.Format);
 
         var transactions = args.DuplicatesOnly 
             ? (await accountant.GuessDuplicates(criteria.Conditions, args.DuplicatesDaysRange, ct)).SelectMany(d => d)
@@ -44,7 +41,7 @@ internal class ListTransactionsCommand : CommandBase
 
         var output = args.Output ?? (args.OpenEditor ? GetFallbackOutputPath(args.Format, "list", "transactions") : null);
         await using var streamWriter = CreateWriter(output);
-        await writer.WriteRecordedTransactions(streamWriter, transactions, ct);
+        await writer.Write(streamWriter, transactions, ct);
 
         if (args.OpenEditor) 
         { 

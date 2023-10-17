@@ -2,6 +2,7 @@
 using System.Globalization;
 using System.Text;
 using Flow.Infrastructure.Configuration.Contract;
+using Flow.Infrastructure.IO.Contract;
 
 namespace Flow.Hosts.Common.Commands;
 
@@ -17,7 +18,7 @@ public abstract class CommandBase
         culture = CultureInfo.GetCultures(CultureTypes.AllCultures).FirstOrDefault(c => c.Name == config.CultureCode) ?? CultureInfo.CurrentCulture;
     }
     
-    protected async Task<int> TryStartEditor(string? outputPath, OldSupportedFormat format, bool waitForExit)
+    protected async Task<int> TryStartEditor(string? outputPath, SupportedFormat format, bool waitForExit)
     {
         if (outputPath == null || !(config.Editor?.ContainsKey(format) ?? false)) return waitForExit ? -1 : 0;
 
@@ -42,7 +43,7 @@ public abstract class CommandBase
         return new StreamWriter(stream, output != null ? Encoding.UTF8 : Encoding.GetEncoding(culture.TextInfo.OEMCodePage));
     }
 
-    protected string? GetFallbackOutputPath(OldSupportedFormat format, string command, string slug)
+    protected string? GetFallbackOutputPath(SupportedFormat format, string command, string slug)
     {
 
         if (config.Editor?.ContainsKey(format) ?? false)
@@ -62,7 +63,7 @@ public abstract class CommandBase
         return new StreamReader(stream, input != null ? Encoding.UTF8 : Encoding.GetEncoding(culture.TextInfo.OEMCodePage));
     }
 
-    private static string GeneratePath(OldSupportedFormat format, string command, string slug)
+    private static string GeneratePath(SupportedFormat format, string command, string slug)
     {
         var filename = $"temp.{command}.{DateTime.Now:s}.{slug}.{format.ToString().ToLower()}".Replace(":", "_");
         

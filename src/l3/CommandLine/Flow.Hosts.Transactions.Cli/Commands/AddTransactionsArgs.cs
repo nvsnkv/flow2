@@ -1,6 +1,7 @@
 ﻿using CommandLine;
 using Flow.Hosts.Common.Commands;
 using Flow.Infrastructure.Configuration.Contract;
+using Flow.Infrastructure.IO.Contract;
 using JetBrains.Annotations;
 
 namespace Flow.Hosts.Transactions.Cli.Commands;
@@ -21,8 +22,8 @@ internal class AddTransactionsArgs : ArgsBase
         }
     }
 
-    [Option('f', "input-format", Required = false, Default = OldSupportedFormat.CSV, HelpText = "Input format.If input-file is set, input format will be defined by extension of the file and this option will be ignored.")]
-    public OldSupportedFormat Format { get; [UsedImplicitly] set; }
+    [Option('f', "input-format", Required = false, Default = "csv", HelpText = "Input format.If input-file is set, input format will be defined by extension of the file and this option will be ignored.")]
+    public SupportedFormat Format { get; [UsedImplicitly] set; }
 
     [Option('e', "edit-in-editor", Required = false, Default = false, HelpText = "Use external editor to update successfully appended transactions.")]
     public bool EditInEdior { get; [UsedImplicitly] set; }

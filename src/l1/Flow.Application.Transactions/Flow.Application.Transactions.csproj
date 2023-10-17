@@ -20,6 +20,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\l0\Flow.Domain.Transactions\Flow.Domain.Transactions.csproj" />
     <ProjectReference Include="..\Flow.Application.ExchangeRates\Flow.Application.ExchangeRates.csproj" />
+    <ProjectReference Include="..\Flow.Application.Transactions.Contract\Flow.Application.Transactions.Contract.csproj" />
   </ItemGroup>
 
 </Project>

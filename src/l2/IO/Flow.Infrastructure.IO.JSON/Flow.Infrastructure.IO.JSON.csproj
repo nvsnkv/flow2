@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net7.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Autofac" Version="7.1.0" />
+      <PackageReference Include="JetBrains.Annotations" Version="2023.2.0" />
+      <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\..\l0\Flow.Domain.ExchangeRates\Flow.Domain.ExchangeRates.csproj" />
+      <ProjectReference Include="..\..\..\l0\Flow.Domain.Transactions\Flow.Domain.Transactions.csproj" />
+      <ProjectReference Include="..\Flow.Infrastructure.IO.Contract\Flow.Infrastructure.IO.Contract.csproj" />
+    </ItemGroup>
+
+</Project>
