@@ -21,7 +21,7 @@ builder = new ContainerBuilder();
 builder.RegisterModule(flowConfigurationModule)
     .RegisterModule(new PluginsModule(config))
     .RegisterModule(new FlowDatabase())
-    .RegisterModule(new FlowIOModule())
+    .RegisterModule(new FlowIO(config))
     .RegisterModule(new CBRFData())
     .RegisterModule(new MoneyExchange())
     .RegisterModule(new TransactionsManagement());

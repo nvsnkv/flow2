@@ -8,22 +8,20 @@ namespace Flow.Infrastructure.IO.Criteria.Contract;
 
 public class CriteriaParsing : Module
 {
+    private readonly CultureInfo culture;
+    private readonly DateTimeStyles dateStyle;
+    private readonly NumberStyles numberStyle;
+
+    public CriteriaParsing(CultureInfo culture, DateTimeStyles dateStyle, NumberStyles numberStyle)
+    {
+        this.culture = culture;
+        this.dateStyle = dateStyle;
+        this.numberStyle = numberStyle;
+    }
+
     protected override void Load(ContainerBuilder builder)
     {
-        builder.Register(c =>
-        {
-            var config = c.Resolve<IFlowConfiguration>();
-
-            var culture = CultureInfo
-                              .GetCultures(CultureTypes.AllCultures)
-                              .FirstOrDefault(ci => ci.Name == config.CultureCode)
-                          ?? CultureInfo.CurrentCulture;
-
-            var numberStyle = Enum.TryParse(config.NumberStyle, out NumberStyles n) ? n : NumberStyles.Any;
-            var dateStyle = Enum.TryParse(config.DateStyle, out DateTimeStyles d) ? d : DateTimeStyles.AssumeLocal;
-
-            return new TransactionCriteriaParser(new GenericParser(culture, dateStyle, numberStyle));
-        }).InstancePerLifetimeScope().AsImplementedInterfaces();
+        builder.RegisterInstance(new TransactionCriteriaParser(new GenericParser(culture, dateStyle, numberStyle))).AsImplementedInterfaces();
 
         base.Load(builder);
     }
