@@ -1,0 +1,13 @@
+﻿{
+  "TransactionReaderMappings": {
+    "valid-format": [
+      { "Field": "Timestamp", "ColumnId": 0 },
+      { "Field": "Amount", "ColumnId": 3 },
+      { "Field": "Currency", "ColumnId": 4 },
+      { "Field": "Category", "ColumnId": 6 },
+      { "Field": "Title", "ColumnId": 7 },
+      { "Field": "Account", "FallbackValue": "Test Account" },
+      { "Field": "Bank", "FallbackValue": "Test Bank" }
+    ]
+  }
+}

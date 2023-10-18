@@ -18,12 +18,16 @@ internal sealed class FlexibleTransactionsReader : IFlexibleTransactionsReader
         map = new InputDataRowClassMap(rules);
     }
 
-    public async Task<IEnumerable<(Transaction, Overrides)>> Read(StreamReader reader, CancellationToken ct)
+    public async Task<IEnumerable<(Transaction, Overrides?)>> Read(StreamReader reader, CancellationToken ct)
     {
         using var csvReader = new CsvReader(reader, new CsvConfiguration(culture));
         csvReader.Context.RegisterClassMap(map);
 
-        return await csvReader.GetRecordsAsync(typeof(InputDataRow), ct).Select(row => ((Transaction,Overrides))row).ToListAsync(ct);
+        return await csvReader.GetRecordsAsync(typeof(InputDataRow), ct).Select(row =>
+        {
+            var (t, r) = (InputDataRow)row;
+            return (t, r);
+        }).ToListAsync(ct);
     }
 
     public SupportedFormat Format { get; }

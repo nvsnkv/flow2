@@ -15,13 +15,13 @@ internal record InputDataRow(
     string? CategoryOverride
 )
 {
-    public static explicit operator (Transaction, Overrides)(InputDataRow input)
+    public InputDataRow() : this(null,null,null,null,null,null,null,null,null,null) {}
+
+    public void Deconstruct(out Transaction t, out Overrides? overrides)
     {
-        var account = new AccountInfo(input.Account ?? string.Empty, input.Bank ?? string.Empty);
-        var overrides = new Overrides(input.CategoryOverride, input.TitleOverride, input.Comment);
+        var account = new AccountInfo(Account ?? string.Empty, Bank ?? string.Empty);
+         overrides = new Overrides(CategoryOverride, TitleOverride, Comment);
 
-        var transaction = new Transaction(input.Timestamp ?? DateTime.MinValue, input.Amount ?? 0, input.Currency, input.Category, input.Title, account);
-
-        return (transaction, overrides);
+         t = new Transaction(Timestamp ?? DateTime.MinValue, Amount ?? 0, Currency, Category, Title, account);
     }
 };

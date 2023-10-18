@@ -1,0 +1,3 @@
+﻿"The Date";"Processed Date";Card;Amount;Currency;Status;Category;Description;MCC
+"18.10.2023 11:44:17";"18.10.2023";"1111 2222 3333 5555";-100;RUB;OK;Transfers;"To someone";5812
+"18.10.2023 11:50:17";"18.10.2023";"1111 2222 3333 5555";100;RUB;OK;Transfers;"From someone";5813
