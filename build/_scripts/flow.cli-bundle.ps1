@@ -1,0 +1,1 @@
+dotnet publish ../../src/l3/CommandLine/Flow.Hosts.EntryPoint.Cli/Flow.Hosts.EntryPoint.Cli.csproj /p:PublishProfile=FolderProfile
