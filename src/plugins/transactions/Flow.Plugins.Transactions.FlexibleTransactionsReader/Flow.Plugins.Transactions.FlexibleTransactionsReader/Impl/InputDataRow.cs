@@ -22,6 +22,6 @@ internal record InputDataRow(
         var account = new AccountInfo(Account ?? string.Empty, Bank ?? string.Empty);
          overrides = new Overrides(CategoryOverride, TitleOverride, Comment);
 
-         t = new Transaction(Timestamp ?? DateTime.MinValue, Amount ?? 0, Currency, Category, Title, account);
+         t = new Transaction(Timestamp ?? DateTime.MinValue, Amount ?? 0, Currency ?? string.Empty, Category, Title ?? string.Empty, account);
     }
 };

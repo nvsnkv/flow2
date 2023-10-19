@@ -23,11 +23,14 @@ internal sealed class FlexibleTransactionsReader : IFlexibleTransactionsReader
         using var csvReader = new CsvReader(reader, new CsvConfiguration(culture));
         csvReader.Context.RegisterClassMap(map);
 
-        return await csvReader.GetRecordsAsync(typeof(InputDataRow), ct).Select(row =>
-        {
-            var (t, r) = (InputDataRow)row;
-            return (t, r);
-        }).ToListAsync(ct);
+        return await csvReader.GetRecordsAsync(typeof(InputDataRow), ct)
+            .Where(r => r != null)
+            .Select(row =>
+            {
+                var (t, r) = (InputDataRow)row!;
+                return (t, r);
+            })
+            .ToListAsync(ct);
     }
 
     public SupportedFormat Format { get; }

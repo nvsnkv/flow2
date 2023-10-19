@@ -7,7 +7,9 @@ obj
 /.vs
 /src/l3/CommandLine/Flow.Hosts.Analysis.Cli/Properties/launchSettings.json
 /docs/samples/aggregation_rules.csv
-/build
+/build/cli-bundle
+/build/plugin-deps
+/build/plugins
 launchSettings.json
 appsettings.Development.json
 *.pubxml.user
