@@ -9,7 +9,10 @@ internal sealed class InputDataRowClassMap : ClassMap<InputDataRow>
     public InputDataRowClassMap(IReadOnlyCollection<MappingRule>? rules)
     {
         var type = typeof(InputDataRow);
-        var rulesDict = rules.ToDictionary(r => r.Field);
+        var rulesDict = rules?
+            .Where(r => r.Field != null)
+            .ToDictionary(r => r.Field!)
+            ?? new Dictionary<string, MappingRule>();
 
         foreach (var info in type.GetProperties(BindingFlags.Public | BindingFlags.Instance))
         {
