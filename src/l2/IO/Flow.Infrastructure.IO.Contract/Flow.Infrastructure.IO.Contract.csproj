@@ -4,8 +4,10 @@
         <TargetFramework>net7.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
-        <Copyright>(c) nvsnkv 2023</Copyright>
+        <Version>1.0.0</Version>
         <AssemblyVersion>1.0.0.0</AssemblyVersion>
+        <Authors>nvsnkv</Authors>
+        <Copyright>© 2023 nvsnkv</Copyright>
     </PropertyGroup>
 
 </Project>
