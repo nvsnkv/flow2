@@ -2,7 +2,7 @@ using Flow.Infrastructure.IO.Contract;
 
 namespace Flow.Infrastructure.IO.Collections;
 
-internal class FormatSpecificCollection<T> : ICollectionOfFormatSpecificItems<T> where T : IFormatSpecific
+internal class FormatSpecificCollection<T,TE> : ICollectionOfFormatSpecificItems<T, TE> where T : IFormatSpecific<TE>
 {
     private readonly Dictionary<SupportedFormat, T> items;
 

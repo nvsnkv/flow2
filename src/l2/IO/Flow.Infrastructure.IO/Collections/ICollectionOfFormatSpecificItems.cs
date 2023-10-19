@@ -2,7 +2,7 @@ using Flow.Infrastructure.IO.Contract;
 
 namespace Flow.Infrastructure.IO.Collections;
 
-public interface ICollectionOfFormatSpecificItems<out T> where T : IFormatSpecific
+public interface ICollectionOfFormatSpecificItems<out T, TE> where T : IFormatSpecific<TE>
 {
     T GetFor(SupportedFormat format);
 

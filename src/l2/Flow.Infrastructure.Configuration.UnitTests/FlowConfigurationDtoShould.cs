@@ -13,6 +13,7 @@ public class FlowConfigurationDtoShould
 
         var config = new FlowConfigurationDto(cfg.GetSection("flow"));
 
-        config.Editor.Keys.Should().BeEquivalentTo(new[] { new SupportedFormat("csv"), new SupportedFormat("json") });
+        config.Editor.Should().NotBeNull();
+        config.Editor!.Keys.Should().BeEquivalentTo(new[] { new SupportedFormat("csv"), new SupportedFormat("json") });
     }
 }
