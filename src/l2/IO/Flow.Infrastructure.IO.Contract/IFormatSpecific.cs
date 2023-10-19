@@ -1,6 +1,6 @@
 namespace Flow.Infrastructure.IO.Contract;
 
-public interface IFormatSpecific
+public interface IFormatSpecific<T>
 {
     SupportedFormat Format { get; }
 }

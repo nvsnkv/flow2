@@ -15,13 +15,13 @@ internal class EditTransactionsCommand : CommandBase
 {
     private readonly IAccountant accountant;
     private readonly ITransactionCriteriaParser criteriaParser;
-    private readonly IReaders<(Transaction, Overrides)> transactionReaders;
+    private readonly IReaders<(Transaction, Overrides?)> transactionReaders;
     private readonly IWriters<Transaction> transactionWriters;
     private readonly IReaders<RecordedTransaction> recordedTransactionReaders;
     private readonly IWriters<RecordedTransaction> recorderTransactionWriters;
     private readonly IWriters<RejectedTransaction> rejectionsWriter;
 
-    public EditTransactionsCommand(IAccountant accountant, IFlowConfiguration config, ITransactionCriteriaParser criteriaParser, IReaders<(Transaction, Overrides)> transactionReaders, IWriters<Transaction> transactionWriters, IReaders<RecordedTransaction> recordedTransactionReaders, IWriters<RecordedTransaction> recorderTransactionWriters, IWriters<RejectedTransaction> rejectionsWriter) : base(config)
+    public EditTransactionsCommand(IAccountant accountant, IFlowConfiguration config, ITransactionCriteriaParser criteriaParser, IReaders<(Transaction, Overrides?)> transactionReaders, IWriters<Transaction> transactionWriters, IReaders<RecordedTransaction> recordedTransactionReaders, IWriters<RecordedTransaction> recorderTransactionWriters, IWriters<RejectedTransaction> rejectionsWriter) : base(config)
     {
         this.accountant = accountant;
         this.criteriaParser = criteriaParser;
@@ -47,7 +47,7 @@ internal class EditTransactionsCommand : CommandBase
         }
 
         var errsPath = args.Errors ?? GetFallbackOutputPath(args.Format, "add", "rejected-transactions");
-        if (!args.EditInEdior) 
+        if (!args.EditInEditor)
         { 
             await using (var streamWriter = CreateWriter(errsPath))
             {
@@ -60,7 +60,7 @@ internal class EditTransactionsCommand : CommandBase
             }
         }
 
-        if (args.EditInEdior)
+        if (args.EditInEditor)
         {
             var format = args.Format;
             Expression<Func<RecordedTransaction, bool>> conditions = t => initial.Min <= t.Timestamp && t.Timestamp <= initial.Max;

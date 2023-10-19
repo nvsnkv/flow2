@@ -12,7 +12,7 @@ internal class EditTransactionsArgs
     public IEnumerable<string>? Criteria { get; [UsedImplicitly] set; }
 
     [Option('f', "format", Default = "csv", HelpText = "Processing format. App will use this format to export data for update.")]
-    public SupportedFormat Format { get; [UsedImplicitly] set; }
+    public SupportedFormat Format { get; [UsedImplicitly] set; } = new("csv");
 
     [Option('e', "output-errors", Required = false, HelpText = "Output file path. If specified, app will write list of rejected transactions to this file, otherwise it will either generate a new file or use standard output depending on configuration.")]
     public string? Output { get; [UsedImplicitly] set; }
