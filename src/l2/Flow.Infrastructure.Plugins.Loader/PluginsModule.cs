@@ -45,7 +45,7 @@ namespace Flow.Infrastructure.Plugins.Loader
                         var ctx = new PluginLoadContext(path);
                         var assembly = ctx.LoadFromAssemblyName(new AssemblyName(Path.GetFileNameWithoutExtension(path)));
                         var bootstrappers =
-                            assembly.ExportedTypes.Where(t => t.IsGenericType && t.GetGenericTypeDefinition() == typeof(IPluginsBootstrapper<>));
+                            assembly.ExportedTypes.Where(t => t.GetInterfaces().Any(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IPluginsBootstrapper<>)));
 
                         foreach (var bootstrapper in bootstrappers)
                         {

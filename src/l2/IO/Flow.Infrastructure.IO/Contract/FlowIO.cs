@@ -28,11 +28,12 @@ public sealed class FlowIO : Module
 
     protected override void Load(ContainerBuilder builder)
     {
-        builder.RegisterGeneric(typeof(Readers<>)).AsImplementedInterfaces().InstancePerLifetimeScope();
-        builder.RegisterGeneric(typeof(Writers<>)).AsImplementedInterfaces().InstancePerLifetimeScope();
+        builder.RegisterGeneric(typeof(Readers<>)).As(typeof(IReaders<>));
+        builder.RegisterGeneric(typeof(Writers<>)).As(typeof(IWriters<>));
+
 
         builder.RegisterModule(new CSVIO(culture));
-        builder.RegisterModule<JSONIO>();
+        builder.RegisterModule(new JSONIO(culture));
         builder.RegisterModule(new CriteriaParsing(culture, dateStyle, numberStyle));
         builder.RegisterModule(new CalendarIO(culture));
     }

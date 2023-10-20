@@ -75,7 +75,7 @@ public class JsonSerializersShould : TestDataCarrier
         var culture = CultureInfo.GetCultureInfo(cultureCode);
         var settings = new JsonSerializerSettings() { Culture = culture };
 
-        var rdr = new TransfersKeyReader(settings);
+        var rdr = new TransferKeyReader(settings);
         var wrtr = new JsonWriter<TransferKey>(settings);
 
         await using var writeStream = new MemoryStream();
@@ -99,7 +99,7 @@ public class JsonSerializersShould : TestDataCarrier
         var culture = CultureInfo.GetCultureInfo(cultureCode);
         var settings = new JsonSerializerSettings() { Culture = culture };
 
-        var rdr = new ExchangeRateReader(settings);
+        var rdr = new ExchangeRatesReader(settings);
         var wrtr = new JsonWriter<ExchangeRate>(settings);
 
 

@@ -8,7 +8,7 @@ using JetBrains.Annotations;
 
 var parser = ParserHelper.Create(CultureInfo.CurrentCulture);
 
-var arguments = parser.ParseArguments<RegisterArgs, UnregisterArgs, ConfigureArgs>(args);
+var arguments = parser.ParseArguments<RegisterArgs, UnregisterArgs, ConfigureArgs, DebugArgs>(args);
 return await arguments.MapResult(
     (RegisterArgs arg) =>
     {
@@ -63,7 +63,8 @@ return await arguments.MapResult(
         if (arg.Verbose) Console.WriteLine("Confgiration updated!");
         return 0;
     },
-    async errs => await ParserHelper.HandleUnparsed(errs, arguments)
+    (DebugArgs _) => new InstallationDebugger().PrintoutDebugInfo(),
+async errs => await ParserHelper.HandleUnparsed(errs, arguments)
 );
 
 namespace Flow.Hosts.Bundling.Cli
@@ -88,4 +89,7 @@ namespace Flow.Hosts.Bundling.Cli
         [Option('v', "verbose", Required = false, Default = false, HelpText = "Verbose output")]
         public bool Verbose { get; [UsedImplicitly] set; }
     }
+
+    [Verb("debug", HelpText = "Prints out debbugging information")]
+    internal class DebugArgs { }
 }
