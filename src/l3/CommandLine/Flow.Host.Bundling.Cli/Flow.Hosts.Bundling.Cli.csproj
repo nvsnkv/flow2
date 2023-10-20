@@ -13,6 +13,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\l2\Flow.Infrastructure.Plugins.Loader\Flow.Infrastructure.Plugins.Loader.csproj" />
+    <ProjectReference Include="..\..\..\l2\IO\Flow.Infrastructure.IO\Flow.Infrastructure.IO.csproj" />
     <ProjectReference Include="..\Flow.Hosts.Common\Flow.Hosts.Common.csproj" />
   </ItemGroup>
 
