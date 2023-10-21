@@ -10,15 +10,17 @@ namespace Flow.Plugins.Transactions.FlexibleTransactionsReader;
 public sealed class Bootstrapper : IPluginsBootstrapper
 {
     private readonly string _configFilePath;
+    private readonly CultureInfo _culture;
     private static readonly string ConfigurationFilePath = "mappings.json";
 
-    public Bootstrapper() : this(ConfigurationFilePath)
+    public Bootstrapper() : this(ConfigurationFilePath, CultureInfo.CurrentCulture)
     {
     }
 
-    public Bootstrapper(string configFilePath)
+    public Bootstrapper(string configFilePath, CultureInfo culture)
     {
         _configFilePath = configFilePath;
+        _culture = culture;
     }
 
     public IEnumerable<IPlugin> GetPlugins()
@@ -30,6 +32,6 @@ public sealed class Bootstrapper : IPluginsBootstrapper
 
         return configuration.GetSection("TransactionReaderMappings")
             .GetChildren()
-            .Select(c => new Impl.FlexibleTransactionsReader(CultureInfo.CurrentCulture, c.Key, c.Get<IReadOnlyCollection<MappingRule>>()));
+            .Select(c => new Impl.FlexibleTransactionsReader(_culture, c.Key, c.Get<IReadOnlyCollection<MappingRule>>()));
     }
 }

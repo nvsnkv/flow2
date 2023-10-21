@@ -1,3 +1,4 @@
+using System.Globalization;
 using Flow.Domain.Transactions;
 using FluentAssertions;
 
@@ -9,7 +10,8 @@ public class FlexibleTransactionReaderShould
     public async Task ReadCorrectFileSuccessfully()
     {
         var expectedFormat = "valid-format"; // from JSON
-        var bootstrapper = new Bootstrapper("./TestData/TestData_Valid_ExtraColumns.json");
+        var culture = CultureInfo.GetCultureInfoByIetfLanguageTag("ru-RU");
+        var bootstrapper = new Bootstrapper("./TestData/TestData_Valid_ExtraColumns.json", culture);
         var reader = bootstrapper.GetPlugins().Single() as IFlexibleTransactionsReader;
 
         using var streamReader = new StreamReader(File.OpenRead("./TestData/TestData_Valid_ExtraColumns.csv"));
