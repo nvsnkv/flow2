@@ -37,7 +37,7 @@ public class JSONIOShould
     [Fact] public void RegisterExchangeRatesWriter() => AssertRegistrationValid<IFormatSpecificWriter<ExchangeRate>, ExchangeRate>();
     [Fact] public void RegisterRejectedRatesWriter() => AssertRegistrationValid<IFormatSpecificWriter<RejectedRate>, RejectedRate>();
 
-    private void AssertRegistrationValid<T,TE>() where T : class, IFormatSpecific<TE>
+    private void AssertRegistrationValid<T,TE>() where T : class, IFormatSpecific
     {
         var readers = container.Resolve<IEnumerable<T>>().ToList();
         readers.Should().HaveCount(1);
