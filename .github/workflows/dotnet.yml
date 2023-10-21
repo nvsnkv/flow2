@@ -45,14 +45,14 @@ jobs:
         ./flow.plugin-deps.ps1
       working-directory: ./build/_scripts
     - name: "[Transfer detection plugin] restore"
-      run: dotnet restore --configFile Nuget.config
+      run: dotnet restore --configfile Nuget.config
       working-directory: ./src/plugins/transactions/Flow.Plugins.Transactions.TKF
     - name: "[Transfer detection plugin] build"
       run: dotnet build --no-restore
       working-directory: ./src/plugins/transactions/Flow.Plugins.Transactions.TKF
 
     - name: "[Transactions reader plugin] restore"
-      run: dotnet restore --configFile Nuget.config
+      run: dotnet restore --configfile Nuget.config
       working-directory: ./src/plugins/transactions/Flow.Plugins.Transactions.FlexibleTransactionsReader
     - name: "[Transactions reader plugin] build"
       run: dotnet build --no-restore
