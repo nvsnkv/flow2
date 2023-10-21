@@ -15,7 +15,7 @@ public class FlexibleTransactionReaderShould
         using var streamReader = new StreamReader(File.OpenRead("./TestData/TestData_Valid_ExtraColumns.csv"));
 
         reader.Should().NotBeNull();
-        reader.Format.Name.Should().Be(expectedFormat);
+        reader!.Format.Name.Should().Be(expectedFormat);
 
         var transactions = await reader.Read(streamReader, CancellationToken.None);
         transactions.Select(p => p.Transaction).Should().BeEquivalentTo(TestData_Valid_ExtraColumns_Transactions);
