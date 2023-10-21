@@ -6,12 +6,13 @@ namespace Flow.Plugins.Transactions.FlexibleTransactionsReader.Tests;
 
 public class FlexibleTransactionReaderShould
 {
+    private static CultureInfo Culture = CultureInfo.GetCultureInfoByIetfLanguageTag("ru-RU");
+
     [Fact]
     public async Task ReadCorrectFileSuccessfully()
     {
         var expectedFormat = "valid-format"; // from JSON
-        var culture = CultureInfo.GetCultureInfoByIetfLanguageTag("ru-RU");
-        var bootstrapper = new Bootstrapper("./TestData/TestData_Valid_ExtraColumns.json", culture);
+        var bootstrapper = new Bootstrapper("./TestData/TestData_Valid_ExtraColumns.json", Culture);
         var reader = bootstrapper.GetPlugins().Single() as IFlexibleTransactionsReader;
 
         using var streamReader = new StreamReader(File.OpenRead("./TestData/TestData_Valid_ExtraColumns.csv"));
@@ -25,7 +26,7 @@ public class FlexibleTransactionReaderShould
 
     private static readonly Transaction[] TestData_Valid_ExtraColumns_Transactions =
     {
-        new(DateTime.Parse("18.10.2023 11:44:17"), -100, "RUB", "Transfers", "To someone", new AccountInfo("Test Account", "Test Bank")),
-        new(DateTime.Parse("18.10.2023 11:50:17"), 100, "RUB", "Transfers", "From someone", new AccountInfo("Test Account", "Test Bank"))
+        new(DateTime.Parse("18.10.2023 11:44:17", Culture), -100, "RUB", "Transfers", "To someone", new AccountInfo("Test Account", "Test Bank")),
+        new(DateTime.Parse("18.10.2023 11:50:17", Culture), 100, "RUB", "Transfers", "From someone", new AccountInfo("Test Account", "Test Bank"))
     };
 }
