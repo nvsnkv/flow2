@@ -58,10 +58,13 @@ internal class InstallationDebugger
 
             await Console.Out.WriteLineAsync("Loaded plugins:");
 
-            var plugins = container.Resolve<IEnumerable<IPlugin>>();
+            var plugins = container.ComponentRegistry.Registrations
+                .Where(r => r.Activator.LimitType.IsAssignableTo(typeof(IPlugin)))
+                .Select(r => r.Activator.LimitType);
+
             foreach (var plugin in plugins)
             {
-                await Console.Out.WriteLineAsync($"| {plugin} [{plugin.GetType()}]");
+                await Console.Out.WriteLineAsync($"  {plugin.Name}: {plugin.Assembly.Location}");
             }
 
             return 0;
@@ -93,7 +96,7 @@ internal class InstallationDebugger
             methodInfo = writers.GetType().GetMethod("GetKnownFormats") ?? throw new InvalidOperationException("supplied writer does not have method called 'GetFormatInfo'!");;
             var writingFormats = methodInfo.Invoke(writers, null) as IEnumerable<SupportedFormat>;
 
-            await Console.Out.WriteAsync($"  {type.Name}:");
+            await Console.Out.WriteAsync($"  {type.Name} - ");
             await Console.Out.WriteAsync(readingFormats?.Aggregate("read: ", (s, format) => s + format.Name + ", "));
             await Console.Out.WriteAsync(writingFormats?.Aggregate("write: ", (s, format) => s + format.Name + ", "));
             await Console.Out.WriteLineAsync();

@@ -24,7 +24,7 @@ public sealed class Bootstrapper : IPluginsBootstrapper
     public IEnumerable<IPlugin> GetPlugins()
     {
         var configuration = new ConfigurationBuilder()
-            .AddJsonFile(_configFilePath)
+            .AddJsonFile(_configFilePath, optional: true)
             .AddEnvironmentVariables()
             .Build();
 
