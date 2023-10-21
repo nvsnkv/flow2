@@ -31,7 +31,7 @@ public class CsvSerializersShould : TestDataCarrier
 
         var result = await rdr.Read(reader, CancellationToken.None);
 
-        result.Select(r => r.Item1).Should().BeEquivalentTo(Transactions);
+        result.Select(r => r.Transaction).Should().BeEquivalentTo(Transactions);
     }
 
     [Theory, UnitTest]
@@ -66,7 +66,7 @@ public class CsvSerializersShould : TestDataCarrier
         var config = new CsvConfiguration(culture);
 
         var rdr = new TransferKeyReader(config);
-        var wrtr = new TransfersWriter(config);
+        var wrtr = new TransfersKeyWriter(config);
 
         await using var stream = new MemoryStream();
         await using var writer = new StreamWriter(stream);

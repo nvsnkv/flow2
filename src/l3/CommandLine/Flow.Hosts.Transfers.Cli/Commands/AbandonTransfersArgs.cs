@@ -23,8 +23,9 @@ internal class AbandonTransfersArgs : ArgsBase
         }
     }
 
-    [Option('f', "input-format", Required = false, Default = "csv", HelpText = "Input format.If input-file is set, input format will be defined by extension of the file and this option will be ignored.")]
-    public SupportedFormat Format { get; [UsedImplicitly] set; }
+    [Option('f', "input-format", Required = false, Default = CSV,
+        HelpText = "Input format.If input-file is set, input format will be defined by extension of the file and this option will be ignored.")]
+    public SupportedFormat Format { get; [UsedImplicitly] set; } = new(CSV);
 
     [Option("output-errors", Required = false, HelpText = "Errors file path. If specified, app will write list of rejected transfers to this file, otherwise it will either generate a new file or use standard output depending on configuration.")]
     public string? Errors { get; [UsedImplicitly] set; }

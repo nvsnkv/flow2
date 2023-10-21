@@ -1,6 +1,7 @@
 using System.Collections.Immutable;
 using System.Reflection;
 using Autofac;
+using Flow.Application.Transactions.Contract;
 using Flow.Domain.ExchangeRates;
 using Flow.Domain.Transactions;
 using Flow.Domain.Transactions.Transfers;
@@ -74,7 +75,7 @@ internal class InstallationDebugger
 
     private static readonly Type[] SupportedTypes =
     {
-        typeof(Transaction), typeof((Transaction, Overrides?)), typeof(RecordedTransaction), typeof(RejectedTransaction),
+        typeof(Transaction), typeof(IncomingTransaction), typeof(RecordedTransaction), typeof(RejectedTransaction),
         typeof(TransferKey), typeof(Transfer), typeof(RejectedTransferKey),
         typeof(ExchangeRate), typeof(RejectedRate)
     };
@@ -86,10 +87,10 @@ internal class InstallationDebugger
             var readers = container.Resolve(typeof(IReaders<>).MakeGenericType(type));
             var writers = container.Resolve(typeof(IWriters<>).MakeGenericType(type));
 
-            var methodInfo = readers.GetType().GetMethod("GetKnownFormats");
+            var methodInfo = readers.GetType().GetMethod("GetKnownFormats") ?? throw new InvalidOperationException("supplied reader does not have method called 'GetFormatInfo'!");
             var readingFormats = methodInfo.Invoke(readers, null) as IEnumerable<SupportedFormat>;
 
-            methodInfo = writers.GetType().GetMethod("GetKnownFormats");
+            methodInfo = writers.GetType().GetMethod("GetKnownFormats") ?? throw new InvalidOperationException("supplied writer does not have method called 'GetFormatInfo'!");;
             var writingFormats = methodInfo.Invoke(writers, null) as IEnumerable<SupportedFormat>;
 
             await Console.Out.WriteAsync($"  {type.Name}:");

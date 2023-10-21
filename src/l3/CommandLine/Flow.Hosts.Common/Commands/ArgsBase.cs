@@ -7,6 +7,8 @@ namespace Flow.Hosts.Common.Commands;
 
 public class ArgsBase
 {
+    protected const string CSV = CSVIO.SupportedFormatName;
+
     protected static SupportedFormat? GuessFormatFromPath(string? input)
     {
         var ext = Path.GetExtension(input)?.ToLower();

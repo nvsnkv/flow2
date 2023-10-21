@@ -14,7 +14,7 @@ internal class DefaultJsonTransactionsSerializer : ITransactionsReader, ITransac
         this.json = json;
     }
 
-    public Task<IEnumerable<(Transaction, Overrides?)>> ReadTransactions(StreamReader reader, CancellationToken ct)
+    public Task<IEnumerable<IncomingTransaction>> ReadTransactions(StreamReader reader, CancellationToken ct)
     {
         return json.Read(reader, (JsonTransaction j) => ((Transaction)j, (Overrides?)null));
     }
