@@ -36,23 +36,20 @@ jobs:
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 7.0.x
-    - name: Restore dependencies
-      run: dotnet restore
-      working-directory: ./src
     - name: Build plugin dependencies
       shell: pwsh
       run: |
         ./flow.plugin-deps.ps1
       working-directory: ./build/_scripts
     - name: "[Transfer detection plugin] restore"
-      run: dotnet restore --configfile Nuget.config
+      run: dotnet restore --configfile Nuget.Config
       working-directory: ./src/plugins/transactions/Flow.Plugins.Transactions.TKF
     - name: "[Transfer detection plugin] build"
       run: dotnet build --no-restore
       working-directory: ./src/plugins/transactions/Flow.Plugins.Transactions.TKF
 
     - name: "[Transactions reader plugin] restore"
-      run: dotnet restore --configfile Nuget.config
+      run: dotnet restore --configfile Nuget.Config
       working-directory: ./src/plugins/transactions/Flow.Plugins.Transactions.FlexibleTransactionsReader
     - name: "[Transactions reader plugin] build"
       run: dotnet build --no-restore
