@@ -28,7 +28,8 @@ jobs:
       working-directory: ./src
     - name: Build plugin dependencies
       shell: pwsh
-      run: ./build/_scripts/flow.plugin-deps.ps1
+      run: |
+        ./build/_scripts/flow.plugin-deps.ps1
       working-directory: ./build/_scripts
     - name: Build transfer detection plugin
       run: dotnet build
