@@ -10,8 +10,14 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="Autofac" Version="7.1.0" />
+        <PackageReference Include="CsvHelper" Version="30.0.1" />
+        <PackageReference Include="Flow.Application.Transactions.Contract" Version="1.0.1" />
+        <PackageReference Include="Flow.Infrastructure.IO.Contract" Version="1.1.0" />
+        <PackageReference Include="Flow.Infrastructure.Plugins.Contract" Version="3.2.0" />
         <PackageReference Include="FluentAssertions" Version="6.12.0" />
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.5.0"/>
+        <PackageReference Include="System.Linq.Async" Version="6.0.1" />
         <PackageReference Include="xunit" Version="2.4.2"/>
         <PackageReference Include="xunit.runner.visualstudio" Version="2.4.5">
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
