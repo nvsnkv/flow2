@@ -1,13 +1,14 @@
 ﻿using System.Diagnostics;
 using System.Globalization;
 using CommandLine;
+using Flow.Hosts.Bundling.Cli;
 using Flow.Hosts.Common;
 using Flow.Infrastructure.Configuration.Contract;
 using JetBrains.Annotations;
 
 var parser = ParserHelper.Create(CultureInfo.CurrentCulture);
 
-var arguments = parser.ParseArguments<RegisterArgs, UnregisterArgs, ConfigureArgs>(args);
+var arguments = parser.ParseArguments<RegisterArgs, UnregisterArgs, ConfigureArgs, DebugArgs>(args);
 return await arguments.MapResult(
     (RegisterArgs arg) =>
     {
@@ -62,27 +63,33 @@ return await arguments.MapResult(
         if (arg.Verbose) Console.WriteLine("Confgiration updated!");
         return 0;
     },
-    async errs => await ParserHelper.HandleUnparsed(errs, arguments)
+    (DebugArgs _) => new InstallationDebugger().PrintoutDebugInfo(),
+async errs => await ParserHelper.HandleUnparsed(errs, arguments)
 );
 
-
-[Verb("register", HelpText = "Adds application folder to PATH to make flow tools available in CLI and registers the settings file"), UsedImplicitly]
-internal class RegisterArgs
+namespace Flow.Hosts.Bundling.Cli
 {
-    [Option('v', "verbose", Required = false, Default = false, HelpText = "Verbose output")]
-    public bool Verbose { get; [UsedImplicitly] set; }
-}
+    [Verb("register", HelpText = "Adds application folder to PATH to make flow tools available in CLI and registers the settings file"), UsedImplicitly]
+    internal class RegisterArgs
+    {
+        [Option('v', "verbose", Required = false, Default = false, HelpText = "Verbose output")]
+        public bool Verbose { get; [UsedImplicitly] set; }
+    }
 
-[Verb("unregister", HelpText = "Removes application folder from PATH and removes settings file registration"), UsedImplicitly]
-internal class UnregisterArgs
-{
-    [Option('v', "verbose", Required = false, Default = false, HelpText = "Verbose output")]
-    public bool Verbose { get; [UsedImplicitly] set; }
-}
+    [Verb("unregister", HelpText = "Removes application folder from PATH and removes settings file registration"), UsedImplicitly]
+    internal class UnregisterArgs
+    {
+        [Option('v', "verbose", Required = false, Default = false, HelpText = "Verbose output")]
+        public bool Verbose { get; [UsedImplicitly] set; }
+    }
 
-[Verb("configure", HelpText = "Opens editor to edit configuration file. Bundle must be registered before using this option"), UsedImplicitly]
-internal class ConfigureArgs
-{
-    [Option('v', "verbose", Required = false, Default = false, HelpText = "Verbose output")]
-    public bool Verbose { get; [UsedImplicitly] set; }
+    [Verb("configure", HelpText = "Opens editor to edit configuration file. Bundle must be registered before using this option"), UsedImplicitly]
+    internal class ConfigureArgs
+    {
+        [Option('v', "verbose", Required = false, Default = false, HelpText = "Verbose output")]
+        public bool Verbose { get; [UsedImplicitly] set; }
+    }
+
+    [Verb("debug", HelpText = "Prints out debbugging information")]
+    internal class DebugArgs { }
 }

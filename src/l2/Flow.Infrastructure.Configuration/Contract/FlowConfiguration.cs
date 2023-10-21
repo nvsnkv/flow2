@@ -1,6 +1,8 @@
-﻿using Autofac;
+﻿using System.Runtime.CompilerServices;
+using Autofac;
 using Microsoft.Extensions.Configuration;
 
+[assembly:InternalsVisibleTo("Flow.Infrastructure.Configuration.UnitTests")]
 namespace Flow.Infrastructure.Configuration.Contract;
 
 public sealed class FlowConfiguration : Module
@@ -32,7 +34,8 @@ public sealed class FlowConfiguration : Module
 
     protected override void Load(ContainerBuilder builder)
     {
-        builder.Register(_ => config.GetSection("flow").Get<FlowConfigurationDto>() ?? new FlowConfigurationDto()).AsImplementedInterfaces();
+        var section = config.GetSection("flow");
+        builder.Register(_ => new FlowConfigurationDto(section)).AsImplementedInterfaces();
         base.Load(builder);
     }
 }

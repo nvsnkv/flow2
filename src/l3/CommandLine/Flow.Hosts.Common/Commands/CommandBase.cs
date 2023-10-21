@@ -2,6 +2,7 @@
 using System.Globalization;
 using System.Text;
 using Flow.Infrastructure.Configuration.Contract;
+using Flow.Infrastructure.IO.Contract;
 
 namespace Flow.Hosts.Common.Commands;
 

@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using Autofac;
+﻿using Autofac;
 using Flow.Hosts.Common;
 using Flow.Infrastructure.Configuration.Contract;
 using System.Globalization;

@@ -4,7 +4,9 @@ using Flow.Domain.Common.Collections;
 using Flow.Domain.Transactions;
 using Flow.Hosts.Common.Commands;
 using Flow.Infrastructure.Configuration.Contract;
-using Flow.Infrastructure.IO.Contract;
+using Flow.Infrastructure.IO.Calendar.Contract;
+using Flow.Infrastructure.IO.Collections;
+using Flow.Infrastructure.IO.Criteria.Contract;
 using JetBrains.Annotations;
 
 namespace Flow.Hosts.Analysis.Cli.Commands;
@@ -15,15 +17,15 @@ internal class BuildCalendarCommand :CommandBase
     private readonly ICalendarConfigParser calendarConfigParser;
     private readonly ITransactionCriteriaParser criteriaParser;
     private readonly IAggregator aggregator;
-    private readonly IRejectionsWriter rejectionsWriter;
+    private readonly IWriters<RejectedTransaction> writers;
     private readonly ICalendarWriter calendarWriter;
 
 
-    public BuildCalendarCommand(IFlowConfiguration config, ICalendarConfigParser calendarConfigParser, IAggregator aggregator, IRejectionsWriter rejectionsWriter, ICalendarWriter calendarWriter, ITransactionCriteriaParser criteriaParser) : base(config)
+    public BuildCalendarCommand(IFlowConfiguration config, ICalendarConfigParser calendarConfigParser, IAggregator aggregator, IWriters<RejectedTransaction> writers, ICalendarWriter calendarWriter, ITransactionCriteriaParser criteriaParser) : base(config)
     {
         this.calendarConfigParser = calendarConfigParser;
         this.aggregator = aggregator;
-        this.rejectionsWriter = rejectionsWriter;
+        this.writers = writers;
         this.calendarWriter = calendarWriter;
         this.criteriaParser = criteriaParser;
     }
@@ -65,7 +67,7 @@ internal class BuildCalendarCommand :CommandBase
         var rejectedPath = arg.RejectedPath ?? GetFallbackOutputPath(arg.Format, "flow", "rejected");
         await using (var rejWriter = CreateWriter(rejectedPath))
         {
-            await rejectionsWriter.WriteRejections(rejWriter, rejectionsWithCount, arg.Format, ct);
+            await writers.GetFor(arg.Format).Write(rejWriter, rejectionsWithCount, ct);
             if (rejectionsWithCount.Count > 0)
             {
                 await TryStartEditor(rejectedPath, arg.Format, false);

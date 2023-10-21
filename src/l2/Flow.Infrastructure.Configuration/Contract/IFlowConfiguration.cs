@@ -1,4 +1,6 @@
-﻿namespace Flow.Infrastructure.Configuration.Contract;
+﻿using Flow.Infrastructure.IO.Contract;
+
+namespace Flow.Infrastructure.Configuration.Contract;
 public interface IFlowConfiguration
 {
     public string? ConnectionString { get; }

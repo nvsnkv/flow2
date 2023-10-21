@@ -1,0 +1,23 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+	  <Version>3.0.0</Version>
+	  <AssemblyVersion>3.0.0.0</AssemblyVersion>
+    <Authors>nvsnkv</Authors>
+    <Copyright>© 2023 nvsnkv</Copyright>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Autofac" Version="7.1.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\l1\Flow.Application.Transactions\Flow.Application.Transactions.csproj" />
+    <ProjectReference Include="..\Flow.Infrastructure.Configuration\Flow.Infrastructure.Configuration.csproj" />
+    <ProjectReference Include="..\Flow.Infrastructure.Plugins.Contract\Flow.Infrastructure.Plugins.Contract.csproj" />
+  </ItemGroup>
+
+</Project>

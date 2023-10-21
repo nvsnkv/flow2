@@ -1,6 +1,7 @@
 ﻿using CommandLine;
 using Flow.Hosts.Common.Commands;
 using Flow.Infrastructure.Configuration.Contract;
+using Flow.Infrastructure.IO.Contract;
 using JetBrains.Annotations;
 
 namespace Flow.Hosts.ExchangeRates.Cli.Commands;
@@ -17,6 +18,6 @@ internal class RequestArgs : ArgsBase
     [Option('d', "date", Required = true, HelpText = "As of date.")]
     public DateTime Date { get; [UsedImplicitly] set; }
 
-    [Option("output-format", Required = true, Default = SupportedFormat.CSV, HelpText = "Output format.")]
-    public SupportedFormat Format { get; [UsedImplicitly] set; }
+    [Option("output-format", Required = true, Default = CSV, HelpText = "Output format.")]
+    public SupportedFormat Format { get; [UsedImplicitly] set; } = new(CSV);
 }

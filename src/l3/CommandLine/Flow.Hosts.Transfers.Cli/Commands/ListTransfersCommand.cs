@@ -4,7 +4,8 @@ using Flow.Domain.Transactions;
 using Flow.Domain.Transactions.Transfers;
 using Flow.Hosts.Common.Commands;
 using Flow.Infrastructure.Configuration.Contract;
-using Flow.Infrastructure.IO.Contract;
+using Flow.Infrastructure.IO.Collections;
+using Flow.Infrastructure.IO.Criteria.Contract;
 using JetBrains.Annotations;
 
 namespace Flow.Hosts.Transfers.Cli.Commands;
@@ -13,13 +14,13 @@ namespace Flow.Hosts.Transfers.Cli.Commands;
 internal class ListTransfersCommand : CommandBase
 {
     private readonly IAccountant accountant;
-    private readonly ITransfersWriter writer;
+    private readonly IWriters<Transfer> writers;
     private readonly ITransactionCriteriaParser parser;
 
-    public ListTransfersCommand(IAccountant accountant, ITransfersWriter writer, ITransactionCriteriaParser parser, IFlowConfiguration config) : base(config)
+    public ListTransfersCommand(IAccountant accountant, IWriters<Transfer> writers, ITransactionCriteriaParser parser, IFlowConfiguration config) : base(config)
     {
         this.accountant = accountant;
-        this.writer = writer;
+        this.writers = writers;
         this.parser = parser;
     }
 
@@ -45,11 +46,11 @@ internal class ListTransfersCommand : CommandBase
             }
         }
 
-        var transfers = getTransfersFunc(criteria.Conditions!, ct);
+        var transfers = await getTransfersFunc(criteria.Conditions!, ct).ToListAsync(cancellationToken: ct);
 
         var output = args.Output ?? (args.OpenEditor ? GetFallbackOutputPath(args.Format, "list", "transactions") : null);
         await using var streamWriter = CreateWriter(output);
-        await writer.WriteTransfers(streamWriter, transfers, args.Format, ct);
+        await writers.GetFor(args.Format).Write(streamWriter, transfers, ct);
 
         if (args.OpenEditor)
         {

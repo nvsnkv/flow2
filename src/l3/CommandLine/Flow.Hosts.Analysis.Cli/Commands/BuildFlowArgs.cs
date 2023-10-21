@@ -1,6 +1,7 @@
 ﻿using CommandLine;
 using Flow.Hosts.Common.Commands;
 using Flow.Infrastructure.Configuration.Contract;
+using Flow.Infrastructure.IO.Contract;
 using JetBrains.Annotations;
 
 namespace Flow.Hosts.Analysis.Cli.Commands;
@@ -9,7 +10,7 @@ namespace Flow.Hosts.Analysis.Cli.Commands;
 internal class BuildFlowArgs : ArgsBase
 {
     private string? output;
-    private SupportedFormat format;
+    private SupportedFormat format = new(ArgsBase.CSV);
 
     [Option('f', "from", Required = true, HelpText = "Left boundary of date range to aggregate. Transactions with date greater or equal to this value will be included to aggregation.")]
     public DateTime From { get; [UsedImplicitly] set; }
@@ -20,7 +21,7 @@ internal class BuildFlowArgs : ArgsBase
     [Option('c', "currency", Required = true, HelpText = "Target currency. Transactions in different currency will be converted to target currency for proper aggregation.")]
     public string Currency { get; [UsedImplicitly] set; } = null!;
 
-    [Option("output-format", Default = SupportedFormat.CSV, HelpText = "Output format. If output-file is set, output format will be defined by extension of output-file and this option will be ignored.")]
+    [Option("output-format", Default = "CSV", HelpText = "Output format. If output-file is set, output format will be defined by extension of output-file and this option will be ignored.")]
     public SupportedFormat Format
     {
         get => format;

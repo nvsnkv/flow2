@@ -5,10 +5,10 @@
     <TargetFramework>net7.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-	<Version>3.1.2</Version>
-	<AssemblyVersion>3.0.0.0</AssemblyVersion>
-	<Authors>nvsnkv</Authors>
-	<Copyright>© 2021 nvsnkv</Copyright>
+	  <Version>5.0.0</Version>
+	  <AssemblyVersion>5.0.0.0</AssemblyVersion>
+	  <Authors>nvsnkv</Authors>
+	  <Copyright>© 2021 nvsnkv</Copyright>
     <AssemblyName>flow-tx</AssemblyName>
   </PropertyGroup>
 
@@ -29,10 +29,11 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\l2\Flow.Infrastructure.Configuration\Flow.Infrastructure.Configuration.csproj" />
-    <ProjectReference Include="..\..\..\l2\Flow.Infrastructure.IO\Flow.Infrastructure.IO.csproj" />
-    <ProjectReference Include="..\..\..\l2\Flow.Infrastructure.Plugins.Transactions.Loader\Flow.Infrastructure.Plugins.Transactions.Loader.csproj" />
+    <ProjectReference Include="..\..\..\l2\Flow.Infrastructure.Plugins.Loader\Flow.Infrastructure.Plugins.Loader.csproj" />
     <ProjectReference Include="..\..\..\l2\Flow.Infrastructure.Rates.CBRF\Flow.Infrastructure.Rates.CBRF.csproj" />
     <ProjectReference Include="..\..\..\l2\Flow.Infrastructure.Storage\Flow.Infrastructure.Storage.csproj" />
+    <ProjectReference Include="..\..\..\l2\IO\Flow.Infrastructure.IO.Criteria\Flow.Infrastructure.IO.Criteria.csproj" />
+    <ProjectReference Include="..\..\..\l2\IO\Flow.Infrastructure.IO\Flow.Infrastructure.IO.csproj" />
     <ProjectReference Include="..\Flow.Hosts.Common\Flow.Hosts.Common.csproj" />
   </ItemGroup>
 

@@ -1,4 +1,5 @@
 ﻿using System.Linq.Expressions;
+using Flow.Application.Transactions.Contract;
 using Flow.Application.Transactions.Infrastructure;
 using Flow.Domain.Transactions;
 using Flow.Infrastructure.Storage.Model;
@@ -14,7 +15,7 @@ internal class TransactionStorage : ITransactionsStorage
         this.factory = factory;
     }
 
-    public async Task<IEnumerable<RejectedTransaction>> Create(IEnumerable<(Transaction, Overrides?)> transactions, CancellationToken ct)
+    public async Task<IEnumerable<RejectedTransaction>> Create(IEnumerable<IncomingTransaction> transactions, CancellationToken ct)
     {
         await using var context = await factory.CreateDbContextAsync(ct);
         foreach (var t in transactions)
@@ -67,7 +68,7 @@ internal class TransactionStorage : ITransactionsStorage
                     target.DbAccount.Transactions.Remove(target);
                     if (target.DbAccount != upd.Account)
                     {
-                        await AddTransaction((upd, upd.Overrides), context, ct);
+                        await AddTransaction(new(upd, upd.Overrides), context, ct);
                     }
                     else
                     {
@@ -96,7 +97,7 @@ internal class TransactionStorage : ITransactionsStorage
         return await context.SaveChangesAsync(ct);
     }
 
-    private static async Task AddTransaction((Transaction, Overrides?) pair, FlowDbContext context, CancellationToken ct)
+    private static async Task AddTransaction(IncomingTransaction pair, FlowDbContext context, CancellationToken ct)
     {
         var (t, o) = pair;
         var account = await GetAccount(context, t.Account, ct);

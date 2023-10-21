@@ -4,8 +4,8 @@
     <TargetFramework>net7.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <Version>3.1.4</Version>
-	<AssemblyVersion>3.0.0.0</AssemblyVersion>
+    <Version>4.0.0</Version>
+	<AssemblyVersion>4.0.0.0</AssemblyVersion>
     <Authors>nvsnkv</Authors>
 	<Copyright>© 2021 nvsnkv</Copyright>
   </PropertyGroup>
@@ -16,6 +16,10 @@
     <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="7.0.4" />
     <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="7.0.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="7.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\IO\Flow.Infrastructure.IO.Contract\Flow.Infrastructure.IO.Contract.csproj" />
   </ItemGroup>
 
 </Project>
