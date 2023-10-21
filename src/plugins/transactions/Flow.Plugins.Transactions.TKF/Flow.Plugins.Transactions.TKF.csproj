@@ -11,8 +11,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Flow.Application.Transactions.Contract" Version="1.0.0" />
-    <PackageReference Include="Flow.Infrastructure.Plugins.Contract" Version="3.0.0" />
+    <PackageReference Include="Flow.Application.Transactions.Contract" Version="1.0.1" />
+    <PackageReference Include="Flow.Infrastructure.Plugins.Contract" Version="3.1.0" />
   </ItemGroup>
 
 </Project>

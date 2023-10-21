@@ -1,6 +1,6 @@
 namespace Flow.Infrastructure.Plugins.Contract;
 
-public interface IPluginsBootstrapper<out T> where T : IPlugin
+public interface IPluginsBootstrapper
 {
-    IEnumerable<T> GetPlugins();
+    IEnumerable<IPlugin> GetPlugins();
 }
