@@ -33,10 +33,10 @@ jobs:
       working-directory: ./build/_scripts
     - name: Build transfer detection plugin
       run: dotnet build
-      working-directory: /src/plugins/transactions/Flow.Plugins.Transactions.TKF
+      working-directory: ./src/plugins/transactions/Flow.Plugins.Transactions.TKF
     - name: Build transactions reader plugin
       run: dotnet build
-      working-directory: /src/plugins/transactions/Flow.Plugins.Transactions.FlexibleTransactionsReader
+      working-directory: ./src/plugins/transactions/Flow.Plugins.Transactions.FlexibleTransactionsReader
     - name: Test transactions reader plugin
       run: dotnet test  --no-build --verbosity normal
-      working-directory: /src/plugins/transactions/Flow.Plugins.Transactions.FlexibleTransactionsReader
+      working-directory: ./src/plugins/transactions/Flow.Plugins.Transactions.FlexibleTransactionsReader
