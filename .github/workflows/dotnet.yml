@@ -26,3 +26,16 @@ jobs:
     - name: Test
       run: dotnet test --no-build --verbosity normal
       working-directory: ./src
+    - name: Build plugin dependencies
+      shell: pwsh
+      run: ./build/_scripts/flow.plugin-deps.ps1
+      working-directory: ./build/_scripts
+    - name: Build transfer detection plugin
+      run: dotnet build
+      working-directory: /src/plugins/transactions/Flow.Plugins.Transactions.TKF
+    - name: Build transactions reader plugin
+      run: dotnet build
+      working-directory: /src/plugins/transactions/Flow.Plugins.Transactions.FlexibleTransactionsReader
+    - name: Test transactions reader plugin
+      run: dotnet test  --no-build --verbosity normal
+      working-directory: /src/plugins/transactions/Flow.Plugins.Transactions.FlexibleTransactionsReader
