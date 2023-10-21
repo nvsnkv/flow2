@@ -7,10 +7,10 @@ using Microsoft.Extensions.Configuration;
 [assembly:InternalsVisibleTo("Flow.Plugins.Transactions.FlexibleTransactionsReader.Tests")]
 namespace Flow.Plugins.Transactions.FlexibleTransactionsReader;
 
-public sealed class Bootstrapper : IPluginsBootstrapper<IFlexibleTransactionsReader>
+public sealed class Bootstrapper : IPluginsBootstrapper
 {
     private readonly string _configFilePath;
-    public static readonly string ConfigurationFilePath = "mappings.json";
+    private static readonly string ConfigurationFilePath = "mappings.json";
 
     public Bootstrapper() : this(ConfigurationFilePath)
     {
@@ -21,7 +21,7 @@ public sealed class Bootstrapper : IPluginsBootstrapper<IFlexibleTransactionsRea
         _configFilePath = configFilePath;
     }
 
-    public IEnumerable<IFlexibleTransactionsReader> GetPlugins()
+    public IEnumerable<IPlugin> GetPlugins()
     {
         var configuration = new ConfigurationBuilder()
             .AddJsonFile(_configFilePath)

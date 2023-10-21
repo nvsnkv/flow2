@@ -1,6 +1,7 @@
 ﻿using System.Globalization;
 using CsvHelper;
 using CsvHelper.Configuration;
+using Flow.Application.Transactions.Contract;
 using Flow.Domain.Transactions;
 using Flow.Infrastructure.IO.Contract;
 using Flow.Plugins.Transactions.FlexibleTransactionsReader.Settings;
@@ -28,7 +29,7 @@ internal sealed class FlexibleTransactionsReader : IFlexibleTransactionsReader
             .Select(row =>
             {
                 var (t, r) = (InputDataRow)row!;
-                return (t, r);
+                return new IncomingTransaction(t, r);
             })
             .ToListAsync(ct);
     }

@@ -7,9 +7,9 @@ using Flow.Infrastructure.Plugins.Contract;
 namespace Flow.Plugins.Transactions.TKF;
 
 [SuppressMessage("ReSharper", "UnusedType.Global")]
-public sealed class Bootstrapper : IPluginsBootstrapper<TransfersDetector>
+public sealed class Bootstrapper : IPluginsBootstrapper
 {
-    public IEnumerable<TransfersDetector> GetPlugins()
+    public IEnumerable<IPlugin> GetPlugins()
     {
         yield return new TransfersDetector();
     }

@@ -10,14 +10,15 @@ public class FlexibleTransactionReaderShould
     {
         var expectedFormat = "valid-format"; // from JSON
         var bootstrapper = new Bootstrapper("./TestData/TestData_Valid_ExtraColumns.json");
-        var reader = bootstrapper.GetPlugins().Single();
+        var reader = bootstrapper.GetPlugins().Single() as IFlexibleTransactionsReader;
 
         using var streamReader = new StreamReader(File.OpenRead("./TestData/TestData_Valid_ExtraColumns.csv"));
 
+        reader.Should().NotBeNull();
         reader.Format.Name.Should().Be(expectedFormat);
 
         var transactions = await reader.Read(streamReader, CancellationToken.None);
-        transactions.Select(p => p.Item1).Should().BeEquivalentTo(TestData_Valid_ExtraColumns_Transactions);
+        transactions.Select(p => p.Transaction).Should().BeEquivalentTo(TestData_Valid_ExtraColumns_Transactions);
     }
 
     private static readonly Transaction[] TestData_Valid_ExtraColumns_Transactions =
