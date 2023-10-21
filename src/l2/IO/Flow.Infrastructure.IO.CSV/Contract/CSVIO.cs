@@ -2,6 +2,7 @@
 using System.Runtime.CompilerServices;
 using Autofac;
 using CsvHelper.Configuration;
+using Flow.Application.Transactions.Contract;
 using Flow.Domain.Transactions;
 using Flow.Infrastructure.Configuration.Contract;
 using Flow.Infrastructure.IO.Contract;
@@ -14,7 +15,8 @@ namespace Flow.Infrastructure.IO.CSV.Contract;
 
 public sealed class CSVIO : Module
 {
-    public static readonly SupportedFormat SupportedFormat = new("CSV");
+    public const string SupportedFormatName = "CSV";
+    public static readonly SupportedFormat SupportedFormat = new(SupportedFormatName);
 
     private readonly CultureInfo culture;
 
@@ -27,7 +29,7 @@ public sealed class CSVIO : Module
     {
         builder.RegisterInstance(new CsvConfiguration(culture) { HeaderValidated = null });
 
-        builder.RegisterType<TransactionsReader>().As<IFormatSpecificReader<(Transaction, Overrides?)>>();
+        builder.RegisterType<TransactionsReader>().AsImplementedInterfaces();
         builder.RegisterType<TransactionsWriter>().AsImplementedInterfaces();
         builder.RegisterType<RejectedTransactionsWriter>().AsImplementedInterfaces();
 
@@ -35,7 +37,7 @@ public sealed class CSVIO : Module
         builder.RegisterType<RecordedTransactionsWriter>().AsImplementedInterfaces();
 
         builder.RegisterType<TransferKeyReader>().AsImplementedInterfaces();
-        builder.RegisterType<TransfersWriter>().AsImplementedInterfaces();
+        builder.RegisterType<TransfersKeyWriter>().AsImplementedInterfaces();
         builder.RegisterType<RejectedTransfersWriter>().AsImplementedInterfaces();
 
         builder.RegisterType<ExchangeRatesReader>().AsImplementedInterfaces();

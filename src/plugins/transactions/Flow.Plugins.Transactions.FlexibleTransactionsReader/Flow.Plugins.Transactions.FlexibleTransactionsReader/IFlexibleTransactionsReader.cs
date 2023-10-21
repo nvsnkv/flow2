@@ -4,4 +4,4 @@ using Flow.Infrastructure.Plugins.Contract;
 
 namespace Flow.Plugins.Transactions.FlexibleTransactionsReader;
 
-public interface IFlexibleTransactionsReader : IPlugin, IFormatSpecificReader<(Transaction, Overrides?)> { }
+public interface IFlexibleTransactionsReader : IPlugin, IFormatSpecificReader<IncomingTransaction> { }

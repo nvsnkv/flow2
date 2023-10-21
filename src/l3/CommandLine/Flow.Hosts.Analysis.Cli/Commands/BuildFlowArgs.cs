@@ -10,7 +10,7 @@ namespace Flow.Hosts.Analysis.Cli.Commands;
 internal class BuildFlowArgs : ArgsBase
 {
     private string? output;
-    private SupportedFormat format = new("csv");
+    private SupportedFormat format = new(ArgsBase.CSV);
 
     [Option('f', "from", Required = true, HelpText = "Left boundary of date range to aggregate. Transactions with date greater or equal to this value will be included to aggregation.")]
     public DateTime From { get; [UsedImplicitly] set; }

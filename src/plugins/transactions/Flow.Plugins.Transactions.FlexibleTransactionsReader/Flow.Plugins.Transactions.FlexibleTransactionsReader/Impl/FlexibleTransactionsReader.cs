@@ -18,7 +18,7 @@ internal sealed class FlexibleTransactionsReader : IFlexibleTransactionsReader
         map = new InputDataRowClassMap(rules);
     }
 
-    public async Task<IEnumerable<(Transaction, Overrides?)>> Read(StreamReader reader, CancellationToken ct)
+    public async Task<IEnumerable<IncomingTransaction>> Read(StreamReader reader, CancellationToken ct)
     {
         using var csvReader = new CsvReader(reader, new CsvConfiguration(culture));
         csvReader.Context.RegisterClassMap(map);

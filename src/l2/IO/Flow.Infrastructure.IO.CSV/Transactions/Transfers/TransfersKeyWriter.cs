@@ -5,11 +5,11 @@ using Flow.Infrastructure.IO.Contract;
 
 namespace Flow.Infrastructure.IO.CSV.Transactions.Transfers;
 
-internal class TransfersWriter : CsvWriter<TransferKey, TransferKeyRow, TransferRowMap>, IFormatSpecificWriter<Transfer>
+internal class TransfersKeyWriter : CsvWriter<TransferKey, TransferKeyRow, TransferRowMap>, IFormatSpecificWriter<Transfer>
 {
     private readonly CsvConfiguration config;
 
-    public TransfersWriter(CsvConfiguration config) : base(config, k => (TransferKeyRow)k)
+    public TransfersKeyWriter(CsvConfiguration config) : base(config, k => (TransferKeyRow)k)
     {
         this.config = config;
     }
