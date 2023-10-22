@@ -22,7 +22,7 @@ bool shouldExit = false;
 
 Task<int> Process(IReadOnlyCollection<string> arguments)
 {
-    var result = parser.ParseArguments<CoreCommand, TxCommand, XfersCommand, RatesCommand, BundleCommand, ExitCommand>(arguments);
+    var result = parser.ParseArguments<CoreCommand, TxCommand, XfersCommand, RatesCommand, BundleCommand, ExitCommand, ImportCommand>(arguments);
     return result.MapResult(
         async (CoreCommand _) => await executor.Execute("flow-core", arguments.Skip(1)),
         async (TxCommand _) => await executor.Execute("flow-tx", arguments.Skip(1)),
@@ -30,6 +30,7 @@ Task<int> Process(IReadOnlyCollection<string> arguments)
         async (RatesCommand _) => await executor.Execute("flow-rates", arguments.Skip(1)),
         async (BundleCommand _) => await executor.Execute("flow-bundle", arguments.Skip(1)),
         (ExitCommand _) => { shouldExit = true; return Task.FromResult(0); },
+        async (ImportCommand _) => await executor.Execute("flow-import", arguments.Skip(1)),
         async errs => await ParserHelper.HandleUnparsed(errs, result)
     );
 

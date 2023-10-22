@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>net7.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <AssemblyName>flow-import</AssemblyName>
+        <PackageId>flow-import</PackageId>
+        <Authors>nvsnkv</Authors>
+        <Copyright>© 2023 nvsnkv</Copyright>
+        <AssemblyVersion>1.0.0.0</AssemblyVersion>
+        <FileVersion>1.0.0.0</FileVersion>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\..\l2\Flow.Infrastructure.Plugins.Loader\Flow.Infrastructure.Plugins.Loader.csproj" />
+      <ProjectReference Include="..\..\..\l2\Flow.Infrastructure.Rates.CBRF\Flow.Infrastructure.Rates.CBRF.csproj" />
+      <ProjectReference Include="..\..\..\l2\Flow.Infrastructure.Storage\Flow.Infrastructure.Storage.csproj" />
+      <ProjectReference Include="..\..\..\l2\IO\Flow.Infrastructure.IO\Flow.Infrastructure.IO.csproj" />
+      <ProjectReference Include="..\Flow.Hosts.Common\Flow.Hosts.Common.csproj" />
+    </ItemGroup>
+
+</Project>
