@@ -27,7 +27,7 @@
     <ProjectReference Include="..\Flow.Hosts.ExchangeRates.Cli\Flow.Hosts.ExchangeRates.Cli.csproj">
       <Private>True</Private>
     </ProjectReference>
-    <ProjectReference Include="..\Flow.Hosts.Import.Cli\Flow.Hosts.Import.Cli.csproj" />
+    <ProjectReference Include="..\Flow.Hosts.Transactions.Import.Cli\Flow.Hosts.Transactions.Import.Cli.csproj" />
     <ProjectReference Include="..\Flow.Hosts.Transactions.Cli\Flow.Hosts.Transactions.Cli.csproj">
       <Private>True</Private>
     </ProjectReference>

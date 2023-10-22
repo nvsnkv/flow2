@@ -4,7 +4,7 @@ using CommandLine;
 using Flow.Application.ExchangeRates.Contract;
 using Flow.Application.Transactions.Contract;
 using Flow.Hosts.Common;
-using Flow.Hosts.Import.Cli.Commands;
+using Flow.Hosts.Transactions.Import.Cli.Commands;
 using Flow.Infrastructure.Configuration.Contract;
 using Flow.Infrastructure.IO.Contract;
 using Flow.Infrastructure.Plugins.Loader;

@@ -1,4 +1,4 @@
-namespace Flow.Hosts.Import.Cli.Commands;
+namespace Flow.Hosts.Transactions.Import.Cli.Commands;
 
 internal class ImportCommandsHandler
 {

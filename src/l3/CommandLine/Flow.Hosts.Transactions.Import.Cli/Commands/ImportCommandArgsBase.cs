@@ -2,7 +2,7 @@ using CommandLine;
 using Flow.Hosts.Common.Commands;
 using JetBrains.Annotations;
 
-namespace Flow.Hosts.Import.Cli.Commands;
+namespace Flow.Hosts.Transactions.Import.Cli.Commands;
 
 internal abstract class ImportCommandArgsBase : ArgsBase
 {
