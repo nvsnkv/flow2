@@ -12,7 +12,7 @@ internal class ListArgs : ArgsBase
 {
     private string? output;
 
-    [Option('f', "output-format", Default = CSV,
+    [Option('f', "output-format",Required = false,
         HelpText = "Output format. If output-file is set, output format will be defined by extension of output-file and this option will be ignored.")]
     public SupportedFormat Format { get; [UsedImplicitly] set; } = new(CSV);
 

@@ -18,6 +18,6 @@ internal class RequestArgs : ArgsBase
     [Option('d', "date", Required = true, HelpText = "As of date.")]
     public DateTime Date { get; [UsedImplicitly] set; }
 
-    [Option("output-format", Required = true, Default = CSV, HelpText = "Output format.")]
+    [Option("output-format", Required = false, HelpText = "Output format.")]
     public SupportedFormat Format { get; [UsedImplicitly] set; } = new(CSV);
 }

@@ -23,7 +23,7 @@ public class ImportContextShould
     }
 
     [Fact, UnitTest]
-    public async Task ListenTransactionRecordedEvents()
+    public void ListenTransactionRecordedEvents()
     {
         var importContext = new ImportContext(notifier);
 
@@ -36,7 +36,7 @@ public class ImportContextShould
 
 
     [Fact, UnitTest]
-    public async Task ProvideRecordedTransactionKeys()
+    public void ProvideRecordedTransactionKeys()
     {
         var expectedKeys = new long[] { 50, 52, 33, 1 };
 

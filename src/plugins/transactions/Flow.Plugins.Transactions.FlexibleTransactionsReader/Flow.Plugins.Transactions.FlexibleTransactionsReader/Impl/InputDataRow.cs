@@ -1,4 +1,5 @@
-﻿using Flow.Domain.Transactions;
+﻿using System;
+using Flow.Domain.Transactions;
 
 namespace Flow.Plugins.Transactions.FlexibleTransactionsReader.Impl;
 

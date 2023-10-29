@@ -12,10 +12,10 @@ internal sealed class PluginLoadContext : AssemblyLoadContext
         resolver = new AssemblyDependencyResolver(pluginPath);
     }
 
-    protected override Assembly? Load(AssemblyName assemblyName)
+    protected override Assembly Load(AssemblyName assemblyName)
     {
         var assemblyPath = resolver.ResolveAssemblyToPath(assemblyName);
-        return assemblyPath != null ? LoadFromAssemblyPath(assemblyPath) : null;
+        return assemblyPath != null ? LoadFromAssemblyPath(assemblyPath) : Default.LoadFromAssemblyName(assemblyName);
     }
 
     protected override nint LoadUnmanagedDll(string unmanagedDllName)
