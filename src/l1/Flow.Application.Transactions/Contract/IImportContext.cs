@@ -5,12 +5,9 @@ namespace Flow.Application.Transactions.Contract;
 
 public interface IImportContext : IAsyncDisposable
 {
+    IEnumerable<long> RecordedTransactionKeys { get; }
+
     int RecordedTransactionsCount { get; }
 
-    Expression<Func<RecordedTransaction, bool>> ImportedTransactionsCriteria { get; }
-
-    Task Complete(CancellationToken ct);
-
-    Task Abort(CancellationToken ct);
-
+    Expression<Func<RecordedTransaction, bool>> Criteria { get; }
 }

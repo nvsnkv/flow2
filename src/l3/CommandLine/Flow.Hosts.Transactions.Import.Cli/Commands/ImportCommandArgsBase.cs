@@ -6,9 +6,6 @@ namespace Flow.Hosts.Transactions.Import.Cli.Commands;
 
 internal abstract class ImportCommandArgsBase : ArgsBase
 {
-    [Option('d', "working-directory", HelpText = "Working directory")]
+    [Option('d', "working-directory", Required = false, HelpText = "Working directory. Default is current directory")]
     public string WorkingDirectory { get; [UsedImplicitly] set; } = Environment.CurrentDirectory;
-
-    [Option('v', "verbose", Default = false, HelpText = "Verbose output")]
-    public bool Verbose { get; [UsedImplicitly] set; }
 }
