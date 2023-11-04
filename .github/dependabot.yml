@@ -15,8 +15,3 @@ updates:
     schedule:
       interval: "weekly"
       day: "saturday"
-  - package-ecosystem: "nuget" # See documentation for possible values
-    directory: "/src/plugins/transactions/Flow.Plugins.Transactions.FlexibleTransactionsReader" # Location of package manifests
-    schedule:
-      interval: "weekly"
-      day: "saturday"
