@@ -1,4 +1,6 @@
-﻿using System.Globalization;
+﻿using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using Flow.Infrastructure.Plugins.Contract;
 using Flow.Plugins.Transactions.FlexibleTransactionsReader.Settings;

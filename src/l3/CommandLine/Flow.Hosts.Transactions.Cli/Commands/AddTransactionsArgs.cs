@@ -22,7 +22,7 @@ internal class AddTransactionsArgs : ArgsBase
         }
     }
 
-    [Option('f', "input-format", Required = false, Default = ArgsBase.CSV,
+    [Option('f', "input-format", Required = false,
         HelpText = "Input format.If input-file is set, input format will be defined by extension of the file and this option will be ignored.")]
     public SupportedFormat Format { get; [UsedImplicitly] set; } = new(ArgsBase.CSV);
 

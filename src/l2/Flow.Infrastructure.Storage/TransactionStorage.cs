@@ -1,12 +1,13 @@
 ﻿using System.Linq.Expressions;
 using Flow.Application.Transactions.Contract;
+using Flow.Application.Transactions.Contract.Events;
 using Flow.Application.Transactions.Infrastructure;
 using Flow.Domain.Transactions;
 using Flow.Infrastructure.Storage.Model;
 using Microsoft.EntityFrameworkCore;
 
 namespace Flow.Infrastructure.Storage;
-internal class TransactionStorage : ITransactionsStorage
+internal sealed class TransactionStorage : ITransactionsStorage, INotifyTransactionRecorded
 {
     private readonly IDbContextFactory<FlowDbContext> factory;
 
@@ -24,6 +25,11 @@ internal class TransactionStorage : ITransactionsStorage
         }
 
         await context.SaveChangesAsync(ct);
+
+        foreach (var key in context.ChangeTracker.Entries<DbTransaction>().Select(t => t.Entity.Key))
+        {
+            RaiseTransactionRecorded(new(key));
+        }
 
         return Enumerable.Empty<RejectedTransaction>();
     }
@@ -47,7 +53,7 @@ internal class TransactionStorage : ITransactionsStorage
         {
             var target = await context.Transactions
                 .Include(t => t.DbAccount)
-                .Include(t => t.DbAccount.Transactions)
+                .Include(t => t.Overrides)
                 .FirstOrDefaultAsync(t => t.Key == upd.Key, ct);
 
             if (target is null)
@@ -97,6 +103,8 @@ internal class TransactionStorage : ITransactionsStorage
         return await context.SaveChangesAsync(ct);
     }
 
+    public event TransactionRecordedEventHandler? TransactionRecorded;
+
     private static async Task AddTransaction(IncomingTransaction pair, FlowDbContext context, CancellationToken ct)
     {
         var (t, o) = pair;
@@ -125,5 +133,10 @@ internal class TransactionStorage : ITransactionsStorage
     private  static async Task<DbAccount?> GetAccount(FlowDbContext context, AccountInfo account, CancellationToken ct)
     {
         return await context.Accounts.Include(a => a.Transactions).SingleOrDefaultAsync(a => a.Name == account.Name && a.Bank == account.Bank, ct);
+    }
+
+    private void RaiseTransactionRecorded(TransactionRecordedEventArgs args)
+    {
+        TransactionRecorded?.Invoke(this, args);
     }
 }

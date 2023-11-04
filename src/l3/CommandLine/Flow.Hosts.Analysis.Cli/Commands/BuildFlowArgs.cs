@@ -21,7 +21,7 @@ internal class BuildFlowArgs : ArgsBase
     [Option('c', "currency", Required = true, HelpText = "Target currency. Transactions in different currency will be converted to target currency for proper aggregation.")]
     public string Currency { get; [UsedImplicitly] set; } = null!;
 
-    [Option("output-format", Default = "CSV", HelpText = "Output format. If output-file is set, output format will be defined by extension of output-file and this option will be ignored.")]
+    [Option("output-format", Required = false, HelpText = "Output format. If output-file is set, output format will be defined by extension of output-file and this option will be ignored.")]
     public SupportedFormat Format
     {
         get => format;
