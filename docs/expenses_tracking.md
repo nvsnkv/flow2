@@ -1,6 +1,8 @@
 ## Expences tracking
 `flow-tx.exe` is the tool that helps to manage information about accounts and transactions.
 ### Transactions management
+
+#### Basic
 Flow allows to capture following information about transactions: Timestamp, Amount, Currency, Category, Title, Account Name, Bank Name.
 Once stored, every transaction receives a unique Key value and user receives an opportunity to provide a Note, and overrides for Title and Category.
 Overrides will replace original values on flow lists.
@@ -49,6 +51,23 @@ If necessary user can enforse a particular transfer by providing a pair of Sourc
 
 Flow comes with the logic that can find potential transfers - usually cross-bank transfer operations gets logged with different titles in source and sink. As a result, system cannot match them automatically.
 `transfers guess` command will provide the list of hypotetical transfers. Output of this command can be used to build the list of transfers to enforce with `transfers enforce`
+
+### Import process
+
+`flow import` commands family allows to spped up import process. You need to put all files with transactions into single folder and run `flow import start` in this folder.
+Then flow will:
+1. Identify file format from file extension (e.g. `.csv`, `.json` or `.my-custom-format.csv` in case you have plugins to read it) and add all transactions from these files to the system in a same way `flow tx add` adds. Rejected transactions will be saved to separate file for each input file.
+2. Find possible duplicates and save them into separate file for further investigation
+3. Find possible transfers and save them into separate file for further investigation
+
+After import you can:
+* edit transactions using `flow import edit`
+* abort import process and remove added transactions using `flow import abort`
+* complete import using `flow import complete`
+
+You can remove duplicates using `flow tx delete` any time. Please note that this action is irreversible, `flow import abort` won't restore removed transactions!
+
+You can enforce transfers using `flow xfers enforce` any time.
 
 ### Exchange Rates
 Where needed, Flow automatically requests exchange rates to perform conversion. Rates that were successfully received from the Central Bank ofr the Russian Federation are getting cached in local storage to speed up subsequent calculations.
