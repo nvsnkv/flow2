@@ -12,15 +12,15 @@ namespace Flow.Hosts.Transactions.Import.Cli.Commands;
 internal class StartCommandHandler : ImportCommandsHandlerBase
 {
     private readonly IAccountant accountant;
-    private readonly IReaders<IncomingTransaction> transactionReaders;
+    private readonly IFileReader fileReader;
     private readonly IWriters<Transfer> transfersWriters;
 
-    public StartCommandHandler(IFlowConfiguration config, IAccountant accountant, FolderBasedTransactionsImporter importer, IReaders<IncomingTransaction> transactionReaders, IWriters<RejectedTransaction> rejectionWriters, IWriters<RecordedTransaction> transactionWriters, IWriters<Transfer> transfersWriters)
+    public StartCommandHandler(IFlowConfiguration config, IAccountant accountant, FolderBasedTransactionsImporter importer, IWriters<RejectedTransaction> rejectionWriters, IWriters<RecordedTransaction> transactionWriters, IWriters<Transfer> transfersWriters, IFileReader fileReader)
         : base(config, importer, rejectionWriters, transactionWriters)
     {
         this.accountant = accountant;
-        this.transactionReaders = transactionReaders;
         this.transfersWriters = transfersWriters;
+        this.fileReader = fileReader;
     }
 
     public async Task<int> Start(StartCommandArgs args, CancellationToken ct)
@@ -35,16 +35,7 @@ internal class StartCommandHandler : ImportCommandsHandlerBase
         await using var context = await Importer.GetContext(ct);
         foreach (var file in Directory.EnumerateFiles(Importer.Workspace))
         {
-            var format = DetectFormat(file);
-            if (!transactionReaders.GetKnownFormats().Contains(format))
-            {
-                await Console.Error.WriteLineAsync($"No reader found for {format}!");
-                return 2;
-            }
-
-            using var streamReader = new StreamReader(File.OpenRead(file));
-
-            var data = await transactionReaders.GetFor(format).Read(streamReader, ct);
+            var data = await fileReader.ReadFromFile(file, ct);
             var rejected = await accountant.CreateTransactions(data, ct);
 
             await WriteRejections($"!rejected.{file}.csv", rejected, ct);
@@ -59,16 +50,6 @@ internal class StartCommandHandler : ImportCommandsHandlerBase
         await WriteTransfers("!transfers.csv", transfers, ct);
 
         return 0;
-    }
-
-    private SupportedFormat DetectFormat(string file)
-    {
-        var parts = file.Split('.');
-        var name = parts.Length > 2
-            ? parts[^2]
-            : parts[^1];
-
-        return new SupportedFormat(name);
     }
 
     private async Task WriteTransfers(string path, IEnumerable<Transfer> transfers, CancellationToken ct)

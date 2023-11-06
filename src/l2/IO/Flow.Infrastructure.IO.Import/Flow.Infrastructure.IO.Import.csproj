@@ -11,10 +11,12 @@
 
     <ItemGroup>
       <ProjectReference Include="..\..\..\l1\Flow.Application.Transactions\Flow.Application.Transactions.csproj" />
+      <ProjectReference Include="..\Flow.Infrastructure.IO\Flow.Infrastructure.IO.csproj" />
     </ItemGroup>
 
     <ItemGroup>
       <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+      <PackageReference Include="System.Text.Encoding" Version="4.3.0" />
     </ItemGroup>
 
 </Project>
