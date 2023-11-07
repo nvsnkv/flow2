@@ -11,6 +11,7 @@
         <Copyright>© 2023 nvsnkv</Copyright>
         <AssemblyVersion>1.0.0.0</AssemblyVersion>
         <FileVersion>1.0.0.0</FileVersion>
+        <Version>1.1.0</Version>
     </PropertyGroup>
 
     <ItemGroup>

@@ -38,7 +38,7 @@ internal class StartCommandHandler : ImportCommandsHandlerBase
             var data = await fileReader.ReadFromFile(file, ct);
             var rejected = await accountant.CreateTransactions(data, ct);
 
-            await WriteRejections($"!rejected.{file}.csv", rejected, ct);
+            await WriteRejections($"!rejected.{Path.GetFileNameWithoutExtension(file)}.csv", rejected, ct);
 
             await Importer.Save(context, ct);
         }

@@ -13,7 +13,7 @@ internal class EditCommandHandler : ImportCommandsHandlerBase
     private readonly IAccountant accountant;
     private readonly IReaders<RecordedTransaction> recordedTransactionReaders;
 
-    protected EditCommandHandler(IFlowConfiguration config, FolderBasedTransactionsImporter importer, IWriters<RejectedTransaction> rejectionWriters, IWriters<RecordedTransaction> transactionWriters, IAccountant accountant, IReaders<RecordedTransaction> recordedTransactionReaders)
+    public EditCommandHandler(IFlowConfiguration config, FolderBasedTransactionsImporter importer, IWriters<RejectedTransaction> rejectionWriters, IWriters<RecordedTransaction> transactionWriters, IAccountant accountant, IReaders<RecordedTransaction> recordedTransactionReaders)
         : base(config, importer, rejectionWriters, transactionWriters)
     {
         this.accountant = accountant;

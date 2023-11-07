@@ -24,9 +24,10 @@ internal sealed class TransactionStorage : ITransactionsStorage, INotifyTransact
             await AddTransaction(t, context, ct);
         }
 
+        var added = context.ChangeTracker.Entries<DbTransaction>().Where(e => e.State == EntityState.Added).ToList();
         await context.SaveChangesAsync(ct);
 
-        foreach (var key in context.ChangeTracker.Entries<DbTransaction>().Select(t => t.Entity.Key))
+        foreach (var key in added.Select(t => t.Entity.Key))
         {
             RaiseTransactionRecorded(new(key));
         }

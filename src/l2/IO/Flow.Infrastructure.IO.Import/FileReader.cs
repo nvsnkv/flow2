@@ -18,7 +18,8 @@ class FileReader : IFileReader
 
     public async Task<IEnumerable<IncomingTransaction>> ReadFromFile(string path, CancellationToken ct)
     {
-        var parts = path.Split('.').Reverse().Skip(1).ToList();
+        var fileName = Path.GetFileName(path);
+        var parts = fileName.Split('.').Reverse().Skip(1).ToList();
         var encoding = Encoding.UTF8;
         var format = CSVIO.SupportedFormatName;
 
