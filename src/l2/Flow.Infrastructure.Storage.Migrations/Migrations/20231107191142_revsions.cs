@@ -15,6 +15,7 @@ namespace Flow.Infrastructure.Storage.Migrations.Migrations
                 table: "Transactions",
                 type: "text",
                 nullable: true);
+            migrationBuilder.Sql("update \"Transactions\" set \"Revision\" = md5(random()::text)");
         }
 
         /// <inheritdoc />
