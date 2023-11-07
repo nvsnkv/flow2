@@ -5,15 +5,15 @@ namespace Flow.Infrastructure.Storage.Model;
 // ReSharper disable once ClassWithVirtualMembersNeverInherited.Global
 internal class DbTransaction : RecordedTransaction
 {
-    public DbTransaction(long key, DateTime timestamp, decimal amount, string currency, string? category, string title) : this(key, timestamp, amount, currency, category, title, DbAccount.Invalid)
+    public DbTransaction(long key, DateTime timestamp, decimal amount, string currency, string? category, string title, string revision) : this(key, timestamp, amount, currency, category, title, DbAccount.Invalid, revision)
     {
     }
 
-    public DbTransaction(DateTime timestamp, decimal amount, string currency, string? category, string title, DbAccount account) : this(0, timestamp, amount, currency, category, title, account)
+    public DbTransaction(DateTime timestamp, decimal amount, string currency, string? category, string title, DbAccount account, string revision) : this(0, timestamp, amount, currency, category, title, account, revision)
     {
     }
 
-    public DbTransaction(long key, DateTime timestamp, decimal amount, string currency, string? category, string title, DbAccount account) : base(key, DateTime.SpecifyKind(timestamp, DateTimeKind.Utc), amount, currency, category, title, account)
+    public DbTransaction(long key, DateTime timestamp, decimal amount, string currency, string? category, string title, DbAccount account, string revision) : base(key, DateTime.SpecifyKind(timestamp, DateTimeKind.Utc), amount, currency, category, title, account, revision)
     {
     }
 

@@ -14,7 +14,7 @@ public class RecordedTransactionValidationRulesShould
     [InlineData("Category")]
     public void AcceptValidTransaction(string? category)
     {
-        RecordedTransactionValidationRules.CheckRecordedTransaction(new RecordedTransaction(1, DateTime.UtcNow, -10, "EUR", category, "Title", new AccountInfo("name", "bank"))).Should().BeTrue();
+        RecordedTransactionValidationRules.CheckRecordedTransaction(new RecordedTransaction(1, DateTime.UtcNow, -10, "EUR", category, "Title", new AccountInfo("name", "bank"), string.Empty)).Should().BeTrue();
     }
 
     [Theory, UnitTest]
@@ -27,18 +27,18 @@ public class RecordedTransactionValidationRulesShould
     public void RejectInvalidTransactionWhenTransactionRecordIsInvalid(string? timestamp, decimal amount, string currency, string? category, string title)
     {
         var ts = timestamp == null ? default : DateTime.Parse(timestamp);
-        RecordedTransactionValidationRules.CheckRecordedTransaction(new RecordedTransaction(1, ts, -amount, currency, category, title, new AccountInfo("name", "bank"))).Should().BeFalse();
+        RecordedTransactionValidationRules.CheckRecordedTransaction(new RecordedTransaction(1, ts, -amount, currency, category, title, new AccountInfo("name", "bank"), string.Empty)).Should().BeFalse();
     }
 
     [Fact, UnitTest]
     public void RejectInvalidTransactionWhenAccountInfoIsInvalid()
     {
-        RecordedTransactionValidationRules.CheckRecordedTransaction(new RecordedTransaction(1, DateTime.UtcNow, -10, "EUR", null, "Title", new AccountInfo("name", ""))).Should().BeFalse();
+        RecordedTransactionValidationRules.CheckRecordedTransaction(new RecordedTransaction(1, DateTime.UtcNow, -10, "EUR", null, "Title", new AccountInfo("name", ""), string.Empty)).Should().BeFalse();
     }
 
     [Fact, UnitTest]
     public void RejectInvalidTransactionWhenKeyIsInvalid()
     {
-        RecordedTransactionValidationRules.CheckRecordedTransaction(new RecordedTransaction(default, DateTime.UtcNow, -10, "EUR", null, "Title", new AccountInfo("name", "bank"))).Should().BeFalse();
+        RecordedTransactionValidationRules.CheckRecordedTransaction(new RecordedTransaction(default, DateTime.UtcNow, -10, "EUR", null, "Title", new AccountInfo("name", "bank"), string.Empty)).Should().BeFalse();
     }
 }

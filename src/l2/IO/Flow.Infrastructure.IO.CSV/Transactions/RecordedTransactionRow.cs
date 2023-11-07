@@ -9,10 +9,12 @@ internal class RecordedTransactionRow : TransactionRow
 {
     public long? KEY { get; init; }
 
+    public string? REVISION { get; init; }
+
     public static explicit operator RecordedTransaction(RecordedTransactionRow row)
     {
         var (transaction, overrides) = row;
-        return new RecordedTransaction(row.KEY ?? default, transaction)
+        return new RecordedTransaction(row.KEY ?? default, transaction, row.REVISION ?? string.Empty)
         {
             Overrides = overrides
         };
@@ -32,7 +34,8 @@ internal class RecordedTransactionRow : TransactionRow
             KEY = t.Key,
             CATEGORY_OVERRIDE = t.Overrides?.Category,
             TITLE_OVERRIDE = t.Overrides?.Title,
-            COMMENT = t.Overrides?.Comment
+            COMMENT = t.Overrides?.Comment,
+            REVISION = t.Revision
         };
     }
 }

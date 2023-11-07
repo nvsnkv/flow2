@@ -19,5 +19,6 @@ internal sealed class RecordedTransactionRowMap : ClassMap<RecordedTransactionRo
         Map(m => m.COMMENT).Index(8);
         Map(m => m.CATEGORY_OVERRIDE).Index(9);
         Map(m => m.TITLE_OVERRIDE).Index(10);
+        Map(m => m.REVISION).Index(11);
     }
 }
