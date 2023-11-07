@@ -4,13 +4,13 @@ namespace Flow.Domain.Transactions;
 
 public class RecordedTransaction: Transaction
 {
-    public RecordedTransaction(long key, DateTime timestamp, decimal amount, string currency, string? category, string title, AccountInfo account, string revision) : base(timestamp, amount, currency, category, title, account)
+    public RecordedTransaction(long key, DateTime timestamp, decimal amount, string currency, string? category, string title, AccountInfo account, string? revision) : base(timestamp, amount, currency, category, title, account)
     {
         Key = key;
         Revision = revision;
     }
 
-    public RecordedTransaction(long key, Transaction t, string revision) : base(t)
+    public RecordedTransaction(long key, Transaction t, string? revision) : base(t)
     {
         Key = key;
         Revision = revision;
@@ -18,7 +18,7 @@ public class RecordedTransaction: Transaction
 
     public long Key { get; }
 
-    public string Revision { get; }
+    public string? Revision { get; }
 
     public Overrides? Overrides { get; set; }
 

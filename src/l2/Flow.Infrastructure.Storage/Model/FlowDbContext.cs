@@ -42,6 +42,7 @@ internal class FlowDbContext : DbContext
             tb.Property(t => t.Currency).IsRequired();
             tb.Property(t => t.Category);
             tb.Property(t => t.Title).IsRequired();
+            tb.Property(t => t.Revision);
             tb.HasKey(t => t.Key);
 
             tb.OwnsOne(t => t.Overrides, ob =>

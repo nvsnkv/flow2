@@ -17,7 +17,7 @@ namespace Flow.Infrastructure.Storage.Migrations.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.0")
+                .HasAnnotation("ProductVersion", "7.0.13")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -79,6 +79,9 @@ namespace Flow.Infrastructure.Storage.Migrations.Migrations
 
                     b.Property<string>("DbAccountName")
                         .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Revision")
                         .HasColumnType("text");
 
                     b.Property<DateTime>("Timestamp")
