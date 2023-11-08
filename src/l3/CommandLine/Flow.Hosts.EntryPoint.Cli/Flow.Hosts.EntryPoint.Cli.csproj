@@ -6,9 +6,9 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <AssemblyName>flow</AssemblyName>
-    <Version>5.1.0</Version>
-    <AssemblyVersion>5.0.0.0</AssemblyVersion>
   </PropertyGroup>
+
+  <Import Project="..\Flow.Hosts.Common\version.props"/>
 
   <ItemGroup>
     <PackageReference Include="JetBrains.Annotations" Version="2023.2.0" />
