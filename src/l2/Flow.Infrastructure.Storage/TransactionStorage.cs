@@ -42,7 +42,8 @@ internal sealed class TransactionStorage : ITransactionsStorage, INotifyTransact
             .Include(t => t.DbAccount)
             .Include(t => t.Overrides)
             .Where(conditions)
-            .Cast<RecordedTransaction>()
+            .Select(d =>
+                new RecordedTransaction(d.Key, d.Timestamp, d.Amount, d.Currency, d.Category, d.Title, new(d.Account.Name, d.Account.Bank), d.Revision))
             .ToListAsync(ct);
     }
 
