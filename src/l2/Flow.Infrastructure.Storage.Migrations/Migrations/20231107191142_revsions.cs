@@ -4,8 +4,10 @@
 
 namespace Flow.Infrastructure.Storage.Migrations.Migrations
 {
+#pragma warning disable CS8981
     /// <inheritdoc />
     public partial class revsions : Migration
+#pragma warning restore CS8981
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

@@ -11,9 +11,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace Flow.Infrastructure.Storage.Migrations.Migrations
 {
+#pragma warning disable CS8981
     [DbContext(typeof(FlowDbContext))]
     [Migration("20231107191142_revsions")]
     partial class revsions
+#pragma warning restore CS8981
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
