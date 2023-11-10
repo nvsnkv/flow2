@@ -43,7 +43,10 @@ internal sealed class TransactionStorage : ITransactionsStorage, INotifyTransact
             .Include(t => t.Overrides)
             .Where(conditions)
             .Select(d =>
-                new RecordedTransaction(d.Key, d.Timestamp, d.Amount, d.Currency, d.Category, d.Title, new(d.Account.Name, d.Account.Bank), d.Revision))
+                new RecordedTransaction(d.Key, d.Timestamp, d.Amount, d.Currency, d.Category, d.Title, new(d.Account.Name, d.Account.Bank), d.Revision)
+                {
+                    Overrides = d.Overrides
+                })
             .ToListAsync(ct);
     }
 
