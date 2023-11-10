@@ -8,6 +8,7 @@ using Flow.Infrastructure.Configuration.Contract;
 using Flow.Infrastructure.IO.Collections;
 using Flow.Infrastructure.IO.Contract;
 using Flow.Infrastructure.IO.Criteria.Contract;
+using Flow.Infrastructure.IO.CSV.Contract;
 
 namespace Flow.Hosts.Transactions.Cli.Commands;
 
@@ -49,7 +50,8 @@ internal class EditTransactionsCommand : CommandBase
         { 
             await using (var streamWriter = CreateWriter(errsPath))
             {
-                await rejectionsWriter.GetFor(args.Format).Write(streamWriter, rejected, ct);
+                var format = rejectionsWriter.GetKnownFormats().Contains(args.Format) ? args.Format : CSVIO.SupportedFormat;
+                await rejectionsWriter.GetFor(format).Write(streamWriter, rejected, ct);
             }
 
             if (rejected.Count > 0)

@@ -68,25 +68,15 @@ internal sealed class TransactionStorage : ITransactionsStorage, INotifyTransact
             }
             else
             {
-                if (upd == target)
+                var account = target.DbAccount;
+                account.Transactions.Remove(target);
+                if (account != upd.Account)
                 {
-                    if (upd.Overrides != target.Overrides)
-                    {
-                        target.Overrides = upd.Overrides;
-                    }
+                    await AddTransaction(new(upd, upd.Overrides), context, ct);
                 }
                 else
                 {
-                    var account = target.DbAccount;
-                    account.Transactions.Remove(target);
-                    if (account != upd.Account)
-                    {
-                        await AddTransaction(new(upd, upd.Overrides), context, ct);
-                    }
-                    else
-                    {
-                        account.Transactions.Add(new DbTransaction(upd.Key, upd.Timestamp, upd.Amount, upd.Currency, upd.Category, upd.Title, account, GetRevision(upd)) { Overrides = upd.Overrides });
-                    }
+                    account.Transactions.Add(new DbTransaction(upd.Key, upd.Timestamp, upd.Amount, upd.Currency, upd.Category, upd.Title, account, GetRevision(upd)) { Overrides = upd.Overrides });
                 }
             }
         }
