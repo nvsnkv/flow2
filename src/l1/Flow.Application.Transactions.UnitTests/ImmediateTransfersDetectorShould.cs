@@ -23,8 +23,8 @@ public class ImmediateTransfersDetectorShould
     public void DetectImmediateTransfers(string? category)
     {
         var now = DateTime.UtcNow;
-        var source = new RecordedTransaction(1, now, -20, "ZWL", category, "Transfer", new AccountInfo("From", "bank"));
-        var sink = new RecordedTransaction(2, now, 20, "ZWL", category, "Transfer", new AccountInfo("To", "bank"));
+        var source = new RecordedTransaction(1, now, -20, "ZWL", category, "Transfer", new AccountInfo("From", "bank"), Guid.NewGuid().ToString());
+        var sink = new RecordedTransaction(2, now, 20, "ZWL", category, "Transfer", new AccountInfo("To", "bank"), Guid.NewGuid().ToString());
 
         new ImmediateTransfersDetector(ratesProvider.Object).CheckIsTransfer(source, sink).Should().BeTrue();
     }
@@ -33,8 +33,8 @@ public class ImmediateTransfersDetectorShould
     public void CreateImmediateTransferFromTransaction()
     {
         var now = DateTime.UtcNow;
-        var source = new RecordedTransaction(1, now, -20, "ZWL", null, "Transfer", new AccountInfo("From", "bank"));
-        var sink = new RecordedTransaction(2, now, 20, "ZWL", null, "Transfer", new AccountInfo("To", "bank"));
+        var source = new RecordedTransaction(1, now, -20, "ZWL", null, "Transfer", new AccountInfo("From", "bank"), Guid.NewGuid().ToString());
+        var sink = new RecordedTransaction(2, now, 20, "ZWL", null, "Transfer", new AccountInfo("To", "bank"), Guid.NewGuid().ToString());
 
         new ImmediateTransfersDetector(ratesProvider.Object).CheckIsTransfer(source, sink).Should().BeTrue();
     }
@@ -59,14 +59,15 @@ public class ImmediateTransfersDetectorShould
     public void IgnoreTransactionsThatDoesNotMeetImmediateTransferCriteria(string? timeShift, decimal amountShift, string? currencyShift, string? categoryShift, string? titleShift)
     {
         var now = DateTime.UtcNow;
-        var source = new RecordedTransaction(1, now, -100, "ZWL", "C", "Transfer", new AccountInfo("From", "bank"));
+        var source = new RecordedTransaction(1, now, -100, "ZWL", "C", "Transfer", new AccountInfo("From", "bank"), Guid.NewGuid().ToString());
         var sink = new RecordedTransaction(2,
             timeShift != null ? now.Add(TimeSpan.Parse(timeShift)) : now,
             source.Amount * -1 + amountShift,
             source.Currency + (currencyShift ?? ""),
             source.Category + (categoryShift ?? ""),
             source.Title + (titleShift ?? ""),
-            new AccountInfo("To", "bank")
+            new AccountInfo("To", "bank"),
+            Guid.NewGuid().ToString()
             );
 
         new ImmediateTransfersDetector(ratesProvider.Object).CheckIsTransfer(source, sink).Should().BeFalse();
@@ -76,8 +77,8 @@ public class ImmediateTransfersDetectorShould
     public void IgnoreTransactionsThatHasFromAccount()
     {
         var now = DateTime.UtcNow;
-        var source = new RecordedTransaction(1, now, -100, "ZWL", "C", "Transfer", new AccountInfo("From", "bank"));
-        var sink = new RecordedTransaction(1, now, 100, "ZWL", "C", "Transfer", new AccountInfo("From", "bank"));
+        var source = new RecordedTransaction(1, now, -100, "ZWL", "C", "Transfer", new AccountInfo("From", "bank"), Guid.NewGuid().ToString());
+        var sink = new RecordedTransaction(1, now, 100, "ZWL", "C", "Transfer", new AccountInfo("From", "bank"), Guid.NewGuid().ToString());
 
         new ImmediateTransfersDetector(ratesProvider.Object).CheckIsTransfer(source, sink).Should().BeFalse();
     }
@@ -86,8 +87,8 @@ public class ImmediateTransfersDetectorShould
     public async Task SetAccuracyLevelToExact()
     {
         var now = DateTime.UtcNow;
-        var source = new RecordedTransaction(1, now, -20, "ZWL", null, "Transfer", new AccountInfo("From", "bank"));
-        var sink = new RecordedTransaction(2, now, 20, "ZWL", null, "Transfer", new AccountInfo("To", "bank"));
+        var source = new RecordedTransaction(1, now, -20, "ZWL", null, "Transfer", new AccountInfo("From", "bank"), Guid.NewGuid().ToString());
+        var sink = new RecordedTransaction(2, now, 20, "ZWL", null, "Transfer", new AccountInfo("To", "bank"), Guid.NewGuid().ToString());
 
         var result = await new ImmediateTransfersDetector(ratesProvider.Object).Create(source, sink, CancellationToken.None);
         result.AccuracyLevel.Should().Be(DetectionAccuracy.Exact);

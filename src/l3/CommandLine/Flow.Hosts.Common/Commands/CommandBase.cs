@@ -20,12 +20,16 @@ public abstract class CommandBase
     
     protected async Task<int> TryStartEditor(string? outputPath, SupportedFormat format, bool waitForExit)
     {
-        if (outputPath == null || !(config.Editor?.ContainsKey(format) ?? false)) return waitForExit ? -1 : 0;
+        if (outputPath == null) return waitForExit ? -1 : 0;
 
-        var process = Process.Start(new ProcessStartInfo(config.Editor[format], outputPath)
-        {
-            UseShellExecute = true
-        });
+        var startInfo = config.Editor?.ContainsKey(format) ?? false
+            ? new ProcessStartInfo(config.Editor[format], outputPath)
+            : new ProcessStartInfo(outputPath);
+
+        startInfo.UseShellExecute = true;
+
+
+        var process = Process.Start(startInfo);
 
         if (!waitForExit) return 0;
         if (process == null) return -1;
@@ -45,13 +49,9 @@ public abstract class CommandBase
 
     protected string? GetFallbackOutputPath(SupportedFormat format, string command, string slug)
     {
+        var filename = $"temp.{command}.{DateTime.Now:s}.{slug}.{format.ToString().ToLower()}".Replace(":", "_");
 
-        if (config.Editor?.ContainsKey(format) ?? false)
-        {
-            return GeneratePath(format, command, slug);
-        }
-
-        return null;
+        return Path.GetFullPath(filename);
     }
 
     protected StreamReader CreateReader(string? input)
@@ -61,12 +61,5 @@ public abstract class CommandBase
             : File.OpenRead(input);
 
         return new StreamReader(stream, input != null ? Encoding.UTF8 : Encoding.GetEncoding(culture.TextInfo.OEMCodePage));
-    }
-
-    private static string GeneratePath(SupportedFormat format, string command, string slug)
-    {
-        var filename = $"temp.{command}.{DateTime.Now:s}.{slug}.{format.ToString().ToLower()}".Replace(":", "_");
-        
-        return Path.GetFullPath(filename);
     }
 }

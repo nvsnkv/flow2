@@ -42,7 +42,11 @@ internal sealed class TransactionStorage : ITransactionsStorage, INotifyTransact
             .Include(t => t.DbAccount)
             .Include(t => t.Overrides)
             .Where(conditions)
-            .Cast<RecordedTransaction>()
+            .Select(d =>
+                new RecordedTransaction(d.Key, d.Timestamp, d.Amount, d.Currency, d.Category, d.Title, new(d.Account.Name, d.Account.Bank), d.Revision)
+                {
+                    Overrides = d.Overrides
+                })
             .ToListAsync(ct);
     }
 
@@ -61,26 +65,21 @@ internal sealed class TransactionStorage : ITransactionsStorage, INotifyTransact
             {
                 rejections.Add(new RejectedTransaction(upd, $"Unable to identify transaction with key {upd.Key}"));
             }
+            else if (target.Revision != upd.Revision)
+            {
+                rejections.Add(new RejectedTransaction(upd, "Revisions does not match!"));
+            }
             else
             {
-                if (upd == target)
+                var account = target.DbAccount;
+                account.Transactions.Remove(target);
+                if (account != upd.Account)
                 {
-                    if (upd.Overrides != target.Overrides)
-                    {
-                        target.Overrides = upd.Overrides;
-                    }
+                    await AddTransaction(new(upd, upd.Overrides), context, ct);
                 }
                 else
                 {
-                    target.DbAccount.Transactions.Remove(target);
-                    if (target.DbAccount != upd.Account)
-                    {
-                        await AddTransaction(new(upd, upd.Overrides), context, ct);
-                    }
-                    else
-                    {
-                        target.DbAccount.Transactions.Add(new DbTransaction(upd.Key, upd.Timestamp, upd.Amount, upd.Currency, upd.Category, upd.Title, target.DbAccount) { Overrides = upd.Overrides });
-                    }
+                    account.Transactions.Add(new DbTransaction(upd.Key, upd.Timestamp, upd.Amount, upd.Currency, upd.Category, upd.Title, account, GetRevision(upd)) { Overrides = upd.Overrides });
                 }
             }
         }
@@ -104,6 +103,7 @@ internal sealed class TransactionStorage : ITransactionsStorage, INotifyTransact
         return await context.SaveChangesAsync(ct);
     }
 
+
     public event TransactionRecordedEventHandler? TransactionRecorded;
 
     private static async Task AddTransaction(IncomingTransaction pair, FlowDbContext context, CancellationToken ct)
@@ -122,7 +122,7 @@ internal sealed class TransactionStorage : ITransactionsStorage, INotifyTransact
             }
         }
 
-        var dbTransaction = new DbTransaction(t.Timestamp, t.Amount, t.Currency, t.Category, t.Title, account);
+        var dbTransaction = new DbTransaction(t.Timestamp, t.Amount, t.Currency, t.Category, t.Title, account, GetRevision(t));
         if (o != null)
         {
             dbTransaction.Overrides = o;
@@ -130,6 +130,8 @@ internal sealed class TransactionStorage : ITransactionsStorage, INotifyTransact
 
         account.Transactions.Add(dbTransaction);
     }
+
+    private static string GetRevision(Transaction upd) => upd.GetHashCode().ToString();
 
     private  static async Task<DbAccount?> GetAccount(FlowDbContext context, AccountInfo account, CancellationToken ct)
     {

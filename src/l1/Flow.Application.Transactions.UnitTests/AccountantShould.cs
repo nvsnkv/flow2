@@ -23,13 +23,13 @@ public class AccountantShould
 {
     private static readonly RecordedTransaction[] RecordedTransactions =
     {
-        new(100, DateTime.UtcNow, -10, "RUB", null, "Transaction 100", new("Account", "Bank")),
-        new(101, DateTime.UtcNow, 11, "RUB", null, "Transaction 101", new("Account", "Bank")),
-        new(102, DateTime.UtcNow, -12, "RUB", null, "Transaction 102", new("Account", "Bank")),
-        new(103, DateTime.UtcNow, 13, "RUB", null, "Transaction 103", new("Account", "Bank")),
-        new(104, DateTime.UtcNow, 104, "RUB", null, "Transaction 104", new("Account", "Bank")),
-        new(105, DateTime.UtcNow, -104, "RUB", null, "Transaction 105", new("Account", "Bank")),
-        new(106, DateTime.UtcNow, 104, "RUB", null, "Transaction 106", new("Account", "Bank"))
+        new(100, DateTime.UtcNow, -10, "RUB", null, "Transaction 100", new("Account", "Bank"), Guid.NewGuid().ToString()),
+        new(101, DateTime.UtcNow, 11, "RUB", null, "Transaction 101", new("Account", "Bank"), Guid.NewGuid().ToString()),
+        new(102, DateTime.UtcNow, -12, "RUB", null, "Transaction 102", new("Account", "Bank"), Guid.NewGuid().ToString()),
+        new(103, DateTime.UtcNow, 13, "RUB", null, "Transaction 103", new("Account", "Bank"), Guid.NewGuid().ToString()),
+        new(104, DateTime.UtcNow, 104, "RUB", null, "Transaction 104", new("Account", "Bank"), Guid.NewGuid().ToString()),
+        new(105, DateTime.UtcNow, -104, "RUB", null, "Transaction 105", new("Account", "Bank"), Guid.NewGuid().ToString()),
+        new(106, DateTime.UtcNow, 104, "RUB", null, "Transaction 106", new("Account", "Bank"), Guid.NewGuid().ToString())
     };
 
     private readonly Mock<ITransactionsStorage> storage = new();
@@ -134,18 +134,18 @@ public class AccountantShould
             "Exact duplicates",
             new RecordedTransaction[]
             {
-                new(5, DateTime.Parse("2022-01-01"), 100, "RUB", null, "Transaction 1", new("Account", "Bank")),
-                new(7, DateTime.Parse("2022-01-01"), 100, "RUB", null, "Transaction 1", new("Account", "Bank")),
-                new(8, DateTime.Parse("2022-01-01"), 100, "RUB", null, "Transaction 1", new("Account", "Bank")),
-                new(0, DateTime.Parse("2022-01-01"), 100, "RUB", null, "Not a dup", new("Account", "Bank")),
+                new(5, DateTime.Parse("2022-01-01"), 100, "RUB", null, "Transaction 1", new("Account", "Bank"), Guid.NewGuid().ToString()),
+                new(7, DateTime.Parse("2022-01-01"), 100, "RUB", null, "Transaction 1", new("Account", "Bank"), Guid.NewGuid().ToString()),
+                new(8, DateTime.Parse("2022-01-01"), 100, "RUB", null, "Transaction 1", new("Account", "Bank"), Guid.NewGuid().ToString()),
+                    new(0, DateTime.Parse("2022-01-01"), 100, "RUB", null, "Not a dup", new("Account", "Bank"), Guid.NewGuid().ToString()),
             },
             new[]
             {
                 new RecordedTransaction[]
                 {
-                    new(5, DateTime.Parse("2022-01-01"), 100, "RUB", null, "Transaction 1", new("Account", "Bank")),
-                    new(7, DateTime.Parse("2022-01-01"), 100, "RUB", null, "Transaction 1", new("Account", "Bank")),
-                    new(8, DateTime.Parse("2022-01-01"), 100, "RUB", null, "Transaction 1", new("Account", "Bank")),
+                    new(5, DateTime.Parse("2022-01-01"), 100, "RUB", null, "Transaction 1", new("Account", "Bank"), Guid.NewGuid().ToString()),
+                    new(7, DateTime.Parse("2022-01-01"), 100, "RUB", null, "Transaction 1", new("Account", "Bank"), Guid.NewGuid().ToString()),
+                    new(8, DateTime.Parse("2022-01-01"), 100, "RUB", null, "Transaction 1", new("Account", "Bank"), Guid.NewGuid().ToString()),
                 }
             }
         },
@@ -155,18 +155,18 @@ public class AccountantShould
             "Different dates",
             new RecordedTransaction[]
             {
-                new(5, DateTime.Parse("2022-01-01"), 100, "RUB", null, "Transaction 1", new("Account", "Bank")),
-                new(7, DateTime.Parse("2022-01-02"), 100, "RUB", null, "Transaction 1", new("Account", "Bank")),
-                new(8, DateTime.Parse("2022-01-03"), 100, "RUB", null, "Transaction 1", new("Account", "Bank")),
-                new(0, DateTime.Parse("2022-01-01"), 100, "RUB", null, "Not a dup", new("Account", "Bank")),
+                new(5, DateTime.Parse("2022-01-01"), 100, "RUB", null, "Transaction 1", new("Account", "Bank"), Guid.NewGuid().ToString()),
+                new(7, DateTime.Parse("2022-01-02"), 100, "RUB", null, "Transaction 1", new("Account", "Bank"), Guid.NewGuid().ToString()),
+                new(8, DateTime.Parse("2022-01-03"), 100, "RUB", null, "Transaction 1", new("Account", "Bank"), Guid.NewGuid().ToString()),
+                new(0, DateTime.Parse("2022-01-01"), 100, "RUB", null, "Not a dup", new("Account", "Bank"), Guid.NewGuid().ToString()),
             },
             new[]
             {
                 new RecordedTransaction[]
                 {
-                    new(5, DateTime.Parse("2022-01-01"), 100, "RUB", null, "Transaction 1", new("Account", "Bank")),
-                    new(7, DateTime.Parse("2022-01-02"), 100, "RUB", null, "Transaction 1", new("Account", "Bank")),
-                    new(8, DateTime.Parse("2022-01-03"), 100, "RUB", null, "Transaction 1", new("Account", "Bank")),
+                    new(5, DateTime.Parse("2022-01-01"), 100, "RUB", null, "Transaction 1", new("Account", "Bank"), Guid.NewGuid().ToString()),
+                    new(7, DateTime.Parse("2022-01-02"), 100, "RUB", null, "Transaction 1", new("Account", "Bank"), Guid.NewGuid().ToString()),
+                    new(8, DateTime.Parse("2022-01-03"), 100, "RUB", null, "Transaction 1", new("Account", "Bank"), Guid.NewGuid().ToString()),
                 }
             }
         },
@@ -176,23 +176,23 @@ public class AccountantShould
             "Two sets",
             new RecordedTransaction[]
             {
-                new(5, DateTime.Parse("2022-01-01"), 100, "RUB", null, "Transaction 2", new("Account", "Bank")),
-                new(7, DateTime.Parse("2022-01-02"), 100, "RUB", null, "Transaction 1", new("Account", "Bank")),
-                new(8, DateTime.Parse("2022-01-03"), 100, "RUB", null, "Transaction 1", new("Account", "Bank")),
-                new(0, DateTime.Parse("2022-01-01"), 100, "RUB", null, "Not a dup", new("Account", "Bank")),
-                new(9, DateTime.Parse("2022-01-01"), 100, "RUB", null, "Transaction 2", new("Account", "Bank")),
+                new(5, DateTime.Parse("2022-01-01"), 100, "RUB", null, "Transaction 2", new("Account", "Bank"), Guid.NewGuid().ToString()),
+                new(7, DateTime.Parse("2022-01-02"), 100, "RUB", null, "Transaction 1", new("Account", "Bank"), Guid.NewGuid().ToString()),
+                new(8, DateTime.Parse("2022-01-03"), 100, "RUB", null, "Transaction 1", new("Account", "Bank"), Guid.NewGuid().ToString()),
+                new(0, DateTime.Parse("2022-01-01"), 100, "RUB", null, "Not a dup", new("Account", "Bank"), Guid.NewGuid().ToString()),
+                new(9, DateTime.Parse("2022-01-01"), 100, "RUB", null, "Transaction 2", new("Account", "Bank"), Guid.NewGuid().ToString()),
             },
             new[]
             {
                 new RecordedTransaction[]
                 {
-                    new(7, DateTime.Parse("2022-01-02"), 100, "RUB", null, "Transaction 1", new("Account", "Bank")),
-                    new(8, DateTime.Parse("2022-01-03"), 100, "RUB", null, "Transaction 1", new("Account", "Bank")),
+                    new(7, DateTime.Parse("2022-01-02"), 100, "RUB", null, "Transaction 1", new("Account", "Bank"), Guid.NewGuid().ToString()),
+                    new(8, DateTime.Parse("2022-01-03"), 100, "RUB", null, "Transaction 1", new("Account", "Bank"), Guid.NewGuid().ToString()),
                 },
                 new RecordedTransaction[]
                 {
-                    new(5, DateTime.Parse("2022-01-01"), 100, "RUB", null, "Transaction 2", new("Account", "Bank")),
-                    new(9, DateTime.Parse("2022-01-01"), 100, "RUB", null, "Transaction 2", new("Account", "Bank")),
+                    new(5, DateTime.Parse("2022-01-01"), 100, "RUB", null, "Transaction 2", new("Account", "Bank"), Guid.NewGuid().ToString()),
+                    new(9, DateTime.Parse("2022-01-01"), 100, "RUB", null, "Transaction 2", new("Account", "Bank"), Guid.NewGuid().ToString()),
                 }
             }
         },
@@ -202,10 +202,10 @@ public class AccountantShould
             "No dups",
             new RecordedTransaction[]
             {
-                new(5, DateTime.Parse("2022-01-01"), 110, "RUB", null, "Transaction 1", new("Account", "Bank")),
-                new(7, DateTime.Parse("2022-01-01"), 100, "RUB", null, "Transaction 1", new("Account", "Bank")),
-                new(8, DateTime.Parse("2022-01-01"), 102, "RUB", null, "Transaction 1", new("Account", "Bank")),
-                new(0, DateTime.Parse("2022-01-01"), 100, "RUB", null, "Not a dup", new("Account", "Bank")),
+                new(5, DateTime.Parse("2022-01-01"), 110, "RUB", null, "Transaction 1", new("Account", "Bank"), Guid.NewGuid().ToString()),
+                new(7, DateTime.Parse("2022-01-01"), 100, "RUB", null, "Transaction 1", new("Account", "Bank"), Guid.NewGuid().ToString()),
+                new(8, DateTime.Parse("2022-01-01"), 102, "RUB", null, "Transaction 1", new("Account", "Bank"), Guid.NewGuid().ToString()),
+                new(0, DateTime.Parse("2022-01-01"), 100, "RUB", null, "Not a dup", new("Account", "Bank"), Guid.NewGuid().ToString()),
             },
             Array.Empty<RecordedTransaction[]>()
         }

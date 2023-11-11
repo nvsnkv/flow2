@@ -19,11 +19,11 @@ public abstract class TestDataCarrier
 
     protected static readonly RecordedTransaction[] RecordedTransactions =
     {
-        new(1, Transactions[0]) { Overrides = new(null, null, null) },
-        new(2, Transactions[1]) { Overrides = new(null, null, null) },
-        new(3, Transactions[2]) { Overrides = new("#1", "2", "noway") },
-        new(4, Transactions[3]) { Overrides = new("Overriden Category", "Overriden Title", null) },
-        new(5, Transactions[4]) { Overrides = new(null, null, "Comment on #5") }
+        new(1, Transactions[0], new object().GetHashCode().ToString()) { Overrides = new(null, null, null) },
+        new(2, Transactions[1], new object().GetHashCode().ToString()) { Overrides = new(null, null, null) },
+        new(3, Transactions[2], new object().GetHashCode().ToString()) { Overrides = new("#1", "2", "noway") },
+        new(4, Transactions[3], new object().GetHashCode().ToString()) { Overrides = new("Overriden Category", "Overriden Title", null) },
+        new(5, Transactions[4], new object().GetHashCode().ToString()) { Overrides = new(null, null, "Comment on #5") }
     };
 
     protected static readonly TransferKey[] TransferKeys =

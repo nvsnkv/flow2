@@ -60,10 +60,10 @@ internal class FlowBuilder
                 return true;
             })
             .Select(t => sources.ContainsKey(t.Key)
-                ? new RecordedTransaction(t.Key, t.Timestamp, sources[t.Key].Fee, sources[t.Key].Currency, $"TRANSFER: {sources[t.Key].Comment}", $"{t.Category}: {t.Title}", t.Account)
+                ? new RecordedTransaction(t.Key, t.Timestamp, sources[t.Key].Fee, sources[t.Key].Currency, $"TRANSFER: {sources[t.Key].Comment}", $"{t.Category}: {t.Title}", t.Account, t.Revision)
                 : t)
             .Select(t => !string.IsNullOrEmpty(t.Overrides?.Category) || !string.IsNullOrEmpty(t.Overrides?.Title)
-                    ? new RecordedTransaction(t.Key, t.Timestamp, t.Amount, t.Currency, t.Overrides?.Category ?? t.Category, t.Overrides?.Title ?? t.Title, t.Account) { Overrides = t.Overrides }
+                    ? new RecordedTransaction(t.Key, t.Timestamp, t.Amount, t.Currency, t.Overrides?.Category ?? t.Category, t.Overrides?.Title ?? t.Title, t.Account, t.Revision) { Overrides = t.Overrides }
                     : t)
             .Where(t =>
             {
@@ -103,8 +103,6 @@ internal class FlowBuilder
             return null;
         }
 
-        return new RecordedTransaction(t.Key, t.Timestamp, t.Amount * rate.Rate, targetCurrency!, t.Category, t.Title,
-            t.Account)
-        { Overrides = t.Overrides };
+        return new RecordedTransaction(t.Key, t.Timestamp, t.Amount * rate.Rate, targetCurrency!, t.Category, t.Title, t.Account, t.Revision) { Overrides = t.Overrides };
     }
 }

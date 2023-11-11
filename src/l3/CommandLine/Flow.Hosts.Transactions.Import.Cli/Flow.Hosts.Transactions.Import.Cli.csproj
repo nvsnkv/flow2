@@ -9,10 +9,9 @@
         <PackageId>flow-import</PackageId>
         <Authors>nvsnkv</Authors>
         <Copyright>© 2023 nvsnkv</Copyright>
-        <AssemblyVersion>1.0.0.0</AssemblyVersion>
-        <FileVersion>1.0.0.0</FileVersion>
-        <Version>1.1.0</Version>
     </PropertyGroup>
+
+    <Import Project="..\Flow.Hosts.Common\version.props"/>
 
     <ItemGroup>
       <ProjectReference Include="..\..\..\l2\Flow.Infrastructure.Plugins.Loader\Flow.Infrastructure.Plugins.Loader.csproj" />

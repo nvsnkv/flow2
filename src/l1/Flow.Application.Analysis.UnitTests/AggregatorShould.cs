@@ -16,10 +16,10 @@ public sealed class AggregatorShould
 
     private static readonly RecordedTransaction[] Transactions =
     {
-        new(11, DateTime.UtcNow, 100, "RUR", null, "Income 1", Account),
-        new(12, DateTime.UtcNow, 101, "RUR", null, "Income 2", Account),
-        new(13, DateTime.UtcNow, 102, "RUR", null, "Income 3", Account),
-        new(14, DateTime.UtcNow, 102, "RUR", null, "Income 4", Account)
+        new(11, DateTime.UtcNow, 100, "RUR", null, "Income 1", Account, Guid.NewGuid().ToString()),
+        new(12, DateTime.UtcNow, 101, "RUR", null, "Income 2", Account, Guid.NewGuid().ToString()),
+        new(13, DateTime.UtcNow, 102, "RUR", null, "Income 3", Account, Guid.NewGuid().ToString()),
+        new(14, DateTime.UtcNow, 102, "RUR", null, "Income 4", Account, Guid.NewGuid().ToString())
     };
 
     private readonly Mock<IAccountant> accountant = new();

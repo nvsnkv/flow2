@@ -14,8 +14,8 @@ public class FuzzyTransferDetectorShould
     [Fact, UnitTest]
     public void NotThreatPairAsTransferIfSourceIsPositive()
     {
-        var left = new RecordedTransaction(0, DateTime.UtcNow, 100, "ZBW", null, "Title", new("Account", "Bank"));
-        var right = new RecordedTransaction(1, DateTime.UtcNow, 100, "ZBW", null, "Title", new("Account", "Bank"));
+        var left = new RecordedTransaction(0, DateTime.UtcNow, 100, "ZBW", null, "Title", new("Account", "Bank"), Guid.NewGuid().ToString());
+        var right = new RecordedTransaction(1, DateTime.UtcNow, 100, "ZBW", null, "Title", new("Account", "Bank"), Guid.NewGuid().ToString());
 
         new FuzzyTransferDetector(new Mock<IExchangeRatesProvider>().Object).CheckIsTransfer(left, right).Should().BeFalse();
     }
@@ -23,8 +23,8 @@ public class FuzzyTransferDetectorShould
     [Fact, UnitTest]
     public void NotThreatPairAsTransferIfSourceDoesNotMatchSink()
     {
-        var left = new RecordedTransaction(0, DateTime.UtcNow, -100, "ZBW", null, "Title", new("Account", "Bank"));
-        var right = new RecordedTransaction(1, DateTime.UtcNow, 105, "ZBW", null, "Title", new("Account", "Bank"));
+        var left = new RecordedTransaction(0, DateTime.UtcNow, -100, "ZBW", null, "Title", new("Account", "Bank"), Guid.NewGuid().ToString());
+        var right = new RecordedTransaction(1, DateTime.UtcNow, 105, "ZBW", null, "Title", new("Account", "Bank"), Guid.NewGuid().ToString());
 
         new FuzzyTransferDetector(new Mock<IExchangeRatesProvider>().Object).CheckIsTransfer(left, right).Should().BeFalse();
     }
@@ -32,8 +32,8 @@ public class FuzzyTransferDetectorShould
     [Fact, UnitTest]
     public void NotThreatPairAsTransferIfCurrencyDiffers()
     {
-        var left = new RecordedTransaction(0, DateTime.UtcNow, -100, "ZBW", null, "Title", new("Account", "Bank"));
-        var right = new RecordedTransaction(1, DateTime.UtcNow, 100, "BYN", null, "Title", new("Account", "Bank"));
+        var left = new RecordedTransaction(0, DateTime.UtcNow, -100, "ZBW", null, "Title", new("Account", "Bank"), Guid.NewGuid().ToString());
+        var right = new RecordedTransaction(1, DateTime.UtcNow, 100, "BYN", null, "Title", new("Account", "Bank"), Guid.NewGuid().ToString());
 
         new FuzzyTransferDetector(new Mock<IExchangeRatesProvider>().Object).CheckIsTransfer(left, right).Should().BeFalse();
     }
@@ -45,8 +45,8 @@ public class FuzzyTransferDetectorShould
     [InlineData("2022-01-28", 1000)]
     public void NotThreatPairAsTransferIfTimespanIsGreaterThenThreeBusinessDays(string timespan, int offset)
     {
-        var left = new RecordedTransaction(0, DateTime.Parse(timespan), -100, "ZBW", null, "Title", new("Account", "Bank"));
-        var right = new RecordedTransaction(1, DateTime.Parse(timespan).AddDays(offset), 100, "ZBW", null, "Title", new("Account", "Bank"));
+        var left = new RecordedTransaction(0, DateTime.Parse(timespan), -100, "ZBW", null, "Title", new("Account", "Bank"), Guid.NewGuid().ToString());
+        var right = new RecordedTransaction(1, DateTime.Parse(timespan).AddDays(offset), 100, "ZBW", null, "Title", new("Account", "Bank"), Guid.NewGuid().ToString());
 
         new FuzzyTransferDetector(new Mock<IExchangeRatesProvider>().Object).CheckIsTransfer(left, right).Should().BeFalse();
     }
@@ -59,8 +59,8 @@ public class FuzzyTransferDetectorShould
     [InlineData("2022-01-30", "2022-01-29")]
     public void DetectTransfersMadeOverTheWeekend(string sourceTimestamp, string sinkTimestamp)
     {
-        var left = new RecordedTransaction(0, DateTime.Parse(sourceTimestamp), -100, "ZBW", null, "Title", new("Account", "Bank"));
-        var right = new RecordedTransaction(1, DateTime.Parse(sinkTimestamp), 100, "ZBW", null, "Title", new("Accounto", "Bank"));
+        var left = new RecordedTransaction(0, DateTime.Parse(sourceTimestamp), -100, "ZBW", null, "Title", new("Account", "Bank"), Guid.NewGuid().ToString());
+        var right = new RecordedTransaction(1, DateTime.Parse(sinkTimestamp), 100, "ZBW", null, "Title", new("Accounto", "Bank"), Guid.NewGuid().ToString());
 
         new FuzzyTransferDetector(new Mock<IExchangeRatesProvider>().Object).CheckIsTransfer(left, right).Should().BeTrue();
     }
@@ -82,8 +82,8 @@ public class FuzzyTransferDetectorShould
     [InlineData("2022-01-31", "2022-02-03")]
     public void DetectTransfersMadeWithinThreeBusinessDays(string sourceTimestamp, string sinkTimestamp)
     {
-        var left = new RecordedTransaction(0, DateTime.Parse(sourceTimestamp), -100, "ZBW", null, "Title", new("Account", "Bank"));
-        var right = new RecordedTransaction(1, DateTime.Parse(sinkTimestamp), 100, "ZBW", null, "Title", new("El Accounto", "El Banco"));
+        var left = new RecordedTransaction(0, DateTime.Parse(sourceTimestamp), -100, "ZBW", null, "Title", new("Account", "Bank"), Guid.NewGuid().ToString());
+        var right = new RecordedTransaction(1, DateTime.Parse(sinkTimestamp), 100, "ZBW", null, "Title", new("El Accounto", "El Banco"), Guid.NewGuid().ToString());
 
         new FuzzyTransferDetector(new Mock<IExchangeRatesProvider>().Object).CheckIsTransfer(left, right).Should().BeTrue();
     }
@@ -95,8 +95,8 @@ public class FuzzyTransferDetectorShould
     [InlineData(null, "Transfer", "СБП", "Перевод")]
     public void DetectTransfersRegardlessOfItsNames(string? lc, string lt, string? rc, string rt)
     {
-        var left = new RecordedTransaction(0, DateTime.UtcNow, -100, "ZBW", lc, lt, new("Account", "Bank"));
-        var right = new RecordedTransaction(1, DateTime.UtcNow ,100, "ZBW", rc, rt, new("El Accounto", "El Banco"));
+        var left = new RecordedTransaction(0, DateTime.UtcNow, -100, "ZBW", lc, lt, new("Account", "Bank"), Guid.NewGuid().ToString());
+        var right = new RecordedTransaction(1, DateTime.UtcNow ,100, "ZBW", rc, rt, new("El Accounto", "El Banco"), Guid.NewGuid().ToString());
 
         new FuzzyTransferDetector(new Mock<IExchangeRatesProvider>().Object).CheckIsTransfer(left, right).Should().BeTrue();
     }

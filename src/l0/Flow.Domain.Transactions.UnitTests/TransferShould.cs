@@ -10,11 +10,11 @@ public class TransferShould
 {
     private static readonly AccountInfo Account = new("The name", "The Bank");
 
-    private readonly RecordedTransaction source = new(1, DateTime.UtcNow, -100, "RUR", null, "Transfer", Account);
-    private readonly RecordedTransaction anotherSource = new(5, DateTime.UtcNow, -100, "RUR", null, "Transfer", Account);
-    private readonly RecordedTransaction sink = new(2, DateTime.UtcNow, 100, "RUR", null, "Transfer", Account);
-    private readonly RecordedTransaction sinkWithFee = new(3, DateTime.UtcNow, 90, "RUR", null, "Transfer", Account);
-    private readonly RecordedTransaction sinkWithDifferentCurrency = new(4, DateTime.UtcNow, 90, "EUR", null, "Transfer", Account);
+    private readonly RecordedTransaction source = new(1, DateTime.UtcNow, -100, "RUR", null, "Transfer", Account, string.Empty);
+    private readonly RecordedTransaction anotherSource = new(5, DateTime.UtcNow, -100, "RUR", null, "Transfer", Account, string.Empty);
+    private readonly RecordedTransaction sink = new(2, DateTime.UtcNow, 100, "RUR", null, "Transfer", Account, string.Empty);
+    private readonly RecordedTransaction sinkWithFee = new(3, DateTime.UtcNow, 90, "RUR", null, "Transfer", Account, string.Empty);
+    private readonly RecordedTransaction sinkWithDifferentCurrency = new(4, DateTime.UtcNow, 90, "EUR", null, "Transfer", Account, string.Empty);
 
     [Fact, UnitTest]
     public void ThrowArgumentExceptionIfSourceAndSinkAreTheSame()
@@ -120,6 +120,6 @@ public class TransferShould
     private static RecordedTransaction GetTransaction(long key, DateTime timestamp = default, decimal amount = -350m,
         string currency = "ZBW", string title = "title")
     {
-        return new RecordedTransaction(key, timestamp, amount, currency, null, title, new("Account", "Bank"));
+        return new RecordedTransaction(key, timestamp, amount, currency, null, title, new("Account", "Bank"), string.Empty);
     }
 }

@@ -15,17 +15,17 @@ public class FlowBuilderShould
 
     private static readonly RecordedTransaction[] Expenses =
     {
-        new(1, DateTime.UtcNow, -100, "RUR", null, "Expense 1", Account),
-        new(2, DateTime.UtcNow, -101, "RUR", null, "Expense 2", Account),
-        new(3, DateTime.UtcNow, -102, "RUR", null, "Expense 3", Account)
+        new(1, DateTime.UtcNow, -100, "RUR", null, "Expense 1", Account, Guid.NewGuid().ToString()),
+        new(2, DateTime.UtcNow, -101, "RUR", null, "Expense 2", Account, Guid.NewGuid().ToString()),
+        new(3, DateTime.UtcNow, -102, "RUR", null, "Expense 3", Account, Guid.NewGuid().ToString())
     };
 
     private static readonly RecordedTransaction[] Incomes =
     {
-        new(11, DateTime.UtcNow, 100, "RUR", null, "Income 1", Account),
-        new(12, DateTime.UtcNow, 101, "RUR", null, "Income 2", Account),
-        new(13, DateTime.UtcNow, 102, "RUR", null, "Income 3", Account),
-        new(14, DateTime.UtcNow, 102, "RUR", null, "Income 4", Account)
+        new(11, DateTime.UtcNow, 100, "RUR", null, "Income 1", Account, Guid.NewGuid().ToString()),
+        new(12, DateTime.UtcNow, 101, "RUR", null, "Income 2", Account, Guid.NewGuid().ToString()),
+        new(13, DateTime.UtcNow, 102, "RUR", null, "Income 3", Account, Guid.NewGuid().ToString()),
+        new(14, DateTime.UtcNow, 102, "RUR", null, "Income 4", Account, Guid.NewGuid().ToString())
     };
 
     private static readonly Transfer[] Transfers =

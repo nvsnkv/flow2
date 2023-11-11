@@ -9,6 +9,8 @@ internal class JsonRecordedTransaction : JsonTransaction
 
     public JsonOverride? Overrides { get; set; }
 
+    public string? Revision { get; set; }
+
     [UsedImplicitly]
     public class JsonOverride
     {
@@ -22,7 +24,7 @@ internal class JsonRecordedTransaction : JsonTransaction
     public static explicit operator RecordedTransaction(JsonRecordedTransaction js)
     {
         var transaction = (Transaction)(JsonTransaction)js;
-        var result = new RecordedTransaction(js.Key ?? default, transaction);
+        var result = new RecordedTransaction(js.Key ?? default, transaction, js.Revision ?? string.Empty);
 
         if (!string.IsNullOrEmpty(js.Overrides?.Comment) ||
             !string.IsNullOrEmpty(js.Overrides?.Category) ||
