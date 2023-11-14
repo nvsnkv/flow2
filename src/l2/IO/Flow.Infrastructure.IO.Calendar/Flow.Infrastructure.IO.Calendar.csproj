@@ -20,7 +20,7 @@
     <ItemGroup>
       <PackageReference Include="Autofac" Version="7.1.0" />
       <PackageReference Include="CsvHelper" Version="30.0.1" />
-      <PackageReference Include="JetBrains.Annotations" Version="2023.2.0" />
+      <PackageReference Include="JetBrains.Annotations" Version="2023.3.0" />
       <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     </ItemGroup>
 
