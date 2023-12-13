@@ -1,4 +1,4 @@
-﻿using Flow.Domain.Analysis.Setup;
+﻿using Flow.Application.Analysis.Contract.Setup;
 
 namespace Flow.Infrastructure.IO.Calendar.Contract;
 

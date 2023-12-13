@@ -1,6 +1,6 @@
 ﻿using System.Linq.Expressions;
+using Flow.Application.Analysis.Contract.Setup;
 using Flow.Domain.Analysis;
-using Flow.Domain.Analysis.Setup;
 using Flow.Domain.Patterns;
 using Flow.Domain.Transactions;
 using Flow.Infrastructure.IO.Calendar.Contract;
