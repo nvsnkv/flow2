@@ -1,5 +1,5 @@
-﻿using Flow.Domain.Analysis;
-using Flow.Domain.Analysis.Setup;
+﻿using Flow.Application.Analysis.Contract.Setup;
+using Flow.Domain.Analysis;
 using Flow.Domain.Transactions;
 using Range = Flow.Domain.Analysis.Range;
 

@@ -36,6 +36,9 @@ public sealed class CSVIO : Module
         builder.RegisterType<RecordedTransactionsReader>().AsImplementedInterfaces();
         builder.RegisterType<RecordedTransactionsWriter>().AsImplementedInterfaces();
 
+        builder.RegisterType<TaggedTransactionsReader>().AsImplementedInterfaces();
+        builder.RegisterType<TaggedTransactionsWriter>().AsImplementedInterfaces();
+
         builder.RegisterType<TransferKeyReader>().AsImplementedInterfaces();
         builder.RegisterType<TransfersKeyWriter>().AsImplementedInterfaces();
         builder.RegisterType<RejectedTransfersWriter>().AsImplementedInterfaces();

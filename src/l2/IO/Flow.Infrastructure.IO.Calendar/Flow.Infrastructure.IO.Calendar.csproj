@@ -12,6 +12,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\..\..\l0\Flow.Domain.Analysis\Flow.Domain.Analysis.csproj" />
+      <ProjectReference Include="..\..\..\l1\Flow.Application.Analysis\Flow.Application.Analysis.csproj" />
       <ProjectReference Include="..\..\Flow.Infrastructure.Configuration\Flow.Infrastructure.Configuration.csproj" />
       <ProjectReference Include="..\Flow.Infrastructure.IO.Contract\Flow.Infrastructure.IO.Contract.csproj" />
       <ProjectReference Include="..\Flow.Infrastructure.IO.Criteria\Flow.Infrastructure.IO.Criteria.csproj" />

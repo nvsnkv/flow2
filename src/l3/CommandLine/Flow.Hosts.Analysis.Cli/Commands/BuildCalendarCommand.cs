@@ -1,5 +1,5 @@
 ﻿using Flow.Application.Analysis.Contract;
-using Flow.Domain.Analysis.Setup;
+using Flow.Application.Analysis.Contract.Setup;
 using Flow.Domain.Common.Collections;
 using Flow.Domain.Transactions;
 using Flow.Hosts.Common.Commands;

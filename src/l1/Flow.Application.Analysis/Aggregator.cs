@@ -1,9 +1,9 @@
 ﻿using System.Linq.Expressions;
 using Flow.Application.Analysis.Contract;
+using Flow.Application.Analysis.Contract.Setup;
 using Flow.Application.ExchangeRates.Contract;
 using Flow.Application.Transactions.Contract;
 using Flow.Domain.Analysis;
-using Flow.Domain.Analysis.Setup;
 using Flow.Domain.Patterns;
 using Flow.Domain.Transactions;
 
