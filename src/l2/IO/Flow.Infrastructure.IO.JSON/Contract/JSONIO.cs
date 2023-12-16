@@ -27,6 +27,7 @@ public class JSONIO : Module
 
         builder.RegisterType<TransactionsReader>().AsImplementedInterfaces();
         builder.RegisterType<RecordedTransactionsReader>().AsImplementedInterfaces();
+        builder.RegisterType<TaggedTransactionsReader>().AsImplementedInterfaces();
 
         builder.RegisterType<TransferKeyReader>().AsImplementedInterfaces();
 

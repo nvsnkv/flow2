@@ -2,6 +2,7 @@ using System.Collections.Immutable;
 using System.Reflection;
 using Autofac;
 using Flow.Application.Transactions.Contract;
+using Flow.Domain.Analysis;
 using Flow.Domain.ExchangeRates;
 using Flow.Domain.Transactions;
 using Flow.Domain.Transactions.Transfers;
@@ -78,7 +79,7 @@ internal class InstallationDebugger
 
     private static readonly Type[] SupportedTypes =
     {
-        typeof(Transaction), typeof(IncomingTransaction), typeof(RecordedTransaction), typeof(RejectedTransaction),
+        typeof(Transaction), typeof(IncomingTransaction), typeof(RecordedTransaction), typeof(TaggedTransaction), typeof(RejectedTransaction),
         typeof(TransferKey), typeof(Transfer), typeof(RejectedTransferKey),
         typeof(ExchangeRate), typeof(RejectedRate)
     };
